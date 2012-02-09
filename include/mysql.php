@@ -7,14 +7,11 @@ class mysql
     {
         global $config;
         # tạo connect tới localhost
-        $this->connection = @mysql_connect($config['dbhost'], $config['dbuser'], $config['dbpass']);
-        if (!$this->connection) {
-            die('Không kết nối được đến host: ' . $config['dbhost']);
-        }
+        $this->connection = @mysql_connect($config['dbhost'], $config['dbuser'], $config['dbpass']) or
+            die('Could not connect to mysql: ' . mysql_er());
         # lấy dữ liệu từ database
-        if (!mysql_select_db($config['dbname'], $this->connection)) {
-            die('Không kết nối được đến database: ' . $config['dbname']);
-        }
+        mysql_select_db($con['dbname'], $this->connection) or die('Could not select database: ' .
+            mysql_er());
     }
 
     public function query($sql)
