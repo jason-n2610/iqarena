@@ -1,3 +1,5 @@
 <?php
-    include_once('modules/controls/register.php');
+    echo 'start';
+    require('/modules/controls/register.php');
+    echo 'end';
 ?>

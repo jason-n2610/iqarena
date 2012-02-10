@@ -7,11 +7,10 @@ class mysql
     {
         global $config;
         # tạo connect tới localhost
-        $this->connection = @mysql_connect($config['dbhost'], $config['dbuser'], $config['dbpass']) or
-            die('Could not connect to mysql: ' . mysql_er());
+        $this->connection = @mysql_connect('localhost', 'root', 'admin') or
+            die('Could not connect to mysql: ' . mysql_error());
         # lấy dữ liệu từ database
-        mysql_select_db($con['dbname'], $this->connection) or die('Could not select database: ' .
-            mysql_er());
+        mysql_select_db('iqarena', $this->connection) or die('Could not select database: ' . mysql_error());
     }
 
     public function query($sql)
