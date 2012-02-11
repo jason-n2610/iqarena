@@ -1,3 +1,5 @@
 <?php
-require ('/modules/controls/register.php');
+
+    require ('/modules/controls/register.php');
+
 ?>
