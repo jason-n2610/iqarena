@@ -1,5 +1,8 @@
 <?php
-	class room{
-		
-	}
+
+    class room
+    {
+
+    }
+
 ?>
