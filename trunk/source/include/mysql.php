@@ -1,23 +1,23 @@
 ﻿<?php
 
-    class mysql
+    class MySQL
     {
-        public $connection = '';
+        public static $connection = '';
 
-        public function connect()
+        public static function connect()
         {
             require_once ('/config/config.php');
             // tạo connect tới localhost
-            $this->connection = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD) or die('Could not connect to mysql: ' .
+            self::$connection = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD) or die('Could not connect to mysql: ' .
                 mysql_error());
             // lấy dữ liệu từ database
-            mysql_select_db('iqarena', $this->connection) or die('Could not select database: ' .
+            mysql_select_db('iqarena', self::$connection) or die('Could not select database: ' .
                 mysql_error());
         }
 
-        public function close()
+        public static function close()
         {
-            return mysql_close($this->connection);
+            return mysql_close(self::$connection);
         }
     }
 
