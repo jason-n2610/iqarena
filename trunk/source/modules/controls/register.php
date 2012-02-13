@@ -16,7 +16,7 @@
         echo $row['username'] . " " . $row['passwd'] . " " . $row['registed_date'];
         echo "<br />";
     }
-    
+
     // lay ve user admin
     $result = User::getUserByUserName('admin1');
     if (mysql_num_rows($result) != 0)
@@ -29,8 +29,8 @@
     {
         echo "ko ton tai user";
     }
-    
-    // giai phong du lieu    
+
+    // giai phong du lieu
     unset($result);
 
     // dong ket noi
