@@ -13,7 +13,8 @@
                             score, 
                             registed_date, 
                             power_user 
-                        FROM users';
+                        FROM 
+                            users';
             $result = @mysql_query($query) or die('getAllUser(): ' . mysql_error());
             return $result;
         }
