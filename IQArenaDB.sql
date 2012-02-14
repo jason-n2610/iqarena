@@ -1,4 +1,4 @@
-
+﻿
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE DATABASE if not exists iqarena
@@ -14,14 +14,22 @@ DROP TABLE IF EXISTS question_types;
 DROP TABLE IF EXISTS room_members;
 DROP TABLE IF EXISTS question_fields;
 DROP TABLE IF EXISTS room_questions;
+DROP TABLE IF EXISTS markets;
+DROP TABLE IF EXISTS user_items;
+DROP TABLE IF EXISTS pictures;
+DROP TABLE IF EXISTS grafts;
+DROP TABLE IF EXISTS user_grafts;
+DROP TABLE IF EXISTS levels;
+DROP TABLE IF EXISTS member_answers;
 
 CREATE TABLE users(
 	user_id int unsigned not null auto_increment,
 	username varchar(30) not null,
-	passwd varchar(32) not null,
-	score float,
+	password varchar(32) not null,
+	score_level float,
 	registed_date datetime,
 	power_user tinyint not null,
+	money float,
 	PRIMARY KEY (user_id)
 );
 
@@ -31,6 +39,7 @@ CREATE TABLE rooms(
 	max_mem int,
 	min_mem int,
 	status tinyint,
+	win_score float,
 	PRIMARY KEY (room_id)
 );
 
@@ -76,7 +85,66 @@ CREATE TABLE room_questions(
 	PRIMARY KEY (room_question_id)
 );
 
-INSERT INTO users(username, passwd, score, registed_date, power_user)
-	VALUES ('admin', '0945fc9611f55fd0e183fb8b044f1afe', 0, '2012-1-2 10:00:00' , 1),
-		('user', '0945fc9611f55fd0e183fb8b044f1afe', 100, '2012-1-2 10:00:00', 0);
+CREATE TABLE markets(
+	item_id int unsigned not null auto_increment,
+	item_name nvarchar(100) not null,
+	describle nvarchar(500),
+	src nvarchar(500), 
+	money float,
+	PRIMARY KEY (item_id)
+);
+
+CREATE TABLE user_items(
+	user_item_id int unsigned not null auto_increment,
+	user_id int unsigned not null,
+	item_id int unsigned not null,	
+	total tinyint not null,
+	PRIMARY KEY (user_item_id)
+);
+
+CREATE TABLE pictures(
+	picture_id int unsigned not null auto_increment,
+	src nvarchar(500) not null,
+	money float not null,
+	PRIMARY KEY (picture_id)
+);
+
+CREATE TABLE grafts(
+	graft_id int unsigned not null auto_increment,
+	picture_id int unsigned not null,
+	src nvarchar(500) not null,
+	graft_type smallint not null,
+	describle nvarchar(500),
+	PRIMARY KEY (graft_id)
+);
+
+CREATE TABLE user_grafts(
+	user_graft_id int unsigned not null auto_increment,
+	user_id int unsigned not null,
+	graft_id int unsigned not null,
+	total tinyint not null,
+	PRIMARY KEY (user_graft_id)
+);
+
+CREATE TABLE member_answers(
+	member_answer_id int unsigned not null auto_increment,
+	user_id int unsigned not null,
+	question_id int unsigned not null,
+	graft_id int unsigned not null,
+	score float not null,
+	combo tinyint,
+	PRIMARY KEY (member_answer_id)
+);
+
+CREATE TABLE levels(
+	level_id int unsigned not null auto_increment,
+	level_name nvarchar(50) not null,
+	score_min float not null,
+	score_max float not null,
+	PRIMARY KEY (level_id)
+);
+
+INSERT INTO users(username, password, score_level, registed_date, power_user, money)
+	VALUES ('admin', '0945fc9611f55fd0e183fb8b044f1afe', 0, '2012-1-2 10:00:00' , 1, 0),
+		('user', '0945fc9611f55fd0e183fb8b044f1afe', 100, '2012-1-2 10:00:00', 0, 0);
 
