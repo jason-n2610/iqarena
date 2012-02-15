@@ -27,7 +27,7 @@
         } else
         {
             echo "ko ton tai user";
-        }
+        }                
 
         // giai phong du lieu
         unset($result);

@@ -26,6 +26,7 @@ CREATE TABLE users(
 	user_id int unsigned not null auto_increment,
 	username varchar(30) not null,
 	password varchar(32) not null,
+	email varchar(100) not null,
 	score_level float,
 	registed_date datetime,
 	power_user tinyint not null,
@@ -36,10 +37,12 @@ CREATE TABLE users(
 CREATE TABLE rooms(
 	room_id int unsigned not null auto_increment,
 	room_name varchar(50) not null,
-	max_mem int,
-	min_mem int,
+	owner_id int unsigned not null,
+	max_member int,
+	min_member int,
 	status tinyint,
 	win_score float,
+	number_of_member int,
 	PRIMARY KEY (room_id)
 );
 
@@ -47,7 +50,7 @@ CREATE TABLE room_members(
 	room_member_id int unsigned not null auto_increment,
 	user_id int unsigned not null,
 	room_id int unsigned not null,
-	user_type tinyint,
+	status tinyint,
 	PRIMARY KEY (room_member_id)
 );
 
@@ -144,7 +147,7 @@ CREATE TABLE levels(
 	PRIMARY KEY (level_id)
 );
 
-INSERT INTO users(username, password, score_level, registed_date, power_user, money)
-	VALUES ('admin', '0945fc9611f55fd0e183fb8b044f1afe', 0, '2012-1-2 10:00:00' , 1, 0),
-		('user', '0945fc9611f55fd0e183fb8b044f1afe', 100, '2012-1-2 10:00:00', 0, 0);
+INSERT INTO users(username, password, email, score_level, registed_date, power_user, money)
+	VALUES ('admin', '0945fc9611f55fd0e183fb8b044f1afe', 'admin@hostmail.com', 0, '2012-1-2 10:00:00' , 1, 0),
+		('user', '0945fc9611f55fd0e183fb8b044f1afe', 'user@gmail.com', 100, '2012-1-2 10:00:00', 0, 0);
 
