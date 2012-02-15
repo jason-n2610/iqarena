@@ -1,0 +1,192 @@
+﻿
+// Dang ki true
+{ 
+	"type":"register",
+	"value":"true", 
+	"user_id":"1234",
+	"level_score":"0",
+	"level":"1sao",
+	"money":"0",
+}
+
+// Dang ki false
+{
+	"type":"register",
+	"value":"false",
+	"message":"username da ton tai"
+}
+
+// Dang nhap true
+{
+	"type":"login",
+	"user_id":"1234",
+	"value":"true",
+	"level_score":"0",
+	"level":"thánh sư",
+	"money":"50"
+	}
+}
+
+// Dang nhap false
+{
+	"type":"login",
+	"value":"false",
+	"message":"ten dang nhap khong ton tai"
+}
+
+// tao room false
+{
+	"type":"create_room",
+	"value":"false",
+	"message":"ten room khong duoc trung lap"
+}
+
+// tao room true
+{
+	"type":"create_room",
+	"value":"true",
+	"message":"tao phong thanh cong"
+}
+
+// xem danh sach phong choi -> true
+{
+	"type":"view_room",
+	"value":"true",
+	"list_room":[
+		{"room_id":"12", "room_name":"abc", "max_mem":"32", "min_mem":"2", "win_score":"1000", "mem_number":"23", "owner":"abc"},
+		{"room_id":"132", "room_name":"a13bc", "max_mem":"3", "min_mem":"2", "win_score":"5000", "mem_number":"43", "owner":"abd"}
+	]
+}
+
+// xem dang sach phong choi -> false
+{
+	"type":"view_room",
+	"value":"false",
+	"message":"oh hi"
+}
+
+// tham gia phong choi -> true
+{
+	"type":"join_room",
+	"value":"true",
+	"list_user":[
+		{"username":"host", "level_score":"1234"},
+		{"username":"tuba", "level_score":"5322"}
+	]
+}
+
+// tham gia phong choi -> false
+{
+	"type":"join_room",
+	"value":"false",
+	"message":"room full"
+}
+
+// thoat khoi tro choi -> true
+{
+	"type":"exit_room",
+	"value":"true",
+	"list_room":[
+		{"room_id":"12", "room_name":"abc", "max_mem":"32", "min_mem":"2", "win_score":"1000", "mem_number":"23", "owner":"abc"},
+		{"room_id":"132", "room_name":"a13bc", "max_mem":"3", "min_mem":"2", "win_score":"5000", "mem_number":"43", "owner":"abd"}
+	]
+}
+
+// thoat khoi tro choi -> false
+{	
+	"type":"exit_room",
+	"value":"false",
+	"message":"error"
+}
+
+//  san sang choi -> true
+{
+	"type":"user_ready",
+	"value":"true",
+	"message":"ok"
+}
+
+//  san sang choi -> false
+{
+	"type":"user_ready",
+	"value":"false",
+	"message":"loi ket loi"
+}
+
+// bat dau tro choi -> true
+{
+	"type":"play",
+	"value":"true",
+	"question":
+	{
+		"contents":"what your name?",
+		"answer_a":"hi",
+		"answer_b":"ho",
+		"answer_c":"he",
+		"answer_d":"hu"
+	}
+}
+
+// bat dau tro cho false
+{
+	"type":"play",
+	"value":"false",
+	"message":"error"
+}
+
+// tra loi cau hoi	-> true
+{
+	"type":"answer",
+	"value":"true",
+	"score":"50",
+	"graft":"0",	// ko nhan duoc manh ghep nao
+	"combo":"0",	// ko co combo
+	"room_answer":[
+		{"username":"abc", "answer":"b", "score":"100"},
+		{"username":"ghe", "answer":"a", "score":"50"},
+		{"username":"def", "answer":"b", "score":"100"}
+	]
+	"next_question":
+	{
+		"contents":"what your name?",
+		"answer_a":"hi",
+		"answer_b":"ho",
+		"answer_c":"he",
+		"answer_d":"hu"
+	}
+}
+
+// tra loi cau hoi -> false
+{
+	"type":"answer",
+	"value":"false",
+	"score":"50",
+	"score_level":"2200",
+	"graft":"0",	// ko nhan duoc manh ghep nao
+	"combo":"0",	// ko co combo
+	"room_answer":[
+		{"username":"abc", "answer":"b", "score":"100"},
+		{"username":"ghe", "answer":"a", "score":"50"},
+		{"username":"def", "answer":"b", "score":"100"}
+	]
+}
+
+// dung tran dau -> true
+{
+	"type":"exit_game",
+	"value":"true",
+	"score":"100",
+	"score_level":"3500",
+	"graft":"0",
+	"combo":"0"
+}
+
+// dung tran dau -> false
+{
+	"type":"exit_game",
+	"value":"false",
+	"message":"error"
+}
+
+
+

@@ -9,10 +9,12 @@
             $query = 'SELECT 
                             user_id, 
                             username, 
-                            passwd, 
-                            score, 
+                            password,
+                            email, 
+                            score_level, 
                             registed_date, 
-                            power_user 
+                            power_user,
+                            money 
                         FROM 
                             users';
             $result = @mysql_query($query) or die('getAllUser(): ' . mysql_error());
@@ -36,19 +38,19 @@
             return $result;
         }
 
-        public static function addUser($username, $passwd, $score, $register_date, $power_user)
+        public static function addUser($username, $password, $score, $register_date, $power_user)
         {
             $query = '  INSERT INTO 
                             users(
                                 username, 
-                                passwd, 
+                                password, 
                                 score, 
                                 register_date, 
                                 power_user)
                         VALUES 
                             (
                                 $username, 
-                                $passwd, 
+                                $password, 
                                 $score, 
                                 $register_date, 
                                 $power_user)';

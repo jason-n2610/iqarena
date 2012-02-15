@@ -38,7 +38,6 @@ public class XMLfunctions {
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
-
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
 			InputSource is = new InputSource();
@@ -92,8 +91,8 @@ public class XMLfunctions {
 					"http://10.0.2.2/iqarena/source_server/test.php");
 			// Add your data
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("username", "admin"));
-			nameValuePairs.add(new BasicNameValuePair("password", "hi"));
+//			nameValuePairs.add(new BasicNameValuePair("username", "admin"));
+//			nameValuePairs.add(new BasicNameValuePair("password", "hi"));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			HttpResponse httpResponse = httpClient.execute(httpPost);
