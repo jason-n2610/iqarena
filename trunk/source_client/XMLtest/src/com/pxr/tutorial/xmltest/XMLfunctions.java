@@ -115,8 +115,6 @@ public class XMLfunctions {
 
 			line = new String(baf.toByteArray());
 
-			Log.i("2", "response: " + line);
-
 		} catch (UnsupportedEncodingException e) {
 			line = "<results status=\"error\"><msg>Can't connect to server</msg></results>";
 		} catch (MalformedURLException e) {
@@ -124,6 +122,8 @@ public class XMLfunctions {
 		} catch (IOException e) {
 			line = "<results status=\"error\"><msg>Can't connect to server</msg></results>";
 		}
+
+		Log.i("2", "response: " + line);
 
 		return line;
 

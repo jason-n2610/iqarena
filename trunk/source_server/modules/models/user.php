@@ -38,22 +38,26 @@
             return $result;
         }
 
-        public static function addUser($username, $password, $score, $register_date, $power_user)
+        public static function addUser($username, $password,$email, $score_level, $register_date, $power_user, $money)
         {
-            $query = '  INSERT INTO 
+            $query = "  INSERT INTO 
                             users(
                                 username, 
-                                password, 
-                                score, 
-                                register_date, 
-                                power_user)
+                                password,
+                                email, 
+                                score_level, 
+                                registed_date, 
+                                power_user,
+                                money )
                         VALUES 
                             (
-                                $username, 
-                                $password, 
-                                $score, 
-                                $register_date, 
-                                $power_user)';
+                                '{$username}', 
+                                '{$password}',
+                                '{$email}', 
+                                '{$score_level}', 
+                                '{$register_date}', 
+                                '{$power_user}',
+                                '{$money}' )";
             $result = @mysql_query($query) or die('addUser(): ' . mysql_error());
             return $result;
         }
