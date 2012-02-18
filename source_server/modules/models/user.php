@@ -33,8 +33,20 @@
                         FROM 
                             users 
                         WHERE 
-                            username = '{$username}'";
+                            username = '{$username}' ";
             $result = @mysql_query($query) or die('getUserByUserName(): ' . mysql_error());
+            return $result;
+        }
+        
+        public static function checkUserLogin($username, $password)
+        {
+            $query = "  SELECT
+                            user_id
+                        FROM
+                            users
+                        WHERE 
+                            username = '{$username}' && password = '{$password}' ";              
+            $result = @mysql_query($query) or die('checkUserLogin: ' . mysql_error());
             return $result;
         }
 
