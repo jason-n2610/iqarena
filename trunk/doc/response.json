@@ -1,12 +1,14 @@
 ﻿
 // Dang ki true
 { 
-	"type":"register",
-	"value":"true", 
-	"user_id":"1234",
-	"level_score":"0",
-	"level":"1sao",
-	"money":"0",
+	"login":{
+		"type":"register",
+		"value":"true", 
+		"user_id":"1234",
+		"level_score":"0",
+		"level":"1sao",
+		"money":"0",
+	}
 }
 
 // Dang ki false
