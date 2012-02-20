@@ -17,10 +17,8 @@
         $password = stripcslashes($password);
         $password = mysql_real_escape_string($password);
 
-        $password = md5($password);
-
         $checkResult = false;
-
+        echo 'server';
         // lay ve user admin
         $result = User::checkUserLogin($username, $password);
         if (mysql_num_rows($result) != 0)

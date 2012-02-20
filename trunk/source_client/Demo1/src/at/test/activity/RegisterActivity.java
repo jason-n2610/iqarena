@@ -1,4 +1,4 @@
-package at.test;
+package at.test.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,13 +7,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import at.test.R;
+import at.test.data.IRequestServer;
+import at.test.data.RequestServer;
+import at.test.data.Utils;
 
-public class RegisterActivity extends Activity implements View.OnClickListener {
+public class RegisterActivity extends Activity implements View.OnClickListener, IRequestServer {
 
 	EditText etUsername, etPassword, etRePassword, etEmail;
 	String strUsername, strPassword, strRePassword, strEmail;
 	TextView tvNotice;
 	Button btnRegister;
+	RequestServer requestServer;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -89,9 +94,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 				tvNotice.setText("password ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z '.'");
 				return;
 			}
-			String result = RequestServer.register(strUsername, strPassword,
+			requestServer = new RequestServer(this);
+			requestServer.register(strUsername, strPassword,
 					strEmail);
-			tvNotice.setText(result);
 		}
+	}
+
+	@Override
+	public void onRequestComplete(String sResult) {
+		tvNotice.setText(sResult);
 	}
 }
