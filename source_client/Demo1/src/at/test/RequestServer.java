@@ -21,6 +21,8 @@ import org.apache.http.util.ByteArrayBuffer;
  * 
  */
 public class RequestServer {	
+	
+	public static boolean isSuccess = false;
 
 	public static String register(String username, String password, String email) {
 		String line = null;
@@ -38,31 +40,24 @@ public class RequestServer {
 
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			InputStream is = httpResponse.getEntity().getContent();
-			BufferedInputStream bis = new BufferedInputStream(is);
-
-			ByteArrayBuffer baf = new ByteArrayBuffer(20);
-
-			int current = 0;
-
-			while ((current = bis.read()) != -1) {
-
-				baf.append((byte) current);
-
-			}
-
-			/* Convert the Bytes read to a String. */
+			int size = is.available();
+			byte[] buffer = new byte[size];
+            is.read(buffer);
 
 			is.close();
-			bis.close();
 			
-			line = new String(baf.toByteArray());
+			line = new String(buffer);
+			isSuccess = true;
 
 		} catch (UnsupportedEncodingException e) {
 			line = e.getMessage();
+			isSuccess = false;
 		} catch (MalformedURLException e) {
 			line = e.getMessage();
+			isSuccess = false;
 		} catch (IOException e) {
 			line = e.getMessage();
+			isSuccess = false;
 		}
 		return line;
 	}

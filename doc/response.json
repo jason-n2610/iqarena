@@ -20,12 +20,13 @@
 
 // Dang nhap true
 {
-	"type":"login",
-	"user_id":"1234",
-	"value":"true",
-	"level_score":"0",
-	"level":"thánh sư",
-	"money":"50"
+	"login":
+	{
+		"value":"true"
+		"message":"login success!"
+		"info":[
+			{"user_id"="", "username"="", "email"="", "score_level"="", "registed_date"="", "power_user"="", "money" = ""}
+		]
 	}
 }
 
