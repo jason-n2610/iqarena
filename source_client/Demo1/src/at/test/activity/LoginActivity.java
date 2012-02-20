@@ -1,20 +1,26 @@
-package at.test;
+package at.test.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import at.test.R;
+import at.test.data.IRequestServer;
+import at.test.data.RequestServer;
+import at.test.data.Utils;
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener, IRequestServer {
 	
 	Button btnRegister, btnLogin;
 	TextView tvLoginResult;
 	ProgressBar pbLoading;
 	EditText etUsername, etPassword;
+	RequestServer requestServer;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -61,16 +67,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				pbLoading.setVisibility(View.INVISIBLE);
 				return;
 			}			
-			String result = RequestServer.login(strUsername, strPassword);
-			if (!RequestServer.isSuccess){
-				// loi ket noi
-				tvLoginResult.setText(result);	
-			}
-			else{
-				// ket noi thanh cong
-				
-			}
-			pbLoading.setVisibility(View.INVISIBLE);
+			requestServer = new RequestServer(this);
+			requestServer.login(strUsername, strPassword);
 		}
 		else if (v.getId() == R.id.btnRegister){
 			Intent intent = new Intent(getApplicationContext(),
@@ -79,5 +77,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			overridePendingTransition(R.anim.incoming, R.anim.outgoing);
 		}
 		
+	}
+
+	@Override
+	public void onRequestComplete(String sResult) {
+		tvLoginResult.setText(sResult);
+		pbLoading.setVisibility(View.INVISIBLE);
+		requestServer.cancel(true);
+		Log.i("2", requestServer.getStatus().toString());
 	}
 }

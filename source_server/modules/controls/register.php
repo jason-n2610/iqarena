@@ -19,8 +19,6 @@
         $password = mysql_real_escape_string($password);  
         $email = mysql_real_escape_string($email);
         
-        $password = md5($password);
-
         // lay ve user admin
         $result = User::getUserByUserName($username);
         if (mysql_num_rows($result) != 0)
@@ -31,6 +29,7 @@
         else
         {
             // user chua ton tai, them user
+            echo 'them thanh cong';
             echo User::addUser($username, $password, $email, 0, 0, 0);
         }                
 

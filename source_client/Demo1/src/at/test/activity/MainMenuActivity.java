@@ -1,9 +1,10 @@
-package at.test;
+package at.test.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import at.test.R;
 
-public class MainMenu extends Activity{
+public class MainMenuActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

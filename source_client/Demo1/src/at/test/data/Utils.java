@@ -1,4 +1,4 @@
-package at.test;
+package at.test.data;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,7 +28,7 @@ public class Utils {
 	}
 
 	public static boolean validateEmail(String emailstring) {
-		Pattern emailPattern = Pattern.compile(".+@.+\\.[a-z]+");
+		Pattern emailPattern = Pattern.compile("[A-z0-9\\.]+@.+\\.[a-z]+");
 		Matcher emailMatcher = emailPattern.matcher(emailstring);
 		return emailMatcher.matches();
 	}
