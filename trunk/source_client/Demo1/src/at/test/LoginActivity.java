@@ -62,7 +62,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				return;
 			}			
 			String result = RequestServer.login(strUsername, strPassword);
-			tvLoginResult.setText(result);			
+			if (!RequestServer.isSuccess){
+				// loi ket noi
+				tvLoginResult.setText(result);	
+			}
+			else{
+				// ket noi thanh cong
+				
+			}
 			pbLoading.setVisibility(View.INVISIBLE);
 		}
 		else if (v.getId() == R.id.btnRegister){

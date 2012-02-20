@@ -31,7 +31,7 @@
         else
         {
             // user chua ton tai, them user
-            echo User::addUser($username, $password, $email, 0, "2012-10-10 10:00:00", 0, 0);
+            echo User::addUser($username, $password, $email, 0, 0, 0);
         }                
 
         // giai phong du lieu

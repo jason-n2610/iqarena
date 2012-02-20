@@ -21,11 +21,20 @@
             return $result;
         }
 
-        public static function getUserById($user)
+        // lay ve info cua user dua vao userid
+        public static function getUserById($user_id)
         {
-
+            $query = "SELECT
+                            *
+                        FROM 
+                            users
+                        WHERE 
+                            user_id == '{$user_id}' ";
+            $result = @mysql_query($query) or die ('getUserById():'.mysql_error());
+            return $result;
         }
 
+        // kiem tra xem username da ton tai chua
         public static function getUserByUserName($username)
         {
             $query = "  SELECT 
@@ -38,10 +47,17 @@
             return $result;
         }
         
+        // kiem tra account da ton tai chua
         public static function checkUserLogin($username, $password)
         {
             $query = "  SELECT
-                            user_id
+                            user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money
                         FROM
                             users
                         WHERE 
@@ -50,7 +66,8 @@
             return $result;
         }
 
-        public static function addUser($username, $password,$email, $score_level, $register_date, $power_user, $money)
+        // them moi 1 user
+        public static function addUser($username, $password,$email, $score_level, $power_user, $money)
         {
             $query = "  INSERT INTO 
                             users(
@@ -67,7 +84,7 @@
                                 '{$password}',
                                 '{$email}', 
                                 '{$score_level}', 
-                                '{$register_date}', 
+                                 NOW(), 
                                 '{$power_user}',
                                 '{$money}' )";
             $result = @mysql_query($query) or die('addUser(): ' . mysql_error());
