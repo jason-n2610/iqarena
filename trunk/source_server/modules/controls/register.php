@@ -1,10 +1,10 @@
 <?php
-
+    $path = getcwd();
     // neu 1 trong cac truong du lieu la khac null
     if ((!empty($_POST['username'])) && (!empty($_POST['password'])) && (!empty($_POST['email'])))   
     {
-        require ('/include/mysql.php');
-        require ('/modules/models/user.php');
+        require ($path.'/include/mysql.php');
+        require ($path.'/modules/models/user.php');
 
         // connect database
         MySQL::connect();

@@ -20,14 +20,12 @@
 
 // Dang nhap true
 {
-	"login":
-	{
-		"value":"true"
-		"message":"login success!"
-		"info":[
-			{"user_id"="", "username"="", "email"="", "score_level"="", "registed_date"="", "power_user"="", "money" = ""}
-		]
-	}
+	"type":"login"
+	"value":"true"
+	"message":"login success!"
+	"info":[
+		{"user_id"="", "username"="", "email"="", "score_level"="", "registed_date"="", "power_user"="", "money" = ""}
+	]
 }
 
 // Dang nhap false
