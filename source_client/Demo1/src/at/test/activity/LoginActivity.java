@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.test.R;
 import at.test.data.IRequestServer;
+import at.test.data.JsonData;
 import at.test.data.RequestServer;
 import at.test.data.Utils;
 
@@ -45,26 +46,31 @@ public class LoginActivity extends Activity implements View.OnClickListener, IRe
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnLogin){
 			pbLoading.setVisibility(View.VISIBLE);
+			btnLogin.setEnabled(false);
 			String strUsername = etUsername.getText().toString();
 			String strPassword = etPassword.getText().toString();
 			if (strUsername.equals("")){
 				tvLoginResult.setText("Username null");
 				pbLoading.setVisibility(View.INVISIBLE);
+				btnLogin.setEnabled(true);
 				return;
 			}
 			if (strPassword.equals("")){
 				tvLoginResult.setText("Password null");
 				pbLoading.setVisibility(View.INVISIBLE);
+				btnLogin.setEnabled(true);
 				return;
 			}
 			if (!Utils.validateString(strUsername)){
 				tvLoginResult.setText("Username chi dc gom [A-z][0-9].");
 				pbLoading.setVisibility(View.INVISIBLE);
+				btnLogin.setEnabled(true);
 				return;
 			}
 			if (!Utils.validateString(strPassword)){
 				tvLoginResult.setText("Password chi dc gom [A-z][0-9].");
 				pbLoading.setVisibility(View.INVISIBLE);
+				btnLogin.setEnabled(true);
 				return;
 			}			
 			requestServer = new RequestServer(this);
@@ -81,9 +87,37 @@ public class LoginActivity extends Activity implements View.OnClickListener, IRe
 
 	@Override
 	public void onRequestComplete(String sResult) {
+		if (sResult != null){
+			int length = sResult.length();
+			int start = sResult.indexOf("{");
+			sResult = sResult.substring(start, length-1);
+			sResult = sResult.trim();
+			// if co thong bao
+			if (length > 0){
+				boolean isSuccess = JsonData.getData(sResult);
+				if (isSuccess){
+					if (JsonData.message != null){
+						sResult = JsonData.message;
+					}
+					if (!JsonData.value){
+						// sai user
+						if (JsonData.message != null){
+							
+						}
+					}
+					else{
+						// success
+						
+					}
+				}
+			}
+			// if ko co thong bao
+			else{
+				sResult = "login that bai";
+			}
+		}
 		tvLoginResult.setText(sResult);
 		pbLoading.setVisibility(View.INVISIBLE);
-		requestServer.cancel(true);
-		Log.i("2", requestServer.getStatus().toString());
+		btnLogin.setEnabled(true);
 	}
 }

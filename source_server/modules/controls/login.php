@@ -1,11 +1,11 @@
-<?php
-
-    // neu 1 trong cac truong du lieu la khac null
+<?php           
+    header('content-type: text/html; charset: utf-8');                                 
+    $path = getcwd();
+    // neu 1 trong cac truong du lieu la khac null   
     if ((!empty($_POST['username'])) && (!empty($_POST['password'])))
     {
-        require ('/include/mysql.php');
-        require ('/modules/models/user.php');
-
+        require ($path."/include/mysql.php"); 
+        require ($path."/modules/models/user.php"); 
         // connect database
         MySQL::connect();
 
@@ -18,18 +18,17 @@
         $password = mysql_real_escape_string($password);
 
         $checkResult = false;
-        echo 'server';
         // lay ve user admin
         $result = User::checkUserLogin($username, $password);
         if (mysql_num_rows($result) != 0)
         {
             // user ton tai, login thanh cong
             $checkResult = true;
-            while ($row=mysql_fetch_assoc($result)) 
+            while ($row=mysql_fetch_row($result)) 
                 $output[]=$row;
-            echo '{ "login":{"value":"true""message":"login success!""info":';
+            echo '{"type":"login", "value":"true", "message":"login success!", "info":';
             echo json_encode($output);
-            echo '}}';
+            echo '}';
         } 
         else
         {
@@ -42,10 +41,10 @@
             $result = User::getUserByUserName($username);
             if (mysql_num_rows($result) != 0)
             {
-                echo '{ "login":{"value":"false""message":"sai password"}}';
+                echo '{"type":"login", "value":"false", "message":"sai password"}';
             } else
-            {
-                echo '{ "login":{"value":"false""message":"user chua ton tai"}}';
+            {                   
+                echo '{"type":"login", "value":"false", "message":"user chua ton tai"}';
             }
         } 
 
