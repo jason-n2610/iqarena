@@ -1,6 +1,5 @@
 package at.test.data;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +13,7 @@ import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -51,13 +51,11 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	protected String doInBackground(String... params) {
 		String result = null;
 		try {
-			 HttpParams para = new BasicHttpParams();
-			 HttpConnectionParams.setConnectionTimeout(para, 15000);
-			 HttpConnectionParams.setSoTimeout(para, 15000);
-			 HttpProtocolParams.setContentCharset(para, "UTF-8");
-			 HttpProtocolParams.setHttpElementCharset(para, "UTF-8");
+			 HttpParams httpParameters = new BasicHttpParams();
+			 HttpConnectionParams.setConnectionTimeout(httpParameters, 15000);
+			 HttpConnectionParams.setSoTimeout(httpParameters, 15000);
 
-			DefaultHttpClient httpClient = new DefaultHttpClient(para);
+			HttpClient httpClient = new DefaultHttpClient(httpParameters);
 			HttpPost httpPost = new HttpPost(Config.REQUEST_SERVER_ADDR);
 			// Add your data
 			List<NameValuePair> nameValuePairs;
@@ -91,26 +89,18 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 			switch (responseCode) {
 			case 200:
 				HttpEntity entity = httpResponse.getEntity();
-
-				Log.i("2", "charset: "+getContentCharSet(entity));
 				InputStream is = entity.getContent();
-				BufferedReader bis = new BufferedReader(new InputStreamReader(is, "utf-8"), 8 * 1024);
-				ByteArrayBuffer baf = new ByteArrayBuffer(1);
-
-				int current = 0;
-
-				while ((current = bis.read()) != -1) {
-
-					baf.append((byte) current);
-
-				}
-
-				is.close();
-				bis.close();
-
-				/* Convert the Bytes read to a String. */
-
-				result = new String(baf.toByteArray());
+				BufferedReader bis = new BufferedReader(new 
+						InputStreamReader(is), 8);
+				StringBuilder sb = new StringBuilder();
+				sb.append(bis.readLine() + "\n");
+	            String line="0";
+	            while ((line = bis.readLine()) != null) {
+	                sb.append(line + "\n");
+	            }
+	            bis.close();
+	            is.close();
+	            result=sb.toString();
 				break;
 			}
 		} catch (UnsupportedEncodingException e) {

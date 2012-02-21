@@ -1,5 +1,4 @@
-<?php   
-    header('content-type: text/html; charset: utf-8');                     
+﻿<?php                   
     $path = getcwd();         
     if ($_POST['message'] == "login")
     {
@@ -9,5 +8,4 @@
     {
         require ($path.'/modules/controls/register.php');
     }
-
-?>       
+?>
