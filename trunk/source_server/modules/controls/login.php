@@ -1,5 +1,4 @@
-<?php           
-    header('content-type: text/html; charset: utf-8');                                 
+﻿<?php                                           
     $path = getcwd();
     // neu 1 trong cac truong du lieu la khac null   
     if ((!empty($_POST['username'])) && (!empty($_POST['password'])))
@@ -44,7 +43,7 @@
                 echo '{"type":"login", "value":"false", "message":"sai password"}';
             } else
             {                   
-                echo '{"type":"login", "value":"false", "message":"user chua ton tai"}';
+                echo '{"type":"login", "value":"false", "message":"user chưa tồn tại"}';
             }
         } 
 

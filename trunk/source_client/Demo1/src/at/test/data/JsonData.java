@@ -23,6 +23,7 @@ public class JsonData {
 	public static boolean getData(String input){
 		boolean result = false;
 		try {
+			Log.i(TAG, input);
 			JSONObject jObject = new JSONObject(input);
 			String typeObj = jObject.getString("type");
 			if (typeObj.equals("login")){

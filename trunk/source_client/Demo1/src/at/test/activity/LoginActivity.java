@@ -88,28 +88,30 @@ public class LoginActivity extends Activity implements View.OnClickListener, IRe
 	@Override
 	public void onRequestComplete(String sResult) {
 		if (sResult != null){
-			int length = sResult.length();
-			int start = sResult.indexOf("{");
-			sResult = sResult.substring(start, length-1);
 			sResult = sResult.trim();
+			int length = sResult.length();
 			// if co thong bao
 			if (length > 0){
-				boolean isSuccess = JsonData.getData(sResult);
-				if (isSuccess){
-					if (JsonData.message != null){
-						sResult = JsonData.message;
-					}
-					if (!JsonData.value){
-						// sai user
+				if (sResult.contains("{")){
+					int start = sResult.indexOf("{");
+					sResult = sResult.substring(start, length);	
+					boolean isSuccess = JsonData.getData(sResult);
+					if (isSuccess){
 						if (JsonData.message != null){
+							sResult = JsonData.message;
+						}
+						if (!JsonData.value){
+							// sai user
+							if (JsonData.message != null){
+								
+							}
+						}
+						else{
+							// success
 							
 						}
-					}
-					else{
-						// success
-						
-					}
-				}
+					}				
+				}				
 			}
 			// if ko co thong bao
 			else{

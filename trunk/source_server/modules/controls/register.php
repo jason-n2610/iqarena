@@ -24,13 +24,13 @@
         if (mysql_num_rows($result) != 0)
         {             
             // user da ton tai
-            echo 'da ton tai user nay';   
+            echo 'đã tồn tại user này';   
         } 
         else
         {
             // user chua ton tai, them user
-            echo 'them thanh cong';
             echo User::addUser($username, $password, $email, 0, 0, 0);
+            echo 'thêm thành công';
         }                
 
         // giai phong du lieu
