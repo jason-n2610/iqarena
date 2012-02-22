@@ -37,11 +37,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
 		btnRegister.setOnClickListener(this);
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		overridePendingTransition(R.anim.incoming, R.anim.outgoing);
-	}
 
 	@Override
 	public void onClick(View v) {

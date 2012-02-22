@@ -23,7 +23,7 @@
         {
             // user ton tai, login thanh cong
             $checkResult = true;
-            while ($row=mysql_fetch_row($result)) 
+            while ($row=mysql_fetch_assoc($result)) 
                 $output[]=$row;
             echo '{"type":"login", "value":"true", "message":"login success!", "info":';
             echo json_encode($output);

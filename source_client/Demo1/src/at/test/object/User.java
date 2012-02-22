@@ -10,9 +10,9 @@ package at.test.object;
 public class User {
 	private int userId, powerUser;
 	private String username, email, registed_date;
-	private float money;
+	private float money, scoreLevel;
 	
-	public User(int userId, String username, String email, String registed_date, 
+	public User(int userId, String username, String email, float scoreLevel, String registed_date, 
 			int powerUser, float money){
 		this.userId = userId;
 		this.username = username;
@@ -20,6 +20,7 @@ public class User {
 		this.registed_date = registed_date;
 		this.powerUser = powerUser;
 		this.money = money;
+		this.setScoreLevel(scoreLevel);
 	}
 
 	public int getUserId() {
@@ -68,5 +69,13 @@ public class User {
 
 	public void setMoney(float money) {
 		this.money = money;
+	}
+
+	public float getScoreLevel() {
+		return scoreLevel;
+	}
+
+	public void setScoreLevel(float scoreLevel) {
+		this.scoreLevel = scoreLevel;
 	}
 }

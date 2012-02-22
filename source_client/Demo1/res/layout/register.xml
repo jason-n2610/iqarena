@@ -46,9 +46,7 @@
 
                 <TextView
                     android:id="@+id/textView1"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                	style="@style/TextViewStyle"
                     android:text="Username" />
 
                 <EditText
@@ -67,8 +65,7 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                	style="@style/TextViewStyle"
                     android:text="Password" />
 
                 <EditText
@@ -86,8 +83,7 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                	style="@style/TextViewStyle"
                     android:text="Re-password" />
 
                 <EditText
@@ -104,8 +100,7 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                	style="@style/TextViewStyle"
                     android:text="Email" />
 
                 <EditText
