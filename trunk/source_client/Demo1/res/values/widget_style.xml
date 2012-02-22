@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- style cho textview login, register -->
+	<style name="TextViewStyle">
+	    <item name="android:layout_width">100dp</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:layout_weight">1</item>	    
+	</style>    
+	
+	<!-- style cho button login, register -->
+	<style name="ButtonStyle">
+	    <item name="android:layout_width">120dp</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:layout_weight">1</item>	    
+	</style>
+</resources>

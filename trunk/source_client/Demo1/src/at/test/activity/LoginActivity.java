@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.test.R;
 import at.test.data.IRequestServer;
-import at.test.data.JsonData;
+import at.test.data.DataInfo;
 import at.test.data.RequestServer;
 import at.test.data.Utils;
 
@@ -80,34 +80,39 @@ public class LoginActivity extends Activity implements View.OnClickListener, IRe
 			Intent intent = new Intent(getApplicationContext(),
 					RegisterActivity.class);
 			startActivity(intent);
-			overridePendingTransition(R.anim.incoming, R.anim.outgoing);
 		}
 		
 	}
 
 	@Override
 	public void onRequestComplete(String sResult) {
+		String message = sResult;
 		if (sResult != null){
 			sResult = sResult.trim();
 			int length = sResult.length();
 			// if co thong bao
 			if (length > 0){
+				// kiem tra xem co thong tin tu server tra ve ko?
 				if (sResult.contains("{")){
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);	
-					boolean isSuccess = JsonData.getData(sResult);
+					boolean isSuccess = DataInfo.setData(sResult);
+					message = DataInfo.message;
 					if (isSuccess){
-						if (JsonData.message != null){
-							sResult = JsonData.message;
-						}
-						if (!JsonData.value){
-							// sai user
-							if (JsonData.message != null){
-								
+						if (DataInfo.value){
+							// dung tai khoan
+							// chuyen sang activity main menu
+							// demo
+							if (DataInfo.userInfo!=null){
+								Intent intent = new Intent(getApplicationContext(),
+										MainMenuActivity.class);
+								startActivity(intent);
+								overridePendingTransition(R.anim.incoming, R.anim.outgoing);;
 							}
 						}
 						else{
-							// success
+							// tai khoan khong hop le
+							// in ra thong bao
 							
 						}
 					}				
@@ -115,10 +120,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, IRe
 			}
 			// if ko co thong bao
 			else{
-				sResult = "login that bai";
+				message = "login thất bại";
 			}
 		}
-		tvLoginResult.setText(sResult);
+		tvLoginResult.setText(message);
 		pbLoading.setVisibility(View.INVISIBLE);
 		btnLogin.setEnabled(true);
 	}
