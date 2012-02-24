@@ -1,14 +1,12 @@
 ﻿
 // Dang ki true
 { 
-	"login":{
-		"type":"register",
-		"value":"true", 
-		"user_id":"1234",
-		"level_score":"0",
-		"level":"1sao",
-		"money":"0",
-	}
+	"type":"register"
+	"value":"true"
+	"message":"register success!"
+	"info":[
+		{"user_id"="", "username"="", "email"="", "score_level"="", "registed_date"="", "power_user"="", "money" = ""}
+	]
 }
 
 // Dang ki false

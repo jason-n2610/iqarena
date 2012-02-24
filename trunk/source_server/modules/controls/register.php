@@ -24,13 +24,22 @@
         if (mysql_num_rows($result) != 0)
         {             
             // user da ton tai
-            echo 'đã tồn tại user này';   
+            echo '{"type":"register", "value":"false", "message":"user đã tồn tại"}';  
         } 
         else
         {
             // user chua ton tai, them user
-            echo User::addUser($username, $password, $email, 0, 0, 0);
-            echo 'thêm thành công';
+            $isSuccess = User::addUser($username, $password, $email, 0, 0, 0);
+            if ($isSuccess)
+            {
+                echo '{"type":"register", "value":"true", "message":"register success!", "info":';
+                echo '[{"user_id"="'.mysql_insert_id().'", "username"="'.$username.'", "email"="'.$email.'", "score_level"="0", "registed_date"="'.date('Y-m-d H:i:s').'", "power_user"="0", "money"="0"}]}';
+            }
+            else
+            {
+                echo '{"type":"register", "value":"false", "message":"Đăng kí thất bại"}';
+            }
+            
         }                
 
         // giai phong du lieu
