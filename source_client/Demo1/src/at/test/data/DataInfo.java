@@ -53,7 +53,29 @@ public class DataInfo {
 
 				}
 			} else if (typeMessage.equals("register")) {
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value) {
+					// truong hop register thanh cong
+					// lay ve thong tin user
+					String jInfo = jObject.getString("info");
+					JSONArray jArray = new JSONArray(jInfo);
+					int length = jArray.length();
+					Log.i(TAG, "length: "+length);
+					for (int i=0; i<length; i++){
+						JSONObject json_data = jArray.getJSONObject(i);
+						int userId = json_data.getInt("user_id");
+						String username = json_data.getString("username");
+						String email = json_data.getString("email");
+						float scoreLevel = json_data.getInt("score_level");
+						String registedDate = json_data.getString("registed_date");
+						int powerUser = json_data.getInt("power_user");
+						float money = json_data.getInt("money");
+						userInfo = new User(userId, username, email, scoreLevel,
+								registedDate, powerUser, money);
+					}
 
+				}
 			}
 			result = true;
 		} catch (JSONException e) {

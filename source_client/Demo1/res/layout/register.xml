@@ -31,12 +31,6 @@
                     android:layout_weight="1"
                     android:text="Result" />
 
-                <ProgressBar
-                    android:id="@+id/pbRegister"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:visibility="invisible"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -51,9 +45,7 @@
 
                 <EditText
                     android:id="@+id/editText1"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/textView1"
+                	style="@style/EditTextStyle"
                     android:inputType="textPersonName" >
                 </EditText>
             </LinearLayout>
@@ -70,8 +62,7 @@
 
                 <EditText
                     android:id="@+id/editText2"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                	style="@style/EditTextStyle"
                     android:inputType="textPassword" >
                 </EditText>
             </LinearLayout>
@@ -88,8 +79,7 @@
 
                 <EditText
                     android:id="@+id/editText3"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                	style="@style/EditTextStyle"
                     android:inputType="textPassword" />
             </LinearLayout>
 
@@ -105,8 +95,7 @@
 
                 <EditText
                     android:id="@+id/editText4"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                	style="@style/EditTextStyle"
                     android:inputType="textEmailAddress" />
             </LinearLayout>
 
