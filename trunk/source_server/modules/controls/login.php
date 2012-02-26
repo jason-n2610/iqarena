@@ -1,5 +1,4 @@
-﻿<?php                                           
-    $path = getcwd();
+﻿<?php                  
     // neu 1 trong cac truong du lieu la khac null   
     if ((!empty($_POST['username'])) && (!empty($_POST['password'])))
     {

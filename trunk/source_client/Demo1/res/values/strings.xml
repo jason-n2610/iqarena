@@ -3,5 +3,17 @@
 
     <string name="hello">Hello World, LoginActivity!</string>
     <string name="app_name">Demo1</string>
+    
+    <!-- login -->
+    <string name="login_username_title">Username:</string>
+    <string name="login_password_title">Password:</string>
+    <string name="login_signin">Login</string>
+    <string name="login_sign_up_here">Don\'t have an account?</string>
+    <string name="login_signup">Sign up</string>    
+    <string name="login_result">Login result</string>
+    
+    <!-- register -->
+    
+    <!-- room -->
 
 </resources>

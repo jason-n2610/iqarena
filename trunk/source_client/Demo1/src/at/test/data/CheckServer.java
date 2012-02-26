@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,26 +20,26 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import android.net.ParseException;
+
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * @author hoangnh
  * 
  */
 
-public class RequestServer extends AsyncTask<String, Integer, String> {
+public class CheckServer extends AsyncTask<String, Integer, String> {
 
-	private IRequestServer delegate;
+	private ICheckServer delegate;
 
 	enum REQUEST_TYPE {
-		REQUEST_LOGIN, REQUEST_REGISTER, REQUEST_GET_LIST_ROOM, 
 		REQUEST_CHECK_CHANGE_ROOM
 	};
 
 	private REQUEST_TYPE requestType;
 
-	public RequestServer(IRequestServer delegate) {
+	public CheckServer(ICheckServer delegate) {
 		this.delegate = delegate;
 	}
 
@@ -58,39 +57,19 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 			List<NameValuePair> nameValuePairs = null;
 
 			switch (requestType) {
-			case REQUEST_LOGIN:
-				nameValuePairs = new ArrayList<NameValuePair>(3);
-				nameValuePairs.add(new BasicNameValuePair("message", "login"));
-				nameValuePairs
-						.add(new BasicNameValuePair("username", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("password", Utils
-						.md5(params[1])));
-				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				break;
 
-			case REQUEST_REGISTER:
-				nameValuePairs = new ArrayList<NameValuePair>(4);
-				nameValuePairs
-						.add(new BasicNameValuePair("message", "register"));
-				nameValuePairs
-						.add(new BasicNameValuePair("username", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("password", Utils
-						.md5(params[1])));
-				nameValuePairs.add(new BasicNameValuePair("email", params[2]));
-				break;
-
-			case REQUEST_GET_LIST_ROOM:
+			case REQUEST_CHECK_CHANGE_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(1);
 				nameValuePairs.add(new BasicNameValuePair("message",
-						"get_list_room"));
+						"check_change_room"));
 				break;				
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			int responseCode = httpResponse.getStatusLine().getStatusCode();
-			switch (responseCode) {
-			case 200:
+			boolean oldIsChange=false, newIsChange=false;
+			boolean lop=false;
+			while(!lop){
+				Thread.sleep(1000);
+				HttpResponse httpResponse = httpClient.execute(httpPost);
 				HttpEntity entity = httpResponse.getEntity();
 				InputStream is = entity.getContent();
 				BufferedReader bis = new BufferedReader(new InputStreamReader(
@@ -104,14 +83,28 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				bis.close();
 				is.close();
 				result = sb.toString();
-				break;
+				Log.i("2", "result:"+result);
+				if (result.contains("false")){
+					newIsChange = false;
+				}
+				else if (result.contains("true")){
+					newIsChange = true;
+				}
+				if (oldIsChange!=newIsChange){
+					oldIsChange = newIsChange;
+					lop = true;
+				}
 			}
+			
 		} catch (UnsupportedEncodingException e) {
 			result = e.getMessage();
 		} catch (MalformedURLException e) {
 			result = e.getMessage();
 		} catch (IOException e) {
 			result = e.getMessage();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return result;
@@ -120,24 +113,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		delegate.onRequestComplete(result);
+		delegate.onCheckServerComplete();
 	}
 
-	// request login
-	public void login(String username, String password) {
-		this.requestType = REQUEST_TYPE.REQUEST_LOGIN;
-		this.execute(username, password);
-	}
-
-	// request register
-	public void register(String username, String password, String email) {
-		this.requestType = REQUEST_TYPE.REQUEST_REGISTER;
-		this.execute(username, password, email);
-	}
-
-	// request get list room
-	public void getListRoom() {
-		this.requestType = REQUEST_TYPE.REQUEST_GET_LIST_ROOM;
+	// request check change room
+	public void checkChangeRoom(){
+		this.requestType = REQUEST_TYPE.REQUEST_CHECK_CHANGE_ROOM;
 		this.execute();
 	}
 }

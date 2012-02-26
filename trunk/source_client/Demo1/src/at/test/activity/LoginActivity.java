@@ -3,12 +3,10 @@ package at.test.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.test.R;
 import at.test.data.IRequestServer;
@@ -32,11 +30,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 		setContentView(R.layout.login);		
         setProgressBarIndeterminateVisibility(false);
 
-		btnRegister = (Button) findViewById(R.id.btnRegister);
-		btnLogin = (Button) findViewById(R.id.btnLogin);
-		tvLoginResult = (TextView) findViewById(R.id.tvLoginResult);
-		etUsername = (EditText) findViewById(R.id.etLoginName);
-		etPassword = (EditText) findViewById(R.id.etLoginPass);
+		btnRegister = (Button) findViewById(R.id.login_signup);
+		btnLogin = (Button) findViewById(R.id.login_login);
+		tvLoginResult = (TextView) findViewById(R.id.login_result);
+		etUsername = (EditText) findViewById(R.id.login_username);
+		etPassword = (EditText) findViewById(R.id.login_password);
 
 		tvLoginResult.setText("");
 		btnRegister.setOnClickListener(this);
@@ -45,7 +43,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btnLogin) {
+		if (v.getId() == R.id.login_login) {
 			String strUsername = etUsername.getText().toString().trim();
 			String strPassword = etPassword.getText().toString().trim();
 			if (strUsername.equals("")) {
@@ -72,7 +70,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 			setProgressBarIndeterminateVisibility(true);
 			btnLogin.setEnabled(false);
 			requestServer.login(strUsername, strPassword);
-		} else if (v.getId() == R.id.btnRegister) {
+		} else if (v.getId() == R.id.login_signup) {
 			Intent intent = new Intent(getApplicationContext(),
 					RegisterActivity.class);
 			startActivity(intent);
