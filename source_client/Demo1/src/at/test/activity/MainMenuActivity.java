@@ -1,20 +1,40 @@
 package at.test.activity;
 
-import android.app.Activity;
+import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.TabHost;
 import at.test.R;
-import at.test.data.DataInfo;
 
-public class MainMenuActivity extends Activity{
+public class MainMenuActivity extends TabActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_menu);
-		TextView tvInfo = (TextView) findViewById(R.id.textView1);
-		tvInfo.setText("xin chào "+DataInfo.userInfo.getUsername());
+		setContentView(R.layout.tab_widget);
+		TabHost tabHost = getTabHost();
+		TabHost.TabSpec spec;
+		Intent intent;
+
+		intent = new Intent().setClass(this, RoomActivity.class);
+
+		spec = tabHost.newTabSpec("rooms").setIndicator("Rooms")
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		intent = new Intent().setClass(this, UserInfoActivity.class);
+		spec = tabHost.newTabSpec("user_info").setIndicator("User Info")
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		intent = new Intent().setClass(this, FriendActivity.class);
+		spec = tabHost.newTabSpec("friends").setIndicator("Friends")
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		tabHost.setCurrentTab(1);
 	}
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
