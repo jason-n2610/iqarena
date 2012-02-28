@@ -1,4 +1,4 @@
-package at.test.data;
+package at.test.connect;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +23,8 @@ import org.apache.http.params.HttpParams;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import at.test.data.Config;
+import at.test.delegate.ICheckServer;
 
 /**
  * @author hoangnh
@@ -65,7 +67,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				break;				
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			boolean oldIsChange=false, newIsChange=false;
+			String oldResult = null;
 			boolean lop=false;
 			while(!lop){
 				Thread.sleep(1000);
@@ -84,14 +86,10 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				is.close();
 				result = sb.toString();
 				Log.i("2", "result:"+result);
-				if (result.contains("false")){
-					newIsChange = false;
+				if (oldResult == null){
+					oldResult = result;
 				}
-				else if (result.contains("true")){
-					newIsChange = true;
-				}
-				if (oldIsChange!=newIsChange){
-					oldIsChange = newIsChange;
+				if (!result.equals(oldResult)){
 					lop = true;
 				}
 			}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package at.test.data;
+package at.test.delegate;
 
 /**
  * @author Administrator

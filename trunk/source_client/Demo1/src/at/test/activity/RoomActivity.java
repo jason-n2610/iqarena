@@ -10,11 +10,11 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import at.test.R;
-import at.test.data.CheckServer;
+import at.test.connect.CheckServer;
+import at.test.connect.RequestServer;
 import at.test.data.DataInfo;
-import at.test.data.ICheckServer;
-import at.test.data.IRequestServer;
-import at.test.data.RequestServer;
+import at.test.delegate.ICheckServer;
+import at.test.delegate.IRequestServer;
 import at.test.object.Room;
 
 /**
@@ -25,8 +25,8 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 
 	ListView mListViewRoom;
 	String[] mStrListRoom;
-	RequestServer mRequestServer;
-	CheckServer mCheckServer;
+	RequestServer mRequestServer = null;
+	CheckServer mCheckServer = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,61 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
 		
-		mRequestServer = new RequestServer(this);
-		mRequestServer.getListRoom();
+		if (savedInstanceState == null){
+			mRequestServer = new RequestServer(this);
+			mRequestServer.getListRoom();
+		}
+		else{
+			if (mRequestServer == null){
+				mRequestServer = new RequestServer(this);
+				mRequestServer.getListRoom();
+			}
+			else{
+				mRequestServer.cancel(true);
+			}
+		}
+		Log.i("2", "onCreate()");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.i("2", "onStart()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.i("2", "onPause()");
+		if (mCheckServer != null){
+			mCheckServer.cancel(true);
+			Log.i("2", "onPause()");
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mCheckServer != null){
+			if (mCheckServer.isCancelled()){
+				// task is cancel true
+				mCheckServer = new CheckServer(this);
+				mCheckServer.checkChangeRoom();
+			}
+		}
+		Log.i("2", "onResume()");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mCheckServer != null){
+			mCheckServer.cancel(true);
+		}
+		if (mRequestServer != null){
+			mRequestServer.cancel(true);
+		}
+		Log.i("2", "onDestroy()");
 	}
 
 	@Override
@@ -64,8 +117,13 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 				mListViewRoom.setAdapter(adapter);
 			}
 		}
-		mCheckServer = new CheckServer(this);
-		mCheckServer.checkChangeRoom();
+		if (mCheckServer == null){
+			mCheckServer = new CheckServer(this);
+			mCheckServer.checkChangeRoom();
+		}
+		else{
+			mCheckServer.cancel(true);
+		}
 	}
 
 	@Override
