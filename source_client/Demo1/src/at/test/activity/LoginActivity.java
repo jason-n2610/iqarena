@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import at.test.R;
-import at.test.data.IRequestServer;
+import at.test.connect.RequestServer;
 import at.test.data.DataInfo;
-import at.test.data.RequestServer;
 import at.test.data.Utils;
+import at.test.delegate.IRequestServer;
 
 public class LoginActivity extends Activity implements View.OnClickListener,
 		IRequestServer {

@@ -1,4 +1,4 @@
-package at.test.data;
+package at.test.connect;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +23,9 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import android.net.ParseException;
 import android.os.AsyncTask;
+import at.test.data.Config;
+import at.test.data.Utils;
+import at.test.delegate.IRequestServer;
 
 /**
  * @author hoangnh
