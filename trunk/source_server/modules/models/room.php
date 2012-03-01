@@ -2,7 +2,7 @@
 
     class Room
     {
-        public static $checkChangeRoom = true;
+        public static $checkChangeRoom = false;
         
         public static function getAllRoom()
         {

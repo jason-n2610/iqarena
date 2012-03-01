@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/relativeLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<LinearLayout android:id="@+id/linearLayout1"
-		android:layout_width="320dp" android:layout_height="240dp"
-		android:layout_centerHorizontal="true" android:layout_centerVertical="true"
-		android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@android:id/tabs"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
-		<TextView android:id="@+id/textView1" android:layout_width="100dp"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:text="Username" />
-	</LinearLayout>
-
-</RelativeLayout>
+</TabHost>

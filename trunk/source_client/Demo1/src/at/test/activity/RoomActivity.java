@@ -32,41 +32,21 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.room);
-		setProgressBarIndeterminateVisibility(true);
 		
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
-		
-		if (savedInstanceState == null){
-			mRequestServer = new RequestServer(this);
-			mRequestServer.getListRoom();
-		}
-		else{
-			if (mRequestServer == null){
-				mRequestServer = new RequestServer(this);
-				mRequestServer.getListRoom();
-			}
-			else{
-				mRequestServer.cancel(true);
-			}
-		}
-		Log.i("2", "onCreate()");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.i("2", "onStart()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.i("2", "onPause()");
 		if (mCheckServer != null){
 			mCheckServer.cancel(true);
-			Log.i("2", "onPause()");
 		}
 	}
 
@@ -80,7 +60,14 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 				mCheckServer.checkChangeRoom();
 			}
 		}
-		Log.i("2", "onResume()");
+		if (mRequestServer == null){
+			mRequestServer = new RequestServer(this);
+			mRequestServer.getListRoom();
+		}
+		else{
+			mRequestServer.cancel(true);
+		}
+		getParent().setProgressBarIndeterminateVisibility(true);
 	}
 
 	@Override
@@ -92,7 +79,6 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		if (mRequestServer != null){
 			mRequestServer.cancel(true);
 		}
-		Log.i("2", "onDestroy()");
 	}
 
 	@Override
@@ -123,6 +109,8 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		}
 		else{
 			mCheckServer.cancel(true);
+			mCheckServer = new CheckServer(this);
+			mCheckServer.checkChangeRoom();
 		}
 	}
 
