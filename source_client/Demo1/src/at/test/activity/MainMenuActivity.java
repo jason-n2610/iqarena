@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
-import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import at.test.R;
@@ -24,9 +23,10 @@ public class MainMenuActivity extends TabActivity {
 		setContentView(R.layout.main_menu);
 		mTabHost = getTabHost();
 		Intent intent;
+		
+		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
 
 		intent = new Intent().setClass(this, RoomActivity.class);
-
 		setupTab("Room", intent);
 
 		intent = new Intent().setClass(this, UserInfoActivity.class);

@@ -6,7 +6,6 @@ package at.test.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import at.test.R;
@@ -48,6 +47,7 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		if (mCheckServer != null){
 			mCheckServer.cancel(true);
 		}
+		getParent().setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
@@ -63,11 +63,11 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		if (mRequestServer == null){
 			mRequestServer = new RequestServer(this);
 			mRequestServer.getListRoom();
+			getParent().setProgressBarIndeterminateVisibility(true);
 		}
 		else{
 			mRequestServer.cancel(true);
 		}
-		getParent().setProgressBarIndeterminateVisibility(true);
 	}
 
 	@Override
@@ -103,6 +103,8 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 				mListViewRoom.setAdapter(adapter);
 			}
 		}
+
+		getParent().setProgressBarIndeterminateVisibility(false);
 		if (mCheckServer == null){
 			mCheckServer = new CheckServer(this);
 			mCheckServer.checkChangeRoom();
@@ -117,6 +119,7 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 	@Override
 	public void onCheckServerComplete() {
 		// TODO Auto-generated method stub
+		getParent().setProgressBarIndeterminateVisibility(true);
 		mRequestServer = new RequestServer(this);
 		mRequestServer.getListRoom();
 	}
