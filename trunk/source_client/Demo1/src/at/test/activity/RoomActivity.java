@@ -6,7 +6,10 @@ package at.test.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import at.test.R;
 import at.test.connect.CheckServer;
@@ -20,9 +23,11 @@ import at.test.object.Room;
  * @author Administrator
  * 
  */
-public class RoomActivity extends Activity implements IRequestServer, ICheckServer {
+public class RoomActivity extends Activity implements IRequestServer, ICheckServer, OnClickListener {
 
 	ListView mListViewRoom;
+	Button mBtnNewRoom;
+	
 	String[] mStrListRoom;
 	RequestServer mRequestServer = null;
 	CheckServer mCheckServer = null;
@@ -34,11 +39,9 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		setContentView(R.layout.room);
 		
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
+		mBtnNewRoom = (Button) findViewById(R.id.room_btn_new_room);
+		
+		mBtnNewRoom.setOnClickListener(this);
 	}
 
 	@Override
@@ -47,7 +50,7 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		if (mCheckServer != null){
 			mCheckServer.cancel(true);
 		}
-		getParent().setProgressBarIndeterminateVisibility(false);
+//		getParent().setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
@@ -98,7 +101,7 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 					mStrListRoom[i] = room.getRoomName();
 				}
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_1, android.R.id.text1,
+						android.R.layout.simple_list_item_2, android.R.id.text1,
 						mStrListRoom);
 				mListViewRoom.setAdapter(adapter);
 			}
@@ -122,6 +125,18 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		getParent().setProgressBarIndeterminateVisibility(true);
 		mRequestServer = new RequestServer(this);
 		mRequestServer.getListRoom();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.room_btn_new_room:
+			
+			break;
+
+		default:
+			break;
+		}
 	}
 
 }

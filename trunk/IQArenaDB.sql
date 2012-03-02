@@ -21,6 +21,8 @@ DROP TABLE IF EXISTS grafts;
 DROP TABLE IF EXISTS user_grafts;
 DROP TABLE IF EXISTS levels;
 DROP TABLE IF EXISTS member_answers;
+DROP TABLE IF EXISTS structure_of_questions;
+DROP TABLE IF EXISTS question_reviews;
 
 CREATE TABLE users(
 	user_id int unsigned not null auto_increment,
@@ -63,6 +65,7 @@ CREATE TABLE questions(
 	answer_c nvarchar(200) not null,
 	answer_d nvarchar(200) not null,
 	answer tinyint not null,
+	describle_answer nvarchar(500),
 	PRIMARY KEY (question_id)
 );
 
@@ -147,7 +150,23 @@ CREATE TABLE levels(
 	PRIMARY KEY (level_id)
 );
 
-INSERT INTO users(username, password, email, score_level, registed_date, power_user, money)
-	VALUES ('admin', '0945fc9611f55fd0e183fb8b044f1afe', 'admin@hostmail.com', 0, '2012-1-2 10:00:00' , 1, 0),
-		('user', '0945fc9611f55fd0e183fb8b044f1afe', 'user@gmail.com', 100, '2012-1-2 10:00:00', 0, 0);
+CREATE TABLE structure_of_questions(
+	structure_of_question_id int unsigned not null auto_increment,
+	question_type_id tinyint unsigned not null,
+	number_of_questions tinyint not null,
+	PRIMARY KEY (structure_of_question_id)
+);
 
+CREATE TABLE question_reviews(
+	question_review_id int unsigned not null auto_increment,
+	user_id int unsigned not null,
+	question_name nvarchar(200) not null,
+	question_type_id tinyint unsigned not null,
+	answer_a nvarchar(200) not null,
+	answer_b nvarchar(200) not null,
+	answer_c nvarchar(200) not null,
+	answer_d nvarchar(200) not null,
+	answer tinyint not null,
+	describle_answer nvarchar(500),
+	PRIMARY KEY (question_review_id)
+);
