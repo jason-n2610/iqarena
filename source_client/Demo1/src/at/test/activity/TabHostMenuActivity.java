@@ -12,7 +12,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import at.test.R;
 
-public class MainMenuActivity extends TabActivity {
+public class TabHostMenuActivity extends TabActivity {
 
 	TabHost mTabHost;
 
@@ -20,7 +20,7 @@ public class MainMenuActivity extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.main_menu);
+		setContentView(R.layout.tab_host_menu);
 		mTabHost = getTabHost();
 		Intent intent;
 		
@@ -52,7 +52,7 @@ public class MainMenuActivity extends TabActivity {
 	}
 
 	private static View createTabView(final Context context, final String text) {
-		View view = LayoutInflater.from(context).inflate(R.layout.tab_item,
+		View view = LayoutInflater.from(context).inflate(R.layout.tah_host_menu_item,
 				null);
 		TextView tv = (TextView) view.findViewById(R.id.tabsText);
 		tv.setText(text);

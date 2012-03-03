@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainMenuActivity" >
+        <activity android:name=".activity.TabHostMenuActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MainMenuActivity" />
 
