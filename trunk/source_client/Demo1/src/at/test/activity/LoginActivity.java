@@ -100,7 +100,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 							if (DataInfo.userInfo != null) {
 								Intent intent = new Intent(
 										getApplicationContext(),
-										MainMenuActivity.class);
+										TabHostMenuActivity.class);
 								startActivity(intent);
 								overridePendingTransition(R.anim.incoming,
 										R.anim.outgoing);

@@ -21,7 +21,7 @@
             return $result;
         }
         
-        public static function addRoom($room_name, $owner_id, $max_member, $min_member, $status, $win_score, $number_of_member)
+        public static function createNewRoom($room_name, $owner_id, $max_member, $min_member, $status, $win_score, $number_of_member)
         {
             $query = "INSERT INTO 
                             rooms(

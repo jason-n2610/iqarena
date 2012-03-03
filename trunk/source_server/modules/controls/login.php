@@ -1,6 +1,6 @@
 ﻿<?php                  
     // neu 1 trong cac truong du lieu la khac null   
-    if ((!empty($_POST['username'])) && (!empty($_POST['password'])))
+    if ((isset($_POST['username'])) && (isset($_POST['password'])))
     {
         require ($path."/include/mysql.php"); 
         require ($path."/modules/models/user.php"); 
