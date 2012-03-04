@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, LoginActivity!</string>
-    <string name="app_name">Demo1</string>
-    
+    <string name="app_name">IQArena</string>
+
     <!-- login -->
+    <string name="login_title">LOGIN</string>
     <string name="login_username_title">Username:</string>
     <string name="login_password_title">Password:</string>
     <string name="login_signin">Login</string>
     <string name="login_sign_up_here">Don\'t have an account?</string>
-    <string name="login_signup">Sign up</string>    
-    <string name="login_result">Login result</string>
-    
+    <string name="login_signup">Sign up</string>
+    <string name="login_result">Result</string>
+
     <!-- register -->
-    
+    <string name="register_title">REGISTER</string>
+    <string name="register_repassword">Re-password:</string>
+    <string name="register_email">Email:</string>
+    <string name="regiser_button_register">Register</string>
+
     <!-- room -->
 
 </resources>
