@@ -47,6 +47,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener,
 	}
 
 	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
+
+	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnRegister) {
 			strUsername = etUsername.getText().toString().trim();

@@ -4,6 +4,7 @@
 package at.test.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -82,6 +83,15 @@ public class RoomActivity extends Activity implements IRequestServer, ICheckServ
 		if (mRequestServer != null){
 			mRequestServer.cancel(true);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
 	@Override
