@@ -30,7 +30,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 	TextView tvLoginResult;
 	EditText etUsername, etPassword;
 	RequestServer requestServer;
-	ProgressDialog progressDialog = null;
 	CheckBox ckRemember;
 
 	/** Called when the activity is first created. */
@@ -207,9 +206,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 		tvLoginResult.setText(message);
 		btnLogin.setEnabled(true);
 		setProgressBarIndeterminateVisibility(false);
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-		}
 	}
 
 }
