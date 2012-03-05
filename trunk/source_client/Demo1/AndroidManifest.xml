@@ -5,38 +5,71 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="8" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
-            android:label="@string/app_name"
-            android:name=".activity.LoginActivity" >
-            <intent-filter >
+            android:name=".activity.LoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" >
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.RegisterActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.TabHostMenuActivity" >
-            <intent-filter >
-                <action android:name="android.intent.action.MainMenuActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.TabHostMenuActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RoomActivity"></activity>
-        <activity android:name=".activity.UserInfoActivity"></activity>
-        <activity android:name=".activity.FriendActivity"></activity>
-        
+        <activity android:name=".activity.RoomActivity" >
+        </activity>
+
+        <intent-filter>
+            <action android:name="android.intent.action.RoomActivity" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+
+        <activity android:name=".activity.UserInfoActivity" >
+        </activity>
+
+        <intent-filter>
+            <action android:name="android.intent.action.UserInfoActivity" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+
+        <activity android:name=".activity.FriendActivity" >
+        </activity>
+
+        <intent-filter>
+            <action android:name="android.intent.action.FriendActivity" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+
+        <activity android:name=".activity.CreateNewRoomActivity" >
+        </activity>
+
+        <intent-filter>
+            <action android:name="android.intent.action.CreateNewRoomActivity" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
     </application>
 
 </manifest>
