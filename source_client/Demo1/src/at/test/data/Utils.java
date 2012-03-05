@@ -1,12 +1,22 @@
 package at.test.data;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
 
+	private static String message;
+	
 	public static String md5(String s) {
 		try {
 			// Create MD5 Hash
@@ -37,5 +47,5 @@ public class Utils {
 		Pattern inputPattern = Pattern.compile("[A-z0-9\\.]+");
 		Matcher inputMatcher = inputPattern.matcher(input);
 		return inputMatcher.matches();
-	}
+	}	
 }
