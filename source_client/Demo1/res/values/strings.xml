@@ -20,5 +20,9 @@
     <string name="regiser_button_register">Register</string>
 
     <!-- room -->
+    
+    <!-- create new room -->
+    <string name="new_room_spinner_max_member">Choose a number</string>
+    <string name="new_room_spinner_bet_score">Choose a score</string>
 
 </resources>

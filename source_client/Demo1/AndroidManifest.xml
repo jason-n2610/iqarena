@@ -7,7 +7,7 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:icon="@drawable/icon"
@@ -35,41 +35,41 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RoomActivity" >
+        <activity android:name=".activity.RoomListActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.RoomActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-
-        <intent-filter>
-            <action android:name="android.intent.action.RoomActivity" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
         <activity android:name=".activity.UserInfoActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.UserInfoActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-
-        <intent-filter>
-            <action android:name="android.intent.action.UserInfoActivity" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
         <activity android:name=".activity.FriendActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.FriendActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-
-        <intent-filter>
-            <action android:name="android.intent.action.FriendActivity" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
         <activity android:name=".activity.CreateNewRoomActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.CreateNewRoomActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+        <activity android:name=".activity.RoomWaitingActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.RoomWaitingActivity" />
 
-        <intent-filter>
-            <action android:name="android.intent.action.CreateNewRoomActivity" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

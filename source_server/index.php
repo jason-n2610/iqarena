@@ -16,4 +16,8 @@
     {
         require ($path.'/modules/controls/check_change_room.php');
     }
+    else if ($_POST['message'] == "create_new_room")
+    {
+        require ($path.'/modules/controls/create_new_room.php');
+    } 
 ?>

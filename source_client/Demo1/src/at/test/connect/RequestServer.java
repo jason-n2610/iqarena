@@ -20,8 +20,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
 import android.os.AsyncTask;
+import android.util.Log;
 import at.test.data.Config;
+import at.test.data.DataInfo;
 import at.test.data.Utils;
 import at.test.delegate.IRequestServer;
 
@@ -35,8 +38,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	private IRequestServer delegate;
 
 	enum REQUEST_TYPE {
-		REQUEST_LOGIN, REQUEST_REGISTER, REQUEST_GET_LIST_ROOM, 
-		REQUEST_CHECK_CHANGE_ROOM
+		REQUEST_LOGIN, REQUEST_REGISTER, REQUEST_GET_LIST_ROOM, REQUEST_CREATE_NEW_ROOM
 	};
 
 	private REQUEST_TYPE requestType;
@@ -84,7 +86,20 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs = new ArrayList<NameValuePair>(1);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						"get_list_room"));
-				break;				
+				break;
+			case REQUEST_CREATE_NEW_ROOM:
+				nameValuePairs = new ArrayList<NameValuePair>();
+				nameValuePairs.add(new BasicNameValuePair("message",
+						"create_new_room"));
+				nameValuePairs.add(new BasicNameValuePair("room_name",
+						params[0]));
+				nameValuePairs.add(new BasicNameValuePair("owner_id", String
+						.valueOf(DataInfo.userInfo.getUserId())));
+				nameValuePairs.add(new BasicNameValuePair("max_member",
+						params[1]));
+				nameValuePairs.add(new BasicNameValuePair("win_score",
+						params[2]));
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -98,13 +113,14 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						is), 8);
 				StringBuilder sb = new StringBuilder();
 				sb.append(bis.readLine() + "\n");
-				String line = "0";
+				String line = null;
 				while ((line = bis.readLine()) != null) {
 					sb.append(line + "\n");
 				}
 				bis.close();
 				is.close();
 				result = sb.toString();
+				Log.i("REQUEST_SERVER", result);
 				break;
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -140,5 +156,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void getListRoom() {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_LIST_ROOM;
 		this.execute();
+	}
+
+	// create new room
+	public void createNewRoom(String strRoomName, String strMaxMem,
+			String strBetScore) {
+		this.requestType = REQUEST_TYPE.REQUEST_CREATE_NEW_ROOM;
+		this.execute(strRoomName, strMaxMem, strBetScore);
 	}
 }
