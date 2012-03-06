@@ -24,7 +24,7 @@ import at.test.object.Room;
  * @author Administrator
  * 
  */
-public class RoomActivity extends Activity implements IRequestServer,
+public class RoomListActivity extends Activity implements IRequestServer,
 		ICheckServer, OnClickListener {
 
 	ListView mListViewRoom;
@@ -38,7 +38,7 @@ public class RoomActivity extends Activity implements IRequestServer,
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.room);
+		setContentView(R.layout.room_list);
 
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
 		mBtnNewRoom = (Button) findViewById(R.id.room_btn_new_room);
@@ -64,13 +64,9 @@ public class RoomActivity extends Activity implements IRequestServer,
 				mCheckServer.checkChangeRoom();
 			}
 		}
-		if (mRequestServer == null) {
 			mRequestServer = new RequestServer(this);
 			mRequestServer.getListRoom();
 			getParent().setProgressBarIndeterminateVisibility(true);
-		} else {
-			mRequestServer.cancel(true);
-		}
 	}
 
 	@Override
@@ -103,7 +99,6 @@ public class RoomActivity extends Activity implements IRequestServer,
 			int length = DataInfo.listRoom.size();
 			// co room
 			if (length > 0) {
-				Log.i("2", "roomactivity, length:" + length);
 				mStrListRoom = new String[length];
 				for (int i = 0; i < length; i++) {
 					Room room = DataInfo.listRoom.get(i);
@@ -140,7 +135,9 @@ public class RoomActivity extends Activity implements IRequestServer,
 		switch (v.getId()) {
 		case R.id.room_btn_new_room:
 			Intent i = new Intent(getApplicationContext(),
-					CreateNewRoomActivity.class);
+					CreateNewRoomActivity.class);			
+			i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
 			startActivity(i);
 			break;
 

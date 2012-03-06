@@ -3,43 +3,133 @@
  */
 package at.test.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SlidingDrawer;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import at.test.R;
+import at.test.connect.RequestServer;
+import at.test.data.DataInfo;
+import at.test.delegate.IRequestServer;
 
 /**
  * @author hoangnh
- *
+ * 
  */
-public class CreateNewRoomActivity extends Activity implements OnClickListener{
+public class CreateNewRoomActivity extends Activity implements OnClickListener,
+			IRequestServer{
+
+	Spinner spMaxNumber, spBetScore;
+	EditText etRoomName;
+	TextView tvResult;
+	Button btnCreate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.create_new_room);
-		Button btnCreate = (Button) findViewById(R.id.btnCreate);
-		Button btnCancel = (Button) findViewById(R.id.btnCancel);
-		
+		setProgressBarIndeterminateVisibility(false);
+
+		Button btnCancel = (Button) findViewById(R.id.btn_cancel);
+		btnCreate = (Button) findViewById(R.id.btn_create);
+		etRoomName = (EditText) findViewById(R.id.et_room_name);
+		spMaxNumber = (Spinner) findViewById(R.id.sp_max_member);
+		spBetScore = (Spinner) findViewById(R.id.sp_bet_score);
+		tvResult = (TextView) findViewById(R.id.tv_result);
+
 		btnCancel.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
+		tvResult.setText("");
+		
+		ArrayList<Integer> alMaxNumber = new ArrayList<Integer>();
+		for (int i = 0; i < 19; i++) {
+			alMaxNumber.add(i + 2);
+		}
+		ArrayList<Integer> alBetScore = new ArrayList<Integer>();
+		for (int i = 5; i < 16; i++) {
+			alBetScore.add(i * 100);
+		}
+
+		ArrayAdapter<Integer> aaMaxNumber = new ArrayAdapter<Integer>(this,
+				android.R.layout.simple_spinner_item, alMaxNumber);
+		ArrayAdapter<Integer> aaBetScore = new ArrayAdapter<Integer>(this,
+				android.R.layout.simple_spinner_item, alBetScore);
+
+		spMaxNumber.setAdapter(aaMaxNumber);
+		spBetScore.setAdapter(aaBetScore);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnCreate:
-			
+		case R.id.btn_create:
+			String strRoomName = etRoomName.getText().toString().trim();
+			String strMaxMember = spMaxNumber.getSelectedItem().toString();
+			String strBetScore = spBetScore.getSelectedItem().toString();
+			if (strRoomName.length() > 0){
+				RequestServer requestServer = new RequestServer(this);
+				requestServer.createNewRoom(strRoomName, strMaxMember, strBetScore);
+				btnCreate.setEnabled(false);
+				setProgressBarIndeterminateVisibility(true);
+			}
+			else{
+				tvResult.setText("Tên room không hợp lệ!");
+			}
 			break;
 
-		case R.id.btnCancel:
+		case R.id.btn_cancel:
 			onBackPressed();
 			break;
 		default:
 			break;
 		}
 	}
-	
+
+	// interface IRequestServer
+	@Override
+	public void onRequestComplete(String sResult) {
+		String strMessage = sResult;
+		if (strMessage != null){
+			sResult = sResult.trim();
+			int length = sResult.length();
+			// if co thong bao
+			if (length > 0) {
+				// kiem tra xem co thong tin tu server tra ve ko?
+				if (sResult.contains("{")) {
+					int start = sResult.indexOf("{");
+					sResult = sResult.substring(start, length);
+					boolean isSuccess = DataInfo.setData(sResult);
+					strMessage = DataInfo.message;
+					if (isSuccess) {
+						// neu create thanh cong
+						if (DataInfo.value) {
+							Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
+							startActivity(intent);
+							strMessage = "";
+						} 
+					}
+				}
+			}
+		}
+		else{
+			strMessage = "Tạo room thất bại";
+		}
+		btnCreate.setEnabled(true);
+		tvResult.setText(strMessage);
+		setProgressBarIndeterminateVisibility(false);
+	}
 }

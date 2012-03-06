@@ -89,6 +89,10 @@ public class DataInfo {
 
 				}
 			}
+			else if (typeMessage.equals("create_new_room")){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+			}
 			// message 'get_list_room'
 			else if (typeMessage.equals("get_list_room")) {
 				Log.i(TAG, "get list room");

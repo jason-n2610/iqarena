@@ -26,7 +26,7 @@ public class TabHostMenuActivity extends TabActivity {
 		
 		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
 
-		intent = new Intent().setClass(this, RoomActivity.class);
+		intent = new Intent().setClass(this, RoomListActivity.class);
 		setupTab("Room", intent);
 
 		intent = new Intent().setClass(this, UserInfoActivity.class);

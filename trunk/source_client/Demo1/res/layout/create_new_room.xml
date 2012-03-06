@@ -14,13 +14,19 @@
         android:layout_marginTop="10dp" />
 
     <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_result" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Room name" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/et_room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:layout_margin="10dp">
@@ -32,12 +38,13 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Max number" />
+        android:text="Max member" />
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/sp_max_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:prompt="@string/new_room_spinner_max_member"
         android:layout_margin="10dp" />
 
     <TextView
@@ -47,9 +54,10 @@
         android:text="Bet score" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/sp_bet_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:prompt="@string/new_room_spinner_bet_score"
         android:layout_margin="10dp" />
 
     <LinearLayout
@@ -59,14 +67,14 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/btnCreate"
+            android:id="@+id/btn_create"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Create" />
 
         <Button
-            android:id="@+id/btnCancel"
+            android:id="@+id/btn_cancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
