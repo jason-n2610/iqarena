@@ -11,10 +11,10 @@ public class Room {
 
 	private int roomId, ownerId, maxMember, minMember, status,
 			numberOfMember;
-	private float winScore;
-	private String roomName;
+	private float betScore;
+	private String roomName, ownerName;
 
-	public Room(int roomId, String roomName, int ownerId, int maxMember,
+	public Room(int roomId, String roomName, int ownerId, String ownerName, int maxMember,
 			int minMember, float winScore, int status, int numberOfMember) {
 		this.roomId = roomId;
 		this.ownerId = ownerId;
@@ -22,8 +22,9 @@ public class Room {
 		this.minMember = minMember;
 		this.status = status;
 		this.numberOfMember = numberOfMember;
-		this.winScore = winScore;
+		this.betScore = winScore;
 		this.roomName = roomName;
+		this.setOwnerName(ownerName);
 	}
 
 	public int getRoomId() {
@@ -74,12 +75,12 @@ public class Room {
 		this.numberOfMember = number_of_member;
 	}
 
-	public float getWinScore() {
-		return winScore;
+	public float getBetScore() {
+		return betScore;
 	}
 
-	public void setWinScore(float winScore) {
-		this.winScore = winScore;
+	public void setBetScore(float winScore) {
+		this.betScore = winScore;
 	}
 
 	public String getRoomName() {
@@ -88,5 +89,19 @@ public class Room {
 
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
+	}
+
+	/**
+	 * @return the ownerName
+	 */
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	/**
+	 * @param ownerName the ownerName to set
+	 */
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 }

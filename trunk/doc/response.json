@@ -52,8 +52,8 @@
 	"type":"view_room",
 	"value":"true",
 	"list_room":[
-		{"room_id":"12", "room_name":"abc", "max_mem":"32", "min_mem":"2", "win_score":"1000", "mem_number":"23", "owner":"abc"},
-		{"room_id":"132", "room_name":"a13bc", "max_mem":"3", "min_mem":"2", "win_score":"5000", "mem_number":"43", "owner":"abd"}
+		{"room_id":"12", "room_name":"abc", "max_mem":"32", "bet_score":"1000", "mem_number":"23", "owner":"abc"},
+		{"room_id":"132", "room_name":"a13bc", "max_mem":"3", "bet_score":"5000", "mem_number":"43", "owner":"abd"}
 	]
 }
 

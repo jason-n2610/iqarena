@@ -3,15 +3,20 @@
  */
 package at.test.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import at.test.R;
 import at.test.connect.CheckServer;
 import at.test.connect.RequestServer;
@@ -99,14 +104,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 			int length = DataInfo.listRoom.size();
 			// co room
 			if (length > 0) {
-				mStrListRoom = new String[length];
-				for (int i = 0; i < length; i++) {
-					Room room = DataInfo.listRoom.get(i);
-					mStrListRoom[i] = room.getRoomName();
-				}
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_2,
-						android.R.id.text1, mStrListRoom);
+				RoomListAdapter adapter = new RoomListAdapter(this, DataInfo.listRoom);
 				mListViewRoom.setAdapter(adapter);
 			}
 		}
@@ -124,7 +122,6 @@ public class RoomListActivity extends Activity implements IRequestServer,
 
 	@Override
 	public void onCheckServerComplete() {
-		// TODO Auto-generated method stub
 		getParent().setProgressBarIndeterminateVisibility(true);
 		mRequestServer = new RequestServer(this);
 		mRequestServer.getListRoom();
@@ -144,6 +141,50 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		default:
 			break;
 		}
+	}
+	
+	public class RoomListAdapter extends ArrayAdapter<Room>{
+		
+		private LayoutInflater mInflater;
+		private ArrayList<Room> mListRoom;
+
+		public RoomListAdapter(Context context, ArrayList<Room> objects) {
+			super(context, 1, objects);
+			mInflater = LayoutInflater.from(context);
+			mListRoom = objects;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			
+			if (convertView == null){
+				convertView = mInflater.inflate(R.layout.room_list_row, null);
+				
+				holder = new ViewHolder();
+				holder.tvRoomName = (TextView) convertView.findViewById(R.id.tv_room_name);
+				holder.tvOwnerName = (TextView) convertView.findViewById(R.id.tv_owner_name);
+				holder.tvBetScore = (TextView) convertView.findViewById(R.id.tv_bet_score);
+				
+				convertView.setTag(holder);
+			}
+			else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			
+			Room room = mListRoom.get(position);
+			
+			holder.tvRoomName.setText(room.getRoomName());
+			holder.tvOwnerName.setText(room.getOwnerName());
+			holder.tvBetScore.setText(String.valueOf(room.getBetScore()));
+			
+			return convertView;
+		}
+		
+	}
+	
+	static class ViewHolder{
+		TextView tvRoomName, tvOwnerName, tvBetScore;
 	}
 
 }
