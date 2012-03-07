@@ -110,13 +110,14 @@ public class DataInfo {
 						int roomId = json_data.getInt("room_id");
 						String roomName = json_data.getString("room_name");
 						int ownerId = json_data.getInt("owner_id");
+						String ownerName = json_data.getString("username");
 						int maxMember = json_data.getInt("max_member");
 						int minMember = json_data.getInt("min_member");
 						int status = json_data.getInt("status");
 						int winScore = json_data.getInt("win_score");
 						int numberOfMember = json_data
 								.getInt("number_of_member");
-						room = new Room(roomId, roomName, ownerId, maxMember,
+						room = new Room(roomId, roomName, ownerId, ownerName, maxMember,
 								minMember, winScore, status, numberOfMember);
 						listRoom.add(room);
 					}

@@ -10,13 +10,16 @@
                             room_id, 
                             room_name, 
                             owner_id,
+                            username,
                             max_member, 
                             min_member, 
                             status,
                             win_score, 
                             number_of_member
                         FROM 
-                            rooms';
+                            rooms AS r, users AS u
+                        WHERE
+                            r.owner_id = u.user_id';
             $result = @mysql_query($query) or die('getAllRoom(): ' . mysql_error());
             return $result;
         }
