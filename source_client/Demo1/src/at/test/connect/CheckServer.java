@@ -68,8 +68,8 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			String oldResult = null;
-			boolean lop=false;
-			while(!lop){
+			boolean loop=false;
+			while(!loop){
 				Thread.sleep(1000);
 				HttpResponse httpResponse = httpClient.execute(httpPost);
 				HttpEntity entity = httpResponse.getEntity();
@@ -90,7 +90,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 					oldResult = result;
 				}
 				if (!result.equals(oldResult)){
-					lop = true;
+					loop = true;
 				}
 			}
 			

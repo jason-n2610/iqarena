@@ -1,8 +1,8 @@
 <?php
-
+    
     require ($path . "/include/mysql.php");
     require ($path . "/modules/models/room.php");
-
+    
     MySQL::connect();
     $result = Room::getAllRoom();
     if ($result == null)

@@ -27,6 +27,14 @@
         if ($result)
         {
             echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công"}';  
+            
+            $filename= $path.'/count.txt' ;
+            $fd = fopen ($filename , "r+") or die ("Can't open $filename") ;
+            $fstring = fread ($fd , filesize ($filename)) ;
+            settype($fstring, "boolean");
+            $fstring = !$fstring;
+            $fout= fwrite ($fd , $fstring) ;
+            fclose($fd) ;
         }
         else
         {
