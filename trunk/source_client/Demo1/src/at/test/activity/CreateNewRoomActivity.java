@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -40,7 +41,9 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
 		setContentView(R.layout.create_new_room);
 		setProgressBarIndeterminateVisibility(false);
 
@@ -68,6 +71,9 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 				android.R.layout.simple_spinner_item, alMaxNumber);
 		ArrayAdapter<Integer> aaBetScore = new ArrayAdapter<Integer>(this,
 				android.R.layout.simple_spinner_item, alBetScore);
+
+		aaMaxNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		aaBetScore.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spMaxNumber.setAdapter(aaMaxNumber);
 		spBetScore.setAdapter(aaBetScore);
