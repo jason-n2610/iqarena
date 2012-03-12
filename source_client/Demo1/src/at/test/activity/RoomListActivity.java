@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,20 +38,30 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	ListView mListViewRoom;
 	Button mBtnNewRoom;
 
-	String[] mStrListRoom;
 	RequestServer mRequestServer = null;
 	CheckServer mCheckServer = null;
+	
+	ArrayList<Room> alRooms = null;
+	RoomListAdapter adapter = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);	
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
 		setContentView(R.layout.room_list);
 
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
 		mBtnNewRoom = (Button) findViewById(R.id.room_btn_new_room);
 
 		mBtnNewRoom.setOnClickListener(this);
+		alRooms = new ArrayList<Room>();
+		adapter = new RoomListAdapter(getApplicationContext(), alRooms);
+		mListViewRoom.setAdapter(adapter);
+		LayoutAnimationController controller 
+		   = AnimationUtils.loadLayoutAnimation(
+		     this, R.anim.layout_grid_fade);
+		  mListViewRoom.setLayoutAnimation(controller);
 	}
 
 	@Override
@@ -85,15 +98,16 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.addCategory(Intent.CATEGORY_HOME);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
-	}
+//	@Override
+//	public void onBackPressed() {
+//		super.onBackPressed();
+//		Intent intent = new Intent(Intent.ACTION_MAIN);
+//		intent.addCategory(Intent.CATEGORY_HOME);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		startActivity(intent);
+//	}
 
+	// khi lay duoc du lieu get_list_room tu server
 	@Override
 	public void onRequestComplete(String sResult) {
 		int len = sResult.length();
@@ -104,8 +118,17 @@ public class RoomListActivity extends Activity implements IRequestServer,
 			int length = DataInfo.listRoom.size();
 			// co room
 			if (length > 0) {
-				RoomListAdapter adapter = new RoomListAdapter(this, DataInfo.listRoom);
-				mListViewRoom.setAdapter(adapter);
+				ArrayList<Room> alTemp = DataInfo.listRoom;
+				if (alTemp != null){
+					int sizeTemp = alTemp.size();
+					if (sizeTemp > 0){
+						alRooms.clear();
+						for (int i=0; i<sizeTemp; i++){
+							alRooms.add(alTemp.get(i));
+						}
+						adapter.notifyDataSetChanged();
+					}
+				}
 			}
 		}
 
