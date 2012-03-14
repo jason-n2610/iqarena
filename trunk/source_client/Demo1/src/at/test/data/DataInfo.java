@@ -145,6 +145,39 @@ public class DataInfo {
 				
 			}
 			
+			// get members in room
+			else if (typeMessage.equals(Config.REQUEST_GET_MEMBERS_IN_ROOM)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value){
+					String jMembers = jObject.getString("members");
+					JSONArray jArray = new JSONArray(jMembers);
+					int length = jArray.length();
+					Log.i(TAG, "length: " + length);
+					mListMemberInRoom.clear();
+					for (int i = 0; i < length; i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+						
+						int userId = json_data.getInt("user_id");
+						String username = json_data.getString("username");
+						String email = json_data.getString("email");
+						float scoreLevel = json_data.getInt("score_level");
+						String registedDate = json_data
+								.getString("registed_date");
+						int powerUser = json_data.getInt("power_user");
+						float money = json_data.getInt("money");
+
+						User user = new User(userId, username, email,
+								scoreLevel, registedDate, powerUser, money);
+						
+						mListMemberInRoom.add(user);
+					}
+				}
+				else{
+					mListMemberInRoom.clear();
+				}
+			}
+			
 			result = true;
 		} catch (JSONException e) {
 			Log.i(TAG, e.getMessage());

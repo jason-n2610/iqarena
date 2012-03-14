@@ -79,6 +79,15 @@
 	"message":"room full"
 }
 
+// xem danh sach nguoi choi tron gphong
+{
+	"type":"get_members_in_room",
+	"value":"true",
+	"members":[
+		
+	]
+}
+
 // thoat khoi tro choi -> true
 {
 	"type":"exit_room",

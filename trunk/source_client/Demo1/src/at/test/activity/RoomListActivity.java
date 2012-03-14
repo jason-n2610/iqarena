@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.test.R;
 import at.test.connect.CheckServer;
 import at.test.connect.RequestServer;
@@ -46,6 +47,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	
 	boolean isJoinRoom = false;
 	String TAG = "RoomListActivity";
+	String mRoomName;
 	// bien luu thong tin room_id khi user chon 1 room
 	int roomID = 0;
 
@@ -111,15 +113,15 @@ public class RoomListActivity extends Activity implements IRequestServer,
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
 				DataInfo.setData(sResult);
-				ArrayList<User> listUser = DataInfo.mListMemberInRoom;
-				if (listUser != null){
-					int size = listUser.size();
-					if (size > 0){
-						Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
-						intent.putExtra("isOwner", false);
-						intent.putExtra("room_id", roomID);
-						startActivity(intent);
-					}
+				if (DataInfo.value){
+					Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
+					intent.putExtra("owner", false);
+					intent.putExtra("room_id", roomID);
+					intent.putExtra("room_name", mRoomName);
+					startActivity(intent);
+				}
+				else{
+					Toast.makeText(this, "Sorry, join don't success", 300).show();
 				}
 			}
 		}
@@ -132,19 +134,16 @@ public class RoomListActivity extends Activity implements IRequestServer,
 				sResult = sResult.substring(start, len);
 				DataInfo.setData(sResult);
 				if (DataInfo.value){
-					int length = DataInfo.mListRoom.size();
-					// co room
-					if (length > 0) {
-						ArrayList<Room> alTemp = DataInfo.mListRoom;
-						if (alTemp != null){
-							int sizeTemp = alTemp.size();
-							if (sizeTemp > 0){
-								alRooms.clear();
-								for (int i=0; i<sizeTemp; i++){
-									alRooms.add(alTemp.get(i));
-								}
-								adapter.notifyDataSetChanged();
+					ArrayList<Room> alRoomTmp = DataInfo.mListRoom;
+					if (alRoomTmp != null){
+						int size = alRoomTmp.size();
+						// co room
+						if (size > 0) {
+							alRooms.clear();
+							for (int i=0; i<size; i++){
+								alRooms.add(alRoomTmp.get(i));
 							}
+							adapter.notifyDataSetChanged();
 						}
 					}
 				}
@@ -231,6 +230,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					if (!mRequestServer.isCancelled()){
 						mRequestServer.cancel(true);
 					}
+					mRoomName = room.getRoomName();
 					roomID = room.getRoomId();
 					mRequestServer = new RequestServer(RoomListActivity.this);
 					mRequestServer.joinRoom(String.valueOf(room.getRoomId()), String.valueOf(DataInfo.userInfo.getUserId()));
