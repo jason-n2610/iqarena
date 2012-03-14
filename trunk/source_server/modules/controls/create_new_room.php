@@ -26,12 +26,23 @@
         $result = Room::createNewRoom($_POST['room_name'], $_POST['owner_id'], $_POST['max_member'], 2, 0, $_POST['win_score'], 1);
         if ($result)
         {
-            echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công"}';
+            echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công", "room_id":'.mysql_insert_id().'}';
 
-            $filename= $path.'/count.txt' ;
-            $fd = fopen ($filename , "r+") or die ("Can't open $filename") ;
-            $fstring = fread ($fd , filesize ($filename)) ;
-            $fstring = $fstring + 1;
+            $filename= $path.'/check_change_room.txt' ;
+            $fstring = "";
+            if (file_exists($filename))
+            {
+                $fstring = file_get_contents($filename);
+            }
+            if ($fstring == '0')
+            {
+                $fstring = '1';
+            }
+            else
+            {
+                $fstring = '0';
+            }
+            $fd = fopen ($filename , "w") or die ("Can't open $filename") ;
             $fout= fwrite ($fd , $fstring) ;
             fclose($fd) ;
         }

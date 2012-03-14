@@ -1,11 +1,13 @@
-<?php    
+<?php
     //require ($path."/modules/models/room.php");
-//    echo var_dump(Room::$checkChangeRoom); 
-//    echo Room::$checkChangeRoom;
-    $path = getcwd();  
-    $filename= $path.'/count.txt' ;
-    $fd = fopen ($filename , "r") or die ("Can't open $filename") ;
-    $fstring = fread ($fd , filesize ($filename)) ;
-    echo "$fstring" ;
-    fclose($fd) ;  
+    //    echo var_dump(Room::$checkChangeRoom);
+    //    echo Room::$checkChangeRoom;
+    $path = getcwd();
+    $filename= $path.'/check_change_room.txt' ;
+    $fstring = "";
+    if (file_exists($filename))
+    {
+        $fstring = file_get_contents($filename);
+    }
+    echo $fstring ;
 ?>

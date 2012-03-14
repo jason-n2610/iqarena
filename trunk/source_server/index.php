@@ -1,8 +1,8 @@
-﻿<?php                   
-    $path = getcwd();         
+﻿<?php
+    $path = getcwd();
     if ($_POST['message'] == "login")
     {
-        require ($path.'/modules/controls/login.php'); 
+        require ($path.'/modules/controls/login.php');
     }
     else if ($_POST['message'] == "register")
     {
@@ -19,5 +19,21 @@
     else if ($_POST['message'] == "create_new_room")
     {
         require ($path.'/modules/controls/create_new_room.php');
-    } 
+    }
+    else if ($_POST['message'] == "remove_room")
+    {
+        require ($path.'/modules/controls/remove_room.php');
+    }
+    else if ($_POST['message'] == "join_room")
+    {
+        require ($path.'/modules/controls/join_room.php');
+    }
+    else if ($_POST['message'] == "exit_room")
+    {
+        require ($path.'/modules/controls/exit_room.php');
+    }
+    else if ($_POST['message'] == "get_members_in_room")
+    {
+        require ($path.'/modules/controls/get_members_in_room.php');
+    }
 ?>

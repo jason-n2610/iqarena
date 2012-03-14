@@ -1,29 +1,26 @@
 package at.test.activity;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.test.R;
 import at.test.connect.RequestServer;
-import at.test.data.Config;
 import at.test.data.DataInfo;
+import at.test.data.SessionStore;
 import at.test.data.Utils;
 import at.test.delegate.IRequestServer;
 
 public class LoginActivity extends Activity implements View.OnClickListener,
-		IRequestServer, OnCheckedChangeListener {
+		IRequestServer {
 
 	Button btnLogin;
 	TextView tvLoginResult;
@@ -54,23 +51,21 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 		tvLoginResult.setText("");
 		btnRegister.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
-		ckRemember.setOnClickListener(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		ArrayList<String> config = Config.getConfigFile();
-		if (config != null) {
-			if (config.size() == 2){
-				etUsername.setText(config.get(0).trim());
-				etPassword.setText(config.get(1).trim());
-				ckRemember.setChecked(true);
-				setProgressBarIndeterminateVisibility(true);
-				btnLogin.setEnabled(false);
-				requestServer = new RequestServer(this);
-				requestServer.login(config.get(0).trim(), config.get(1).trim());
-			}
+		
+		SessionStore.restoreSession(getApplicationContext());
+		if (SessionStore.getSaved()){
+			etUsername.setText(SessionStore.getUsername());
+			etPassword.setText(SessionStore.getPassword());
+			ckRemember.setChecked(true);
+			setProgressBarIndeterminateVisibility(true);
+			btnLogin.setEnabled(false);
+			requestServer = new RequestServer(this);
+			requestServer.login(SessionStore.getUsername(), SessionStore.getPassword());
 		}
 	}
 
@@ -115,57 +110,13 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 					RegisterActivity.class);
 			startActivity(intent);
 			break;
-		case R.id.ckRemember:
-			tvLoginResult.setText("");
-			if (!ckRemember.isChecked()) {
-				Config.destroyConfigFile();
-				ckRemember.setChecked(false);
-			} else {
-				ckRemember.setChecked(true);
-				String username = etUsername.getText().toString();
-				String password = etPassword.getText().toString();
-				if ((username.length() == 0) || (password.length() == 0)) {
-					Toast.makeText(this, "Bạn chưa điền đầy đủ thông tin", 500)
-							.show();
-					ckRemember.setChecked(false);
-				} else {
-					boolean result = Config.saveConfigFile(username, password);
-					if (!result) {
-						tvLoginResult.setText(Config.getMessage());
-					}
-				}
-			}
-			break;
-		}
-
-	}
-
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (buttonView.getId() == R.id.ckRemember) {
-			tvLoginResult.setText("");
-			if (isChecked) {
-				String username = etUsername.getText().toString();
-				String password = etPassword.getText().toString();
-				if ((username.length() == 0) || (password.length() == 0)) {
-					Toast.makeText(this, "Bạn chưa điền đầy đủ thông tin", 500)
-							.show();
-					buttonView.setChecked(false);
-				} else {
-					boolean result = Config.saveConfigFile(username, password);
-					if (!result) {
-						tvLoginResult.setText(Config.getMessage());
-					}
-				}
-			} else {
-				Config.destroyConfigFile();
-			}
 		}
 
 	}
 
 	@Override
 	public void onRequestComplete(String sResult) {
+		Log.i("2", sResult);
 		String message = sResult;
 		if (sResult != null) {
 			sResult = sResult.trim();
@@ -184,6 +135,15 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 							// chuyen sang activity main menu
 							// demo
 							if (DataInfo.userInfo != null) {
+								if (ckRemember.isChecked()){
+									String username = etUsername.getText().toString();
+									String password = etPassword.getText().toString();
+									// save account 
+									SessionStore.saveSession(getApplicationContext(), true, username, password);
+								}
+								else{
+									SessionStore.saveSession(getApplicationContext(), false, "", "");
+								}		
 								Intent intent = new Intent(
 										getApplicationContext(),
 										TabHostMenuActivity.class);

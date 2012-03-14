@@ -9,13 +9,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,6 +26,7 @@ import at.test.data.DataInfo;
 import at.test.delegate.ICheckServer;
 import at.test.delegate.IRequestServer;
 import at.test.object.Room;
+import at.test.object.User;
 
 /**
  * @author Administrator
@@ -34,7 +34,7 @@ import at.test.object.Room;
  */
 public class RoomListActivity extends Activity implements IRequestServer,
 		ICheckServer, OnClickListener {
-
+	
 	ListView mListViewRoom;
 	Button mBtnNewRoom;
 
@@ -43,6 +43,11 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	
 	ArrayList<Room> alRooms = null;
 	RoomListAdapter adapter = null;
+	
+	boolean isJoinRoom = false;
+	String TAG = "RoomListActivity";
+	// bien luu thong tin room_id khi user chon 1 room
+	int roomID = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +63,6 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		alRooms = new ArrayList<Room>();
 		adapter = new RoomListAdapter(getApplicationContext(), alRooms);
 		mListViewRoom.setAdapter(adapter);
-		LayoutAnimationController controller 
-		   = AnimationUtils.loadLayoutAnimation(
-		     this, R.anim.layout_grid_fade);
-		  mListViewRoom.setLayoutAnimation(controller);
 	}
 
 	@Override
@@ -98,48 +99,70 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		}
 	}
 
-//	@Override
-//	public void onBackPressed() {
-//		super.onBackPressed();
-//		Intent intent = new Intent(Intent.ACTION_MAIN);
-//		intent.addCategory(Intent.CATEGORY_HOME);
-//		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		startActivity(intent);
-//	}
-
 	// khi lay duoc du lieu get_list_room tu server
 	@Override
 	public void onRequestComplete(String sResult) {
-		int len = sResult.length();
-		if (sResult.contains("{") && len > 0) {
-			int start = sResult.indexOf("{");
-			sResult = sResult.substring(start, len);
-			DataInfo.setData(sResult);
-			int length = DataInfo.listRoom.size();
-			// co room
-			if (length > 0) {
-				ArrayList<Room> alTemp = DataInfo.listRoom;
-				if (alTemp != null){
-					int sizeTemp = alTemp.size();
-					if (sizeTemp > 0){
-						alRooms.clear();
-						for (int i=0; i<sizeTemp; i++){
-							alRooms.add(alTemp.get(i));
-						}
-						adapter.notifyDataSetChanged();
+		Log.i(TAG, "isJoinRoom: "+isJoinRoom);
+		// truong hop join room
+		if (isJoinRoom){
+			int len = sResult.length();
+			if (sResult.contains("{") && len > 0) {
+				isJoinRoom = !isJoinRoom;
+				int start = sResult.indexOf("{");
+				sResult = sResult.substring(start, len);
+				DataInfo.setData(sResult);
+				ArrayList<User> listUser = DataInfo.mListMemberInRoom;
+				if (listUser != null){
+					int size = listUser.size();
+					if (size > 0){
+						Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
+						intent.putExtra("isOwner", false);
+						intent.putExtra("room_id", roomID);
+						startActivity(intent);
 					}
 				}
 			}
 		}
+		
+		// truong hop xem danh sach room
+		else{
+			int len = sResult.length();
+			if (sResult.contains("{") && len > 0) {
+				int start = sResult.indexOf("{");
+				sResult = sResult.substring(start, len);
+				DataInfo.setData(sResult);
+				if (DataInfo.value){
+					int length = DataInfo.mListRoom.size();
+					// co room
+					if (length > 0) {
+						ArrayList<Room> alTemp = DataInfo.mListRoom;
+						if (alTemp != null){
+							int sizeTemp = alTemp.size();
+							if (sizeTemp > 0){
+								alRooms.clear();
+								for (int i=0; i<sizeTemp; i++){
+									alRooms.add(alTemp.get(i));
+								}
+								adapter.notifyDataSetChanged();
+							}
+						}
+					}
+				}
+				else{
+					alRooms.clear();
+					adapter.notifyDataSetChanged();
+				}
+			}
 
-		getParent().setProgressBarIndeterminateVisibility(false);
-		if (mCheckServer == null) {
-			mCheckServer = new CheckServer(this);
-			mCheckServer.checkChangeRoom();
-		} else {
-			mCheckServer.cancel(true);
-			mCheckServer = new CheckServer(this);
-			mCheckServer.checkChangeRoom();
+			getParent().setProgressBarIndeterminateVisibility(false);
+			if (mCheckServer == null) {
+				mCheckServer = new CheckServer(this);
+				mCheckServer.checkChangeRoom();
+			} else {
+				mCheckServer.cancel(true);
+				mCheckServer = new CheckServer(this);
+				mCheckServer.checkChangeRoom();
+			}
 		}
 	}
 
@@ -178,7 +201,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 			
 			if (convertView == null){
@@ -195,11 +218,25 @@ public class RoomListActivity extends Activity implements IRequestServer,
 				holder = (ViewHolder) convertView.getTag();
 			}
 			
-			Room room = mListRoom.get(position);
+			final Room room = mListRoom.get(position);
 			
 			holder.tvRoomName.setText(room.getRoomName());
 			holder.tvOwnerName.setText(room.getOwnerName());
 			holder.tvBetScore.setText(String.valueOf(room.getBetScore()));
+			
+			convertView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (!mRequestServer.isCancelled()){
+						mRequestServer.cancel(true);
+					}
+					roomID = room.getRoomId();
+					mRequestServer = new RequestServer(RoomListActivity.this);
+					mRequestServer.joinRoom(String.valueOf(room.getRoomId()), String.valueOf(DataInfo.userInfo.getUserId()));
+					isJoinRoom = true;
+				}
+			});
 			
 			return convertView;
 		}

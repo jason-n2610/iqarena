@@ -44,7 +44,8 @@
 {
 	"type":"create_room",
 	"value":"true",
-	"message":"tao phong thanh cong"
+	"message":"tao phong thanh cong",
+	"room_id":"1"
 }
 
 // xem danh sach phong choi -> true
@@ -68,10 +69,7 @@
 {
 	"type":"join_room",
 	"value":"true",
-	"list_user":[
-		{"username":"host", "level_score":"1234"},
-		{"username":"tuba", "level_score":"5322"}
-	]
+	"message":"success"
 }
 
 // tham gia phong choi -> false
@@ -97,6 +95,7 @@
 	"value":"false",
 	"message":"error"
 }
+
 
 //  san sang choi -> true
 {

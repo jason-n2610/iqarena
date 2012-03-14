@@ -1,33 +1,15 @@
-<?php         
-    $path = getcwd();    
-    require ($path."/include/mysql.php"); 
-    require ($path."/modules/models/room.php"); 
-    
+<?php
+    $path = getcwd();
+    include ($path."/include/mysql.php");
+    include ($path."/modules/models/room_members.php");
+
     MySQL::connect();
-    $result = Room::getAllRoom();
-    if ($result == null)
-    {
-        // truong hop ko co room nao
-        echo '{"type":"get_list_room", "value":"false", "message":"không có room nào!"}';
+    $list_user = RoomMembers::getMembersInRoom(17);
+    var_dump($list_user);
+    $output = null;
+    while($row = mysql_fetch_assoc($list_user)){
+        $output[] = $row;
     }
-    else
-    {
-        $length = mysql_num_rows($result);
-        if ($length != 0)
-        {
-            $output = null;
-            // co room
-            while($row = mysql_fetch_assoc($result))
-            {
-                $output[] = $row;
-            }
-            echo '{"type":"get_list_room", "value":"true", "info":';
-            echo json_encode($output);
-            echo '}';
-        }
-        else
-        {
-            echo '{"type":"get_list_room", "value":"false", "message":"không có room nào!"}';
-        }
-    }
+    echo json_encode($output);
+    MySQL::close();
 ?>
