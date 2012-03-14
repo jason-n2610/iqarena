@@ -23,7 +23,9 @@ public class DataInfo {
 	public static boolean value = false;
 	public static String message = null;
 	public static User userInfo = null;
-	public static ArrayList<Room> listRoom = new ArrayList<Room>();
+	public static int roomId = 0;
+	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
+	public static ArrayList<User> mListMemberInRoom = new ArrayList<User>();
 
 	private static final String TAG = "JSONDATA";
 
@@ -35,7 +37,7 @@ public class DataInfo {
 			String typeMessage = jObject.getString("type");
 
 			// message 'login'
-			if (typeMessage.equals("login")) {
+			if (typeMessage.equals(Config.REQUEST_LOGIN)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 				if (value) {
@@ -63,7 +65,7 @@ public class DataInfo {
 			}
 
 			// message 'register'
-			else if (typeMessage.equals("register")) {
+			else if (typeMessage.equals(Config.REQUEST_REGISTER)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 				if (value) {
@@ -89,12 +91,16 @@ public class DataInfo {
 
 				}
 			}
-			else if (typeMessage.equals("create_new_room")){
+			
+			// message 'create_new_room'
+			else if (typeMessage.equals(Config.REQUEST_CREATE_NEW_ROOM)){
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
+				roomId = jObject.getInt("room_id");
 			}
+			
 			// message 'get_list_room'
-			else if (typeMessage.equals("get_list_room")) {
+			else if (typeMessage.equals(Config.REQUEST_GET_LIST_ROOM)) {
 				Log.i(TAG, "get list room");
 				value = jObject.getBoolean("value");
 				// truong hop co room tra ve
@@ -103,7 +109,7 @@ public class DataInfo {
 					JSONArray jArray = new JSONArray(jInfo);
 					int length = jArray.length();
 					Log.i(TAG, "length: " + length);
-					listRoom.clear();
+					mListRoom.clear();
 					for (int i = 0; i < length; i++) {
 						Room room;
 						JSONObject json_data = jArray.getJSONObject(i);
@@ -119,13 +125,30 @@ public class DataInfo {
 								.getInt("number_of_member");
 						room = new Room(roomId, roomName, ownerId, ownerName, maxMember,
 								minMember, winScore, status, numberOfMember);
-						listRoom.add(room);
+						mListRoom.add(room);
 					}
 				}
+				else{
+					mListRoom.clear();
+					message = jObject.getString("message");
+				}
 			}
+			
+			// message join room
+			else if (typeMessage.equals(Config.REQUEST_JOIN_ROOM)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+			}
+			
+			// message exit room
+			else if (typeMessage.equals(Config.REQUEST_EXIT_ROOM)){
+				
+			}
+			
 			result = true;
 		} catch (JSONException e) {
 			Log.i(TAG, e.getMessage());
+			result = false;
 		}
 		return result;
 	}

@@ -52,7 +52,6 @@ CREATE TABLE room_members(
 	room_member_id int unsigned not null auto_increment,
 	user_id int unsigned not null,
 	room_id int unsigned not null,
-	status tinyint,
 	PRIMARY KEY (room_member_id)
 );
 

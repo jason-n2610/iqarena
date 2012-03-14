@@ -38,6 +38,8 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	enum REQUEST_TYPE {
 		REQUEST_CHECK_CHANGE_ROOM
 	};
+	
+	String TAG = "CheckServer";
 
 	private REQUEST_TYPE requestType;
 
@@ -85,7 +87,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				bis.close();
 				is.close();
 				result = sb.toString();
-				Log.i("2", "result:"+result);
+				Log.i(TAG, "result:"+result);
 				if (oldResult == null){
 					oldResult = result;
 				}

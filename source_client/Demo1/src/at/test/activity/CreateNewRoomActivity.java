@@ -120,10 +120,13 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 					sResult = sResult.substring(start, length);
 					boolean isSuccess = DataInfo.setData(sResult);
 					strMessage = DataInfo.message;
+					int roomId = DataInfo.roomId;
 					if (isSuccess) {
 						// neu create thanh cong
 						if (DataInfo.value) {
 							Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
+							intent.putExtra("isOwner", true);
+							intent.putExtra("room_id", roomId);
 							startActivity(intent);
 							strMessage = "";
 						} 
