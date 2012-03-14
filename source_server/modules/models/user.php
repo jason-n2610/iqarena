@@ -9,7 +9,6 @@
             $query = 'SELECT
                             user_id,
                             username,
-                            password,
                             email,
                             score_level,
                             registed_date,

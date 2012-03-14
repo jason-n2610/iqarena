@@ -3,7 +3,14 @@
     {
         public static function getMembersInRoom($room_id)
         {
-            $query = "  SELECT *
+            $query = "  SELECT
+                            u.user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money
                         FROM room_members AS rm, users AS u
                         WHERE rm.user_id = u.user_id AND rm.room_id = '{$room_id}'";
             $result = @mysql_query($query) or die ('getMembersInRoom: '.mysql_error());
