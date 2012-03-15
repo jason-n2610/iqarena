@@ -32,5 +32,14 @@
             $result = @mysql_query($query) or die ('removeMembersInRoom: '.mysql_error());
             return $result;
         }
+
+        // remove member in room
+        public static function removeMemberInRoom($member_id, $room_id)
+        {
+            $query = "  DELETE FROM room_members
+                        WHERE room_id = '{$room_id}' AND user_id = '{$member_id}'";
+            $result = @mysql_query($query) or die ('removeMemberInRoom: '.mysql_error());
+            return $result;
+        }
     }
 ?>

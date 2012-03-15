@@ -8,5 +8,5 @@ package at.test.delegate;
  *
  */
 public interface ICheckServer {
-	public void onCheckServerComplete();
+	public void onCheckServerComplete(String result);
 }

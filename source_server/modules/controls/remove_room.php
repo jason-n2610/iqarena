@@ -1,9 +1,11 @@
 <?php
+
     // xoa room
     if (isset($_POST['room_id']))
     {
-    require ($path.'/include/mysql.php');
-        require ($path.'/modules/models/room.php');
+        require ($path . '/include/mysql.php');
+        require ($path . '/modules/models/room_members.php');
+        require ($path . '/modules/models/room.php');
 
         // connect database
         MySQL::connect();
@@ -16,7 +18,11 @@
         {
             echo '{"type":"remove_room", "value":"true", "message":"xóa room thành công"}';
 
-            $filename= $path.'/check_change_room.txt' ;
+            // xoa cac members trong bang room_members
+            RoomMembers::removeMembersInRoom($_POST['room_id']);
+
+            // xoa file check_change_room.txt thong bao cho nguoi dung biet room nay da bi xoa
+            $filename = $path . '/check_change_room.txt';
             $fstring = "";
             if (file_exists($filename))
             {
@@ -25,16 +31,17 @@
             if ($fstring == '0')
             {
                 $fstring = '1';
-            }
-            else
+            } else
             {
                 $fstring = '0';
             }
-            $fd = fopen ($filename , "w") or die ("Can't open $filename") ;
-            $fout= fwrite ($fd , $fstring) ;
-            fclose($fd) ;
-        }
-        else
+            $fd = fopen($filename, "w") or die("Can't open $filename");
+            $fout = fwrite($fd, $fstring);
+            fclose($fd);
+
+            // xoa file 'roomid'.txt thong bao cho members biet room da xoa
+            unlink($path . '/' . $_POST['room_id'] . '.txt');
+        } else
         {
             echo '{"type":"remove_room", "value":"false", "message":"không xóa được room"}';
         }
@@ -45,4 +52,5 @@
         MySQL::close();
 
     }
+
 ?>

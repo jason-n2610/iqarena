@@ -36,8 +36,11 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	private ICheckServer delegate;
 
 	enum REQUEST_TYPE {
-		REQUEST_CHECK_CHANGE_ROOM
+		REQUEST_CHECK_CHANGE_ROOM,
+		REQUEST_CHECK_MEMBERS_IN_ROOM
 	};
+	
+	private int requestTime = 1000;
 	
 	String TAG = "CheckServer";
 
@@ -65,14 +68,20 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 			case REQUEST_CHECK_CHANGE_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(1);
 				nameValuePairs.add(new BasicNameValuePair("message",
-						"check_change_room"));
-				break;				
+						Config.REQUEST_CHECK_CHANGE_ROOM));
+				break;			
+			case REQUEST_CHECK_MEMBERS_IN_ROOM:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_CHECK_MEMBERS_IN_ROOM));
+				nameValuePairs.add(new BasicNameValuePair("room_id", params[0]));
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			String oldResult = null;
 			boolean loop=false;
 			while(!loop){
-				Thread.sleep(1000);
+				Thread.sleep(requestTime);
 				HttpResponse httpResponse = httpClient.execute(httpPost);
 				HttpEntity entity = httpResponse.getEntity();
 				InputStream is = entity.getContent();
@@ -113,12 +122,18 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		delegate.onCheckServerComplete();
+		delegate.onCheckServerComplete(result);
 	}
 
 	// request check change room
 	public void checkChangeRoom(){
 		this.requestType = REQUEST_TYPE.REQUEST_CHECK_CHANGE_ROOM;
 		this.execute();
+	}
+	
+	// request check change members in room
+	public void checkMembersInRoom(String strRoomID){
+		this.requestType = REQUEST_TYPE.REQUEST_CHECK_MEMBERS_IN_ROOM;
+		this.execute(strRoomID);
 	}
 }

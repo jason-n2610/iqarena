@@ -45,7 +45,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_REMOVE_ROOM,
 		REQUEST_JOIN_ROOM, 
 		REQUEST_EXIT_ROOM,
-		REQUEST_GET_MEMBERS_IN_ROOM
+		REQUEST_GET_MEMBERS_IN_ROOM,
 	};
 
 	private REQUEST_TYPE requestType;

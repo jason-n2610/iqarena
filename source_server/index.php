@@ -36,4 +36,12 @@
     {
         require ($path.'/modules/controls/get_members_in_room.php');
     }
+    else if ($_POST['message'] == "check_members_in_room")
+    {
+        require ($path.'/modules/controls/check_members_in_room.php');
+    }
+    else if ($_POST['message'] == "exit_room")
+    {
+        require ($path.'/modules/controls/exit_room.php');
+    }
 ?>
