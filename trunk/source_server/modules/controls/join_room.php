@@ -18,6 +18,19 @@
         if ($result)
         {
             echo '{"type":"join_room", "value":"true", "message"="tham gia thanh cong"}';
+            $filename= $path.'/'.$_POST['room_id'].'.txt' ;
+            $fstring = "";
+            if (file_exists($filename))
+            {
+                $fstring = file_get_contents($filename);
+            }
+
+            // thay doi noi dung file 'roomid'.txt
+            settype($fstring, "integer");
+            $fstring = $fstring+1;
+            $fd = fopen ($filename , "w") or die ("Can't open". $filename) ;
+            $fout= fwrite ($fd , $fstring) ;
+            fclose($fd) ;
         }
         else
         {

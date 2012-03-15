@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import at.test.R;
 import at.test.activity.RoomListActivity.ViewHolder;
+import at.test.connect.CheckServer;
 import at.test.connect.RequestServer;
 import at.test.data.DataInfo;
+import at.test.delegate.ICheckServer;
 import at.test.delegate.IRequestServer;
 import at.test.object.Room;
 import at.test.object.User;
@@ -34,7 +37,7 @@ import at.test.object.User;
  *
  */
 public class RoomWaitingActivity extends Activity implements 
-OnClickListener, IRequestServer{
+OnClickListener, IRequestServer, ICheckServer{
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -43,14 +46,25 @@ OnClickListener, IRequestServer{
 	// room id
 	int mRoomID = 0;
 	String mStrRoomName;
-	private String TAG = "RoomWaitingActivity";
+	String mStrOwnerName;
 	
 	// list members in room
 	private ListView mLvMembers;
 	private RequestServer mRequest;
+	private CheckServer mCheck;
 	
 	// bien kiem tra loai request la getmembers hay exitroom
 	private boolean mIsGetMembers = true;
+	
+	// bien kiem tra loai user khi vao room
+	// hoac la owner hoac la member
+	private boolean isOwner;
+
+//	// bien kiem tra xem nguoi dung an back hay an nut exit
+//	// co bien nay la do khi nguoi dung an nut 'exit' ta goi onBackPress()
+//	// gio neu nguoi dung ko an 'exit' ma an nut back
+//	// can goi lai cac request cho server
+//	private boolean isBackPress = true;
 	
 	// arraylist member
 	private ArrayList<User> mAlMembers = null;
@@ -63,10 +77,11 @@ OnClickListener, IRequestServer{
 		
 		// Nhan ve du lieu la owner hay member
 		Bundle extras = getIntent().getExtras();
-		boolean isOwner = extras.getBoolean("owner");
+		isOwner = extras.getBoolean("owner");
 		
 		mRoomID = extras.getInt("room_id");
 		mStrRoomName = extras.getString("room_name");
+		mStrOwnerName = extras.getString("owner_name");
 		// hide statusbar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
@@ -95,7 +110,7 @@ OnClickListener, IRequestServer{
 		
 		String strHeader = "<font color=#ff158a><b><big>"+ 
 				mStrRoomName+"</big></b></font>" + "<br/>" + 
-				"<font color=#00bf00><strong>"+DataInfo.userInfo.getUsername()
+				"<font color=#00bf00><strong>"+mStrOwnerName
 				+"</strong></font>";
 		tvHeader.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		tvHeader.setText(Html.fromHtml(strHeader));
@@ -111,7 +126,33 @@ OnClickListener, IRequestServer{
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
+		super.onBackPressed();		
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK){
+			if (isOwner){
+				if (mRequest != null){
+					if (!mRequest.isCancelled()){
+						mRequest.cancel(true);
+					}				
+				}
+				mRequest = new RequestServer(this);
+				mRequest.removeRoom(String.valueOf(mRoomID));
+			}
+			else{
+				if (mRequest != null){
+					if (!mRequest.isCancelled()){
+						mRequest.cancel(true);
+					}
+				}
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(String.valueOf(mRoomID), String.valueOf(DataInfo.userInfo.getUserId()));
+			}
+			mIsGetMembers = false;
+		}
+		return true;
 	}
 
 	/*
@@ -128,13 +169,28 @@ OnClickListener, IRequestServer{
 			
 		// exit
 		case R.id.room_waiting_btn_exit:
-			if (mRequest != null){
-				if (!mRequest.isCancelled()){
-					mRequest.cancel(true);
-				}				
+			
+//			// xac lap bien isBackPress = false => chung to ko phai an Back de thoat
+//			isBackPress = false;
+			
+			if (isOwner){
+				if (mRequest != null){
+					if (!mRequest.isCancelled()){
+						mRequest.cancel(true);
+					}				
+				}
+				mRequest = new RequestServer(this);
+				mRequest.removeRoom(String.valueOf(mRoomID));
 			}
-			mRequest = new RequestServer(this);
-			mRequest.removeRoom(String.valueOf(mRoomID));
+			else{
+				if (mRequest != null){
+					if (!mRequest.isCancelled()){
+						mRequest.cancel(true);
+					}
+				}
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(String.valueOf(mRoomID), String.valueOf(DataInfo.userInfo.getUserId()));
+			}
 			mIsGetMembers = false;
 			break;
 			
@@ -151,6 +207,7 @@ OnClickListener, IRequestServer{
 	public void onRequestComplete(String sResult) {
 		Log.i("onRequestComplete", "sResult: "+sResult);
 		Log.i("onRequestComplete", "mIsgetMembers: "+mIsGetMembers);
+		// neu thuoc request get members
 		if (mIsGetMembers){
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
@@ -175,10 +232,42 @@ OnClickListener, IRequestServer{
 					mAlMembers.clear();
 					adapter.notifyDataSetChanged();
 				}
+				
+				if (mCheck != null){
+					if (!mCheck.isCancelled()){
+						mCheck.cancel(true);
+					}
+				}
+				mCheck = new CheckServer(this);
+				mCheck.checkMembersInRoom(String.valueOf(mRoomID));
+			}
+		}
+		
+		// thuoc request remove room
+		else{
+			onBackPressed();
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see at.test.delegate.ICheckServer#onCheckServerComplete()
+	 */
+
+	@Override
+	public void onCheckServerComplete(String result) {
+		if (!result.contains("false")){
+			if (mRequest != null){
+				if (!mRequest.isCancelled()){
+					mRequest.cancel(true);
+				}
+				mRequest = new RequestServer(this);
+				mRequest.getMembersInRoom(String.valueOf(mRoomID));
 			}
 		}
 		else{
-			this.onBackPressed();
+			Log.i("onCheckServerComplete", "vao backpressed");
+			onBackPressed();
 		}
 	}
 	

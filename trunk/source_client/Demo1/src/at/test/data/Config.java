@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Config {
-	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
+//	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 //	public static final String REQUEST_SERVER_ADDR = "http://iqarena.freevnn.com/";
-//	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.14/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.14/iqarena/source_server/index.php";
 	public static final String PATH_CONFIG = "/mnt/sdcard/iqarena/";
 	public static final String NAME_CONFIG = "config.dat";
 	public static final String REQUEST_LOGIN = "login";
@@ -23,6 +23,8 @@ public class Config {
 	public static final String REQUEST_JOIN_ROOM = "join_room";
 	public static final String REQUEST_EXIT_ROOM = "exit_room";
 	public static final String REQUEST_GET_MEMBERS_IN_ROOM = "get_members_in_room";
+	public static final String REQUEST_CHECK_CHANGE_ROOM = "check_change_room";
+	public static final String REQUEST_CHECK_MEMBERS_IN_ROOM = "check_members_in_room";
 	
 //	private static String message;
 //

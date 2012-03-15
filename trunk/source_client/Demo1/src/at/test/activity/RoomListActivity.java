@@ -48,6 +48,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	boolean isJoinRoom = false;
 	String TAG = "RoomListActivity";
 	String mRoomName;
+	String mRoomOwnerName;
 	// bien luu thong tin room_id khi user chon 1 room
 	int roomID = 0;
 
@@ -118,6 +119,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					intent.putExtra("owner", false);
 					intent.putExtra("room_id", roomID);
 					intent.putExtra("room_name", mRoomName);
+					intent.putExtra("owner_name", mRoomOwnerName);
 					startActivity(intent);
 				}
 				else{
@@ -166,7 +168,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	}
 
 	@Override
-	public void onCheckServerComplete() {
+	public void onCheckServerComplete(String result) {
 		getParent().setProgressBarIndeterminateVisibility(true);
 		mRequestServer = new RequestServer(this);
 		mRequestServer.getListRoom();
@@ -232,6 +234,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					}
 					mRoomName = room.getRoomName();
 					roomID = room.getRoomId();
+					mRoomOwnerName = room.getOwnerName();
 					mRequestServer = new RequestServer(RoomListActivity.this);
 					mRequestServer.joinRoom(String.valueOf(room.getRoomId()), String.valueOf(DataInfo.userInfo.getUserId()));
 					isJoinRoom = true;
