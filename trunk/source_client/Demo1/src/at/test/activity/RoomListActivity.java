@@ -159,11 +159,12 @@ public class RoomListActivity extends Activity implements IRequestServer,
 			if (mCheckServer == null) {
 				mCheckServer = new CheckServer(this);
 				mCheckServer.checkChangeRoom();
-			} else {
-				mCheckServer.cancel(true);
-				mCheckServer = new CheckServer(this);
-				mCheckServer.checkChangeRoom();
-			}
+			} 
+//			else {
+//				mCheckServer.cancel(true);
+//				mCheckServer = new CheckServer(this);
+//				mCheckServer.checkChangeRoom();
+//			}
 		}
 	}
 

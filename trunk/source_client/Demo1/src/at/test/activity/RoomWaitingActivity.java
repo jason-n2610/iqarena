@@ -127,6 +127,11 @@ OnClickListener, IRequestServer, ICheckServer{
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();		
+		if (mCheck != null){
+			if (!mCheck.isCancelled()){
+				mCheck.cancel(true);
+			}
+		}
 	}
 
 	@Override
@@ -209,6 +214,10 @@ OnClickListener, IRequestServer, ICheckServer{
 		Log.i("onRequestComplete", "mIsgetMembers: "+mIsGetMembers);
 		// neu thuoc request get members
 		if (mIsGetMembers){
+			if (mCheck == null){
+				mCheck = new CheckServer(this);
+				mCheck.checkMembersInRoom(String.valueOf(mRoomID));
+			}
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
@@ -231,15 +240,7 @@ OnClickListener, IRequestServer, ICheckServer{
 				else{
 					mAlMembers.clear();
 					adapter.notifyDataSetChanged();
-				}
-				
-				if (mCheck != null){
-					if (!mCheck.isCancelled()){
-						mCheck.cancel(true);
-					}
-				}
-				mCheck = new CheckServer(this);
-				mCheck.checkMembersInRoom(String.valueOf(mRoomID));
+				}				
 			}
 		}
 		
