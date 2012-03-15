@@ -21,6 +21,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import at.test.data.Config;
@@ -43,6 +44,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	private int requestTime = 1000;
 	
 	String TAG = "CheckServer";
+	String mPost = null;
 
 	private REQUEST_TYPE requestType;
 
@@ -101,7 +103,9 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 					oldResult = result;
 				}
 				if (!result.equals(oldResult)){
-					loop = true;
+					oldResult = result;
+					mPost = result;
+					publishProgress(1);					
 				}
 			}
 			
@@ -117,6 +121,12 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 		}
 
 		return result;
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		super.onProgressUpdate(values);
+		delegate.onCheckServerComplete(mPost);
 	}
 
 	@Override
