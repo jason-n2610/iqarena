@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
     // Mảng $config lưu thông tin
 

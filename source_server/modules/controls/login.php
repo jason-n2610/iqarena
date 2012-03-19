@@ -1,4 +1,4 @@
-﻿<?php                  
+<?php                  
     // neu 1 trong cac truong du lieu la khac null   
     if ((isset($_POST['username'])) && (isset($_POST['password'])))
     {

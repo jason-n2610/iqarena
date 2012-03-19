@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
     // class user, define method access user table
     class User
