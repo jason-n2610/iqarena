@@ -26,6 +26,8 @@
         $result = Room::createNewRoom($_POST['room_name'], $_POST['owner_id'], $_POST['max_member'], 2, 0, $_POST['win_score'], 1);
         if ($result)
         {
+            $_SESSION["create_new_room"] = 1;
+            echo 'session: '.$_SESSION["create_new_room"];
             $roomID = mysql_insert_id();
             echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công", "room_id":'.$roomID.'}';
 

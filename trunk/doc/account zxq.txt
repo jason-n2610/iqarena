@@ -1,0 +1,6 @@
+﻿FTP details
+If you’d like to upload and download files via FTP use the following credentials:
+Host: iqarena.zxq.net
+Port: 21
+User: iqarena_zxq
+Password: 123456
