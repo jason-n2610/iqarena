@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Config {
 //	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 //	public static final String REQUEST_SERVER_ADDR = "http://iqarena.freevnn.com/";
-	public static final String REQUEST_SERVER_ADDR = "http://192.168.204.51/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.39/iqarena/source_server/index.php";
 	public static final String PATH_CONFIG = "/mnt/sdcard/iqarena/";
 	public static final String NAME_CONFIG = "config.dat";
 	public static final String REQUEST_LOGIN = "login";

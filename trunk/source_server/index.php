@@ -1,7 +1,5 @@
 <?php
     $path = getcwd();
-
- session_start();
     if ($_POST['message'] == "login")
     {
         require ($path.'/modules/controls/login.php');
