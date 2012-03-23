@@ -3,9 +3,10 @@
     // xoa room
     if (isset($_POST['room_id']))
     {
-        require ($path . '/include/mysql.php');
-        require ($path . '/modules/models/room_members.php');
-        require ($path . '/modules/models/room.php');
+        $path = getcwd();
+        include ($path . '/include/mysql.php');
+        include ($path . '/modules/models/room_members.php');
+        include ($path . '/modules/models/room.php');
 
         // connect database
         MySQL::connect();

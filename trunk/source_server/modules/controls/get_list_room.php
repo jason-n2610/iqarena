@@ -1,7 +1,8 @@
 <?php
     
-    require ($path . "/include/mysql.php");
-    require ($path . "/modules/models/room.php");
+    $path = getcwd();
+    include ($path . "/include/mysql.php");
+    include ($path . "/modules/models/room.php");
     
     MySQL::connect();
     $result = Room::getAllRoom();

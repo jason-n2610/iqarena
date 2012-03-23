@@ -4,8 +4,9 @@
         public static $connection = '';
 
         public static function connect()
-        {
-            require_once ('/config/config.php');
+        {            
+            $path = getcwd();
+            include ($path.'/config/config.php');
             // tạo connect tới localhost
             self::$connection = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD) or die('Could not connect to mysql: ' . mysql_error());
             // lấy dữ liệu từ database

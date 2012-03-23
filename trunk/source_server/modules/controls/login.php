@@ -1,9 +1,10 @@
 <?php                  
     // neu 1 trong cac truong du lieu la khac null   
     if ((isset($_POST['username'])) && (isset($_POST['password'])))
-    {
-        require ($path."/include/mysql.php"); 
-        require ($path."/modules/models/user.php"); 
+    {        
+        $path = getcwd();
+        include ($path."/include/mysql.php"); 
+        include ($path."/modules/models/user.php"); 
         // connect database
         MySQL::connect();
 
