@@ -5,8 +5,9 @@
     // neu 1 trong cac truong du lieu la khac null
     if ((isset($_POST['room_name'])) && (isset($_POST['owner_id'])) && (isset($_POST['max_member']) && (isset($_POST['win_score']))))
     {
-        require ($path.'/include/mysql.php');
-        require ($path.'/modules/models/room.php');
+        $path = getcwd();
+        include ($path.'/include/mysql.php');
+        include ($path.'/modules/models/room.php');
 
         // connect database
         MySQL::connect();

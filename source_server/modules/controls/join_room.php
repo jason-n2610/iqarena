@@ -1,9 +1,10 @@
 <?php
     // user join room
     if (isset($_POST['room_id']) && isset($_POST['user_id']))
-    {
-        require ($path.'/include/mysql.php');
-        require ($path.'/modules/models/room_members.php');
+    {        
+        $path = getcwd();
+        include ($path.'/include/mysql.php');
+        include ($path.'/modules/models/room_members.php');
 
         // remove special character
 
