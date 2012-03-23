@@ -72,6 +72,7 @@
         </activity>
         <activity
             android:name=".activity.CreateNewRoomActivity"
+            android:noHistory="true"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.CreateNewRoomActivity" />
@@ -81,9 +82,19 @@
         </activity>
         <activity
             android:name=".activity.RoomWaitingActivity"
+            android:noHistory="true"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.RoomWaitingActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.GamePlayActivity"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.GamePlayActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
