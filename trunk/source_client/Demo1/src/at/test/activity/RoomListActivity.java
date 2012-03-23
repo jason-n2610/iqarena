@@ -180,9 +180,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		switch (v.getId()) {
 		case R.id.room_btn_new_room:
 			Intent i = new Intent(getApplicationContext(),
-					CreateNewRoomActivity.class);			
-			i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
+					CreateNewRoomActivity.class);		
 			startActivity(i);
 			break;
 

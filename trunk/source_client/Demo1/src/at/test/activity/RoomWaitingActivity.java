@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
@@ -169,7 +170,8 @@ OnClickListener, IRequestServer, ICheckServer{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.room_waiting_btn_play:
-			
+			Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
+			startActivity(intent);
 			break;
 			
 		// exit
