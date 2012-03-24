@@ -51,6 +51,11 @@ CREATE TABLE room_members (
     room_member_id int unsigned not null auto_increment,
     user_id int unsigned not null,
     room_id int unsigned not null,
+	type tinyint unsigned not null,
+    question_id int unsigned,
+    graft_id int unsigned,
+    score float,
+    combo tinyint,
     PRIMARY KEY (room_member_id)
 );
 

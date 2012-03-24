@@ -122,7 +122,7 @@
 
 // bat dau tro choi -> true
 {
-	"type":"play",
+	"type":"play_game",
 	"value":"true",
 	"question":
 	{
