@@ -9,14 +9,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Room Waiting!" />
-
+
     <ListView
         android:id="@+id/room_waiting_lv_member"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/room_waiting_tv_time"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/room_waiting_tv_header" >
+
     </ListView>
 
     <LinearLayout
@@ -39,5 +40,14 @@
             android:layout_weight="1"
             android:text="Exit" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/room_waiting_tv_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:text="1..."
+        android:textColor="@color/red" />
 
 </RelativeLayout>

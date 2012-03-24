@@ -37,7 +37,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 
 	private IRequestServer delegate;
 
-	enum REQUEST_TYPE {
+	public enum REQUEST_TYPE {
 		REQUEST_LOGIN, 
 		REQUEST_REGISTER, 
 		REQUEST_GET_LIST_ROOM, 
@@ -46,6 +46,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_JOIN_ROOM, 
 		REQUEST_EXIT_ROOM,
 		REQUEST_GET_MEMBERS_IN_ROOM,
+		REQUEST_PLAY_GAME
 	};
 
 	private REQUEST_TYPE requestType;
@@ -147,6 +148,13 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("room_id",
 						params[0]));
 				break;
+			case REQUEST_PLAY_GAME:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_PLAY_GAME));
+				nameValuePairs.add(new BasicNameValuePair("room_id",
+						params[0]));
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -233,6 +241,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	// get members in room
 	public void getMembersInRoom(String strRoomID){
 		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM;
+		this.execute(strRoomID);
+	}
+	
+	// play game
+	public void playGame(String strRoomID){
+		this.requestType = REQUEST_TYPE.REQUEST_PLAY_GAME;
 		this.execute(strRoomID);
 	}
 }

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +28,7 @@ import at.test.R;
 import at.test.activity.RoomListActivity.ViewHolder;
 import at.test.connect.CheckServer;
 import at.test.connect.RequestServer;
+import at.test.connect.RequestServer.REQUEST_TYPE;
 import at.test.data.DataInfo;
 import at.test.delegate.ICheckServer;
 import at.test.delegate.IRequestServer;
@@ -35,188 +37,224 @@ import at.test.object.User;
 
 /**
  * @author Administrator
- *
+ * 
  */
-public class RoomWaitingActivity extends Activity implements 
-OnClickListener, IRequestServer, ICheckServer{
+public class RoomWaitingActivity extends Activity implements OnClickListener,
+		IRequestServer, ICheckServer {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
-	
+
 	// room id
 	int mRoomID = 0;
 	String mStrRoomName;
 	String mStrOwnerName;
-	
+
 	// list members in room
 	private ListView mLvMembers;
 	private RequestServer mRequest;
 	private CheckServer mCheck;
-	
-	// bien kiem tra loai request la getmembers hay exitroom
-	private boolean mIsGetMembers = true;
-	
+	private TextView mTvCounter;
 	// bien kiem tra loai user khi vao room
 	// hoac la owner hoac la member
 	private boolean isOwner;
 
-//	// bien kiem tra xem nguoi dung an back hay an nut exit
-//	// co bien nay la do khi nguoi dung an nut 'exit' ta goi onBackPress()
-//	// gio neu nguoi dung ko an 'exit' ma an nut back
-//	// can goi lai cac request cho server
-//	private boolean isBackPress = true;
-	
+	// // bien kiem tra xem nguoi dung an back hay an nut exit
+	// // co bien nay la do khi nguoi dung an nut 'exit' ta goi onBackPress()
+	// // gio neu nguoi dung ko an 'exit' ma an nut back
+	// // can goi lai cac request cho server
+	// private boolean isBackPress = true;
+
 	// arraylist member
 	private ArrayList<User> mAlMembers = null;
-	
+
 	private MembersAdapter adapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
-		
+		super.onCreate(savedInstanceState);
+
 		// Nhan ve du lieu la owner hay member
 		Bundle extras = getIntent().getExtras();
 		isOwner = extras.getBoolean("owner");
-		
+
 		mRoomID = extras.getInt("room_id");
 		mStrRoomName = extras.getString("room_name");
 		mStrOwnerName = extras.getString("owner_name");
 		// hide statusbar
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.room_waiting);
-		
+
 		// init ui
 		initUI(isOwner);
 		mRequest = new RequestServer(this);
 		mRequest.getMembersInRoom(String.valueOf(mRoomID));
-		
+
 		mAlMembers = new ArrayList<User>();
 		adapter = new MembersAdapter(getApplicationContext(), mAlMembers);
 		mLvMembers.setAdapter(adapter);
 	}
-	
+
+
 	/*
-	 * init ui
-	 * Nhan vao la bien xac dinh xem la owner hay member
+	 * init ui Nhan vao la bien xac dinh xem la owner hay member
 	 */
-	void initUI(boolean isOwner){
+	void initUI(boolean isOwner) {
 		Button btnPlay = (Button) findViewById(R.id.room_waiting_btn_play);
 		Button btnExit = (Button) findViewById(R.id.room_waiting_btn_exit);
 		mLvMembers = (ListView) findViewById(R.id.room_waiting_lv_member);
+		mTvCounter = (TextView) findViewById(R.id.room_waiting_tv_time);
 		TextView tvHeader = (TextView) findViewById(R.id.room_waiting_tv_header);
-		
-		String strHeader = "<font color=#ff158a><b><big>"+ 
-				mStrRoomName+"</big></b></font>" + "<br/>" + 
-				"<font color=#00bf00><strong>"+mStrOwnerName
-				+"</strong></font>";
+
+		String strHeader = "<font color=#ff158a><b><big>" + mStrRoomName
+				+ "</big></b></font>" + "<br/>"
+				+ "<font color=#00bf00><strong>" + mStrOwnerName
+				+ "</strong></font>";
 		tvHeader.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		tvHeader.setText(Html.fromHtml(strHeader));
-		
-		if (!isOwner){
+
+		if (!isOwner) {
 			btnPlay.setVisibility(View.GONE);
 		}
+		mTvCounter.setVisibility(View.INVISIBLE);
 		btnPlay.setOnClickListener(this);
 		btnExit.setOnClickListener(this);
-		
-		
+
 	}
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();		
-		if (mCheck != null){
-			if (!mCheck.isCancelled()){
+		super.onBackPressed();
+		if (mCheck != null) {
+			if (!mCheck.isCancelled()) {
 				mCheck.cancel(true);
 			}
 		}
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK){
-			if (isOwner){
-				if (mRequest != null){
-					if (!mRequest.isCancelled()){
-						mRequest.cancel(true);
-					}				
-				}
-				mRequest = new RequestServer(this);
-				mRequest.removeRoom(String.valueOf(mRoomID));
+	protected void onPause() {
+		super.onPause();
+		if (mCheck != null) {
+			if (!mCheck.isCancelled()) {
+				mCheck.cancel(true);
 			}
-			else{
-				if (mRequest != null){
-					if (!mRequest.isCancelled()){
+		}
+		if (isOwner) {
+			if (mRequest != null) {
+				if (!mRequest.isCancelled()) {
+					mRequest.cancel(true);
+				}
+			}
+			mRequest = new RequestServer(this);
+			mRequest.removeRoom(String.valueOf(mRoomID));
+		} else {
+			if (mRequest != null) {
+				if (!mRequest.isCancelled()) {
+					mRequest.cancel(true);
+				}
+			}
+			mRequest = new RequestServer(this);
+			mRequest.exitRoom(String.valueOf(mRoomID),
+					String.valueOf(DataInfo.userInfo.getUserId()));
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (isOwner) {
+				if (mRequest != null) {
+					if (!mRequest.isCancelled()) {
 						mRequest.cancel(true);
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.exitRoom(String.valueOf(mRoomID), String.valueOf(DataInfo.userInfo.getUserId()));
+				mRequest.removeRoom(String.valueOf(mRoomID));
+			} else {
+				if (mRequest != null) {
+					if (!mRequest.isCancelled()) {
+						mRequest.cancel(true);
+					}
+				}
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(String.valueOf(mRoomID),
+						String.valueOf(DataInfo.userInfo.getUserId()));
 			}
-			mIsGetMembers = false;
 		}
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see android.view.View.OnClickListener#onClick(android.view.View)
-	 * Event khi click vao button Play hay Exit
+	 * 
+	 * @see android.view.View.OnClickListener#onClick(android.view.View) Event
+	 * khi click vao button Play hay Exit
 	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.room_waiting_btn_play:
-			Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
-			startActivity(intent);
+			if (mRequest != null){
+				if (!mRequest.isCancelled()){
+					mRequest.cancel(true);
+				}
+			}
+			if (mCheck != null){
+				if (!mCheck.isCancelled()){
+					mCheck.cancel(true);
+				}
+			}
+			mRequest = new RequestServer(this);
+			mRequest.playGame(String.valueOf(mRoomID));
 			break;
-			
+
 		// exit
 		case R.id.room_waiting_btn_exit:
-			
-//			// xac lap bien isBackPress = false => chung to ko phai an Back de thoat
-//			isBackPress = false;
-			
-			if (isOwner){
-				if (mRequest != null){
-					if (!mRequest.isCancelled()){
-						mRequest.cancel(true);
-					}				
-				}
-				mRequest = new RequestServer(this);
-				mRequest.removeRoom(String.valueOf(mRoomID));
-			}
-			else{
-				if (mRequest != null){
-					if (!mRequest.isCancelled()){
+
+			// // xac lap bien isBackPress = false => chung to ko phai an Back
+			// de thoat
+			// isBackPress = false;
+
+			if (isOwner) {
+				if (mRequest != null) {
+					if (!mRequest.isCancelled()) {
 						mRequest.cancel(true);
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.exitRoom(String.valueOf(mRoomID), String.valueOf(DataInfo.userInfo.getUserId()));
+				mRequest.removeRoom(String.valueOf(mRoomID));
+			} else {
+				if (mRequest != null) {
+					if (!mRequest.isCancelled()) {
+						mRequest.cancel(true);
+					}
+				}
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(String.valueOf(mRoomID),
+						String.valueOf(DataInfo.userInfo.getUserId()));
 			}
-			mIsGetMembers = false;
 			break;
-			
+
 		default:
 			break;
 		}
 	}
 
 	/*
-	 * interface request server
-	 * Tra ve du lieu nhan duoc tu server 
+	 * interface request server Tra ve du lieu nhan duoc tu server
 	 */
 	@Override
 	public void onRequestComplete(String sResult) {
-		Log.i("onRequestComplete", "sResult: "+sResult);
-		Log.i("onRequestComplete", "mIsgetMembers: "+mIsGetMembers);
+		Log.i("onRequestComplete", "sResult: " + sResult);
 		// neu thuoc request get members
-		if (mIsGetMembers){
-			if (mCheck == null){
+		if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM) {
+			if (mCheck == null) {
 				mCheck = new CheckServer(this);
 				mCheck.checkMembersInRoom(String.valueOf(mRoomID));
 			}
@@ -225,59 +263,95 @@ OnClickListener, IRequestServer, ICheckServer{
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
 				DataInfo.setData(sResult);
-				if (DataInfo.value){
+				if (DataInfo.value) {
 					ArrayList<User> alMembers = DataInfo.mListMemberInRoom;
-					if (alMembers != null){
+					if (alMembers != null) {
 						int size = alMembers.size();
 						// co room
 						if (size > 0) {
 							mAlMembers.clear();
-							for (int i=0; i<size; i++){
+							for (int i = 0; i < size; i++) {
 								mAlMembers.add(alMembers.get(i));
 							}
 							adapter.notifyDataSetChanged();
 						}
 					}
-				}
-				else{
+				} else {
 					mAlMembers.clear();
 					adapter.notifyDataSetChanged();
-				}				
+				}
 			}
 		}
-		
-		// thuoc request remove room
-		else{
-			onBackPressed();
+
+		// neu la chu phong
+		if (isOwner){
+			// request thuoc remove room
+			if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_REMOVE_ROOM){
+				onBackPressed();
+			}
+			else if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_PLAY_GAME){
+				// tao dong ho dem nguoc 5s
+				int len = sResult.length();
+				if (sResult.contains("{") && len > 0) {
+					int start = sResult.indexOf("{");
+					int end = sResult.lastIndexOf("}");
+					sResult = sResult.substring(start, end);
+					DataInfo.setData(sResult);
+					if (DataInfo.value) {
+						new CountDownTimer(5000, 1000) {
+							
+							@Override
+							public void onTick(long millisUntilFinished) {
+								mTvCounter.setText((5000-millisUntilFinished) + "...");
+							}
+							
+							@Override
+							public void onFinish() {
+								Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
+								startActivity(intent);
+							}
+						}.start();
+					} else {
+						
+					}
+				}
+			}
+		}
+		// neu la member
+		else{			
+			// request exit room
+			if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_EXIT_ROOM){
+				onBackPressed();
+			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see at.test.delegate.ICheckServer#onCheckServerComplete()
 	 */
 
 	@Override
 	public void onCheckServerComplete(String result) {
-		if (!result.contains("false")){
-			if (mRequest != null){
-				if (!mRequest.isCancelled()){
+		if (!result.contains("false")) {
+			if (mRequest != null) {
+				if (!mRequest.isCancelled()) {
 					mRequest.cancel(true);
 				}
 				mRequest = new RequestServer(this);
 				mRequest.getMembersInRoom(String.valueOf(mRoomID));
 			}
-		}
-		else{
+		} else {
 			Log.i("onCheckServerComplete", "vao backpressed");
 			onBackPressed();
 		}
 	}
-	
+
 	/*
 	 * Adapter ListView members
 	 */
-	class MembersAdapter extends ArrayAdapter<User>{
+	class MembersAdapter extends ArrayAdapter<User> {
 
 		private LayoutInflater mInflater;
 		private ArrayList<User> alListMembers;
@@ -289,34 +363,36 @@ OnClickListener, IRequestServer, ICheckServer{
 		}
 
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
 			MemberHolder holder;
-			
-			if (convertView == null){
-				convertView = mInflater.inflate(R.layout.room_waiting_row, null);
-				
+
+			if (convertView == null) {
+				convertView = mInflater
+						.inflate(R.layout.room_waiting_row, null);
+
 				holder = new MemberHolder();
-				holder.tvUsername = (TextView) convertView.findViewById(R.id.room_waiting_row_username);
-				
+				holder.tvUsername = (TextView) convertView
+						.findViewById(R.id.room_waiting_row_username);
+
 				convertView.setTag(holder);
-			}
-			else{
+			} else {
 				holder = (MemberHolder) convertView.getTag();
 			}
-			
+
 			User user = alListMembers.get(position);
 			Log.i("adapter", user.getUsername());
-			holder.tvUsername.setText(user.getUsername());			
-			
+			holder.tvUsername.setText(user.getUsername());
+
 			return convertView;
 		}
 	}
-	
+
 	/*
 	 * holder adapter
 	 */
-	
-	static class MemberHolder{
+
+	static class MemberHolder {
 		TextView tvUsername;
 	}
 

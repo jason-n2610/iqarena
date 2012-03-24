@@ -44,4 +44,8 @@
     {
         include ($path.'/modules/controls/exit_room.php');
     }
+    else if ($_POST['message'] == "play_game")
+    {
+        include ($path . '/modules/controls/play_game.php');
+    }
 ?>
