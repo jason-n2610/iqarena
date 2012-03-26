@@ -31,7 +31,7 @@
             echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công", "room_id":'.$roomID.'}';
 
             // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
-            $filename= $path.'/check_change_room.txt' ;
+            $filename= 'check_change_room.txt' ;
             $fstring = "";
             if (file_exists($filename))
             {
@@ -51,7 +51,7 @@
             fclose($fd) ;
 
             // tao file 'room_id'.txt dung de kiem tra su thay doi members  trong 1 room
-            $fileMember = $roomID.'.txt';
+            $fileMember = $roomID . '.txt';
             $fMember = fopen($fileMember, "w") or die ("Can't open ".$fileMember);
             fclose($fMember);
         }

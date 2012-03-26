@@ -1,5 +1,6 @@
 <?php
-    $filename= $path.'/check_change_room.txt' ;
+    $path = getcwd();
+    $filename= $path . '/check_change_room.txt' ;
     $fstring = "";
     if (file_exists($filename))
     {
