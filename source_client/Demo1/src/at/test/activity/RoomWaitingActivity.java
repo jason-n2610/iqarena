@@ -6,6 +6,7 @@ package at.test.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -87,6 +88,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		// hide statusbar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setTitle("Room Waiting");
 
 		setContentView(R.layout.room_waiting);
 
@@ -205,11 +207,11 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					mRequest.cancel(true);
 				}
 			}
-			if (mCheck != null){
-				if (!mCheck.isCancelled()){
-					mCheck.cancel(true);
-				}
-			}
+//			if (mCheck != null){
+//				if (!mCheck.isCancelled()){
+//					mCheck.cancel(true);
+//				}
+//			}
 			mRequest = new RequestServer(this);
 			mRequest.playGame(String.valueOf(mRoomID));
 			break;
@@ -289,32 +291,34 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 			if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_REMOVE_ROOM){
 				onBackPressed();
 			}
+			
+			// request playgame
 			else if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_PLAY_GAME){
 				// tao dong ho dem nguoc 5s
-				int len = sResult.length();
-				if (sResult.contains("{") && len > 0) {
-					int start = sResult.indexOf("{");
-					int end = sResult.lastIndexOf("}");
-					sResult = sResult.substring(start, end);
-					DataInfo.setData(sResult);
-					if (DataInfo.value) {
-						new CountDownTimer(5000, 1000) {
-							
-							@Override
-							public void onTick(long millisUntilFinished) {
-								mTvCounter.setText((5000-millisUntilFinished) + "...");
-							}
-							
-							@Override
-							public void onFinish() {
-								Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
-								startActivity(intent);
-							}
-						}.start();
-					} else {
-						
-					}
-				}
+//				int len = sResult.length();
+//				if (sResult.contains("{") && len > 0) {
+//					int start = sResult.indexOf("{");
+//					int end = sResult.lastIndexOf("}");
+//					sResult = sResult.substring(start, end);
+//					DataInfo.setData(sResult);
+//					if (DataInfo.value) {
+//						new CountDownTimer(5000, 1000) {
+//							
+//							@Override
+//							public void onTick(long millisUntilFinished) {
+//								mTvCounter.setText((5000-millisUntilFinished) + "...");
+//							}
+//							
+//							@Override
+//							public void onFinish() {
+//								Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
+//								startActivity(intent);
+//							}
+//						}.start();
+//					} else {
+//						
+//					}
+//				}
 			}
 		}
 		// neu la member
@@ -334,17 +338,39 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onCheckServerComplete(String result) {
-		if (!result.contains("false")) {
-			if (mRequest != null) {
-				if (!mRequest.isCancelled()) {
-					mRequest.cancel(true);
-				}
-				mRequest = new RequestServer(this);
-				mRequest.getMembersInRoom(String.valueOf(mRoomID));
-			}
-		} else {
+		
+		// tin hieu thoat khoi phong - chu phong da xoa phong
+		if (result.contains("exit")){
 			Log.i("onCheckServerComplete", "vao backpressed");
 			onBackPressed();
+		}
+		
+		// tin hieu bat dau choi tu chu phong
+		else if (result.contains("play")){
+			new CountDownTimer(5000, 1000) {
+				
+				@Override
+				public void onTick(long millisUntilFinished) {
+					mTvCounter.setVisibility(View.VISIBLE);
+					mTvCounter.setText("Game playing in " + (int)(millisUntilFinished/1000) + "...");
+				}
+				
+				@Override
+				public void onFinish() {
+					mTvCounter.setVisibility(View.INVISIBLE);
+					Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
+					startActivity(intent);
+				}
+			}.start();
+		}
+		
+		// tin hieu co nguoi choi moi vao phong
+		else{
+			if (!mRequest.isCancelled()) {
+				mRequest.cancel(true);
+			}
+			mRequest = new RequestServer(this);
+			mRequest.getMembersInRoom(String.valueOf(mRoomID));			
 		}
 	}
 
