@@ -29,7 +29,7 @@
                             users
                         WHERE
                             user_id == '{$user_id}' ";
-            $result = @mysql_query($query) or die ('getUserById():'.mysql_error());
+            $result = @mysql_query($query) or die('getUserById():' . mysql_error());
             return $result;
         }
 
@@ -66,7 +66,8 @@
         }
 
         // them moi 1 user
-        public static function addUser($username, $password,$email, $score_level, $power_user, $money)
+        public static function addUser($username, $password, $email, $score_level, $power_user,
+            $money)
         {
             $query = "  INSERT INTO
                             users(

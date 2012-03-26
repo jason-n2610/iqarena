@@ -48,4 +48,8 @@
     {
         include ($path . '/modules/controls/play_game.php');
     }
+    else if ($_POST['message'] == "get_question")
+    {
+        include ($path . '/modules/controls/get_question.php');
+    }
 ?>

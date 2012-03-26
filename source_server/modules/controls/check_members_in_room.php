@@ -1,7 +1,8 @@
 <?php
+
     /*
-     * Lay ve noi dung file 'room_id'.txt de kiem tra xem co members moi ko?
-     */
+    * Lay ve noi dung file 'room_id'.txt de kiem tra xem co members moi ko?
+    */
 
     if (isset($_POST['room_id']))
     {
@@ -15,8 +16,7 @@
         {
             $result = file_get_contents($filename);
             echo $result;
-        }
-        else
+        } else
         {
             echo 'exit';
         }
@@ -28,4 +28,5 @@
             echo 'play';
         }
     }
+
 ?>

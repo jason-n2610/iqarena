@@ -1,10 +1,11 @@
 <?php
+
     // user join room
     if (isset($_POST['room_id']) && isset($_POST['user_id']))
-    {        
+    {
         $path = getcwd();
-        include ($path.'/include/mysql.php');
-        include ($path.'/modules/models/room_members.php');
+        include ($path . '/include/mysql.php');
+        include ($path . '/modules/models/room_members.php');
 
         // remove special character
 
@@ -19,7 +20,7 @@
         if ($result)
         {
             echo '{"type":"join_room", "value":"true", "message"="tham gia thanh cong"}';
-            $filename= $path.'/'.$_POST['room_id'].'.txt' ;
+            $filename = $path . '/' . $_POST['room_id'] . '.txt';
             $fstring = "";
             if (file_exists($filename))
             {
@@ -28,14 +29,13 @@
 
             // thay doi noi dung file 'roomid'.txt
             settype($fstring, "integer");
-            $fstring = $fstring+1;
-            $fd = fopen ($filename , "w") or die ("Can't open". $filename) ;
-            $fout= fwrite ($fd , $fstring) ;
-            fclose($fd) ;
-        }
-        else
+            $fstring = $fstring + 1;
+            $fd = fopen($filename, "w") or die("Can't open" . $filename);
+            $fout = fwrite($fd, $fstring);
+            fclose($fd);
+        } else
         {
-             echo '{"type":"join_room", "value":"false", "message":"không tham gia duoc phong"}';
+            echo '{"type":"join_room", "value":"false", "message":"không tham gia duoc phong"}';
         }
 
         unset($result);
@@ -44,4 +44,5 @@
         MySQL::close();
 
     }
+
 ?>
