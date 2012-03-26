@@ -24,7 +24,8 @@
         }
 
         // tao room moi
-        public static function createNewRoom($room_name, $owner_id, $max_member, $min_member, $status, $win_score, $number_of_member)
+        public static function createNewRoom($room_name, $owner_id, $max_member, $min_member,
+            $status, $win_score, $number_of_member)
         {
             $query = "INSERT INTO
                             rooms(
@@ -57,7 +58,8 @@
                         DELETE FROM rooms
                         WHERE room_id = '{$room_id}'
                         ";
-            return @mysql_query($query) or die('removeRoom(): '.mysql_error());
+            return @mysql_query($query) or die('removeRoom(): ' . mysql_error());
         }
     }
+
 ?>

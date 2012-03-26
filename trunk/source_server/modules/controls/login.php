@@ -1,10 +1,11 @@
-<?php                  
-    // neu 1 trong cac truong du lieu la khac null   
+<?php
+
+    // neu 1 trong cac truong du lieu la khac null
     if ((isset($_POST['username'])) && (isset($_POST['password'])))
-    {        
+    {
         $path = getcwd();
-        include ($path."/include/mysql.php"); 
-        include ($path."/modules/models/user.php"); 
+        include ($path . "/include/mysql.php");
+        include ($path . "/modules/models/user.php");
         // connect database
         MySQL::connect();
 
@@ -23,13 +24,12 @@
         {
             // user ton tai, login thanh cong
             $checkResult = true;
-            while ($row=mysql_fetch_assoc($result)) 
-                $output[]=$row;
+            while ($row = mysql_fetch_assoc($result))
+                $output[] = $row;
             echo '{"type":"login", "value":"true", "message":"login success!", "info":';
             echo json_encode($output);
             echo '}';
-        } 
-        else
+        } else
         {
             // user chua ton tai, login that bai
             $checkResult = false;
@@ -42,10 +42,10 @@
             {
                 echo '{"type":"login", "value":"false", "message":"sai password"}';
             } else
-            {                   
+            {
                 echo '{"type":"login", "value":"false", "message":"user chưa tồn tại"}';
             }
-        } 
+        }
 
         // giai phong du lieu
         unset($result);

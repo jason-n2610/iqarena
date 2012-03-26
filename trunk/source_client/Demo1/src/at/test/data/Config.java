@@ -26,6 +26,7 @@ public class Config {
 	public static final String REQUEST_CHECK_CHANGE_ROOM = "check_change_room";
 	public static final String REQUEST_CHECK_MEMBERS_IN_ROOM = "check_members_in_room";
 	public static final String REQUEST_PLAY_GAME = "play_game";
+	public static final String REQUEST_GET_QUESTION = "get_question";
 //	private static String message;
 //
 //	public static String getMessage() {

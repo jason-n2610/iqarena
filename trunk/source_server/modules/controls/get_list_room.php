@@ -1,9 +1,9 @@
 <?php
-    
+
     $path = getcwd();
     include ($path . "/include/mysql.php");
     include ($path . "/modules/models/room.php");
-    
+
     MySQL::connect();
     $result = Room::getAllRoom();
     if ($result == null)

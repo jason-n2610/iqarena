@@ -1,10 +1,11 @@
 <?php
+
     // neu 1 trong cac truong du lieu la khac null
     if ((isset($_POST['username'])) && (isset($_POST['password'])) && (isset($_POST['email'])))
     {
         $path = getcwd();
-        include ($path.'/include/mysql.php');
-        include ($path.'/modules/models/user.php');
+        include ($path . '/include/mysql.php');
+        include ($path . '/modules/models/user.php');
 
         // connect database
         MySQL::connect();
@@ -25,17 +26,17 @@
         {
             // user da ton tai
             echo '{"type":"register", "value":"false", "message":"user đã tồn tại"}';
-        }
-        else
+        } else
         {
             // user chua ton tai, them user
             $isSuccess = User::addUser($username, $password, $email, 0, 0, 0);
             if ($isSuccess)
             {
                 echo '{"type":"register", "value":"true", "message":"register success!", "info":';
-                echo '[{"user_id"="'.mysql_insert_id().'", "username"="'.$username.'", "email"="'.$email.'", "score_level"="0", "registed_date"="'.date('Y-m-d H:i:s').'", "power_user"="0", "money"="0"}]}';
-            }
-            else
+                echo '[{"user_id"="' . mysql_insert_id() . '", "username"="' . $username .
+                    '", "email"="' . $email . '", "score_level"="0", "registed_date"="' . date('Y-m-d H:i:s') .
+                    '", "power_user"="0", "money"="0"}]}';
+            } else
             {
                 echo '{"type":"register", "value":"false", "message":"Đăng kí thất bại"}';
             }

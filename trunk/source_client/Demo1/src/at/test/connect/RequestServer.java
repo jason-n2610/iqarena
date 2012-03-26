@@ -46,7 +46,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_JOIN_ROOM, 
 		REQUEST_EXIT_ROOM,
 		REQUEST_GET_MEMBERS_IN_ROOM,
-		REQUEST_PLAY_GAME
+		REQUEST_PLAY_GAME, 
+		REQUEST_GET_QUESTION
 	};
 
 	private REQUEST_TYPE requestType;
@@ -155,6 +156,15 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("room_id",
 						params[0]));
 				break;
+				
+			case REQUEST_GET_QUESTION:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_GET_QUESTION));
+				nameValuePairs.add(new BasicNameValuePair("member_id",
+						params[0]));
+				break;
+				
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -248,5 +258,11 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void playGame(String strRoomID){
 		this.requestType = REQUEST_TYPE.REQUEST_PLAY_GAME;
 		this.execute(strRoomID);
+	}
+	
+	// question
+	public void getQuestion(String strMemberId){
+		this.requestType = REQUEST_TYPE.REQUEST_GET_QUESTION;
+		this.execute(strMemberId);
 	}
 }

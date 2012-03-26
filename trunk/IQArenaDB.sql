@@ -62,6 +62,7 @@ CREATE TABLE room_members (
 CREATE TABLE questions (
     question_id int unsigned not null auto_increment,
     question_type_id tinyint unsigned not null,
+	question_field_id tinyint unsigned not null,
     question_name nvarchar(200) not null,
     answer_a nvarchar(200) not null,
     answer_b nvarchar(200) not null,
@@ -74,8 +75,8 @@ CREATE TABLE questions (
 
 CREATE TABLE question_types (
     question_type_id tinyint unsigned not null auto_increment,
-    question_field_id tinyint unsigned not null,
-    question_type tinyint unsigned not null,
+    question_type_value tinyint unsigned not null,
+	question_type_name nvarchar(50),
     score float not null,
     PRIMARY KEY (question_type_id)
 );
