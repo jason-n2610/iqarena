@@ -44,7 +44,7 @@
             }
             else
             {
-                echo '{"type":"get_question", "value":"false", "message":"get failed!"';
+                echo '{"type":"get_question", "value":"false", "message":"get failed!"}';
             }
 
             MySQL::close();

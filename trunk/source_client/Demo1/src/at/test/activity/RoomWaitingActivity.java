@@ -102,6 +102,10 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		mAlMembers = new ArrayList<User>();
 		adapter = new MembersAdapter(getApplicationContext(), mAlMembers);
 		mLvMembers.setAdapter(adapter);
+		
+		// check server
+		mCheck = new CheckServer(this);
+		mCheck.checkMembersInRoom(mRoomID);
 	}
 
 
@@ -231,6 +235,11 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 				mRequest.exitRoom(mRoomID,
 						String.valueOf(DataInfo.userInfo.getUserId()));
 			}
+			if (mCheck != null){
+				if (!mCheck.isCancelled()){
+					mCheck.cancel(true);
+				}
+			}
 			break;
 
 		default:
@@ -243,13 +252,8 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	 */
 	@Override
 	public void onRequestComplete(String sResult) {
-		Log.i("onRequestComplete", "sResult: " + sResult);
 		// neu thuoc request get members
 		if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM) {
-			if (mCheck == null) {
-				mCheck = new CheckServer(this);
-				mCheck.checkMembersInRoom(mRoomID);
-			}
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
@@ -332,6 +336,11 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		// tin hieu thoat khoi phong - chu phong da xoa phong
 		if (result.contains("exit")){
 			Log.i("onCheckServerComplete", "vao backpressed");
+			if (mCheck!=null){
+				if (!mCheck.isCancelled()){
+					mCheck.cancel(true);
+				}
+			}
 			onBackPressed();
 		}
 		

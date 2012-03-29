@@ -12,7 +12,7 @@
         include ($path . '/modules/models/questions.php');
         include ($path . '/modules/models/room.php');
 
-        // tạo ra file 'room_id'_play.txt
+        // tạo ra file 'room_id'_play.txt thong bao cho cac member khac room da duoc bat dau choi
         $pathPlay = $path . '/' . $_POST['room_id'] . '_play.txt';
         $filePlay = fopen($pathPlay, 'w') or die('can not open ' . $pathPlay);
         fclose($filePlay);
@@ -25,7 +25,7 @@
         unlink($path . '/' . $_POST['room_id'] . '.txt');
 
          // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
-        $filename = path . '/check_change_room.txt';
+        $filename = $path . '/check_change_room.txt';
         $fstring = "";
         if (file_exists($filename))
         {
