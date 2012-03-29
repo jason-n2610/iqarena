@@ -1,44 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/play_game_layout_question"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:baselineAligned="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="4" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="Question #"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:baselineAligned="false"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/play_game_question"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:gravity="center_vertical"
+                            android:maxLines="5"
+                            android:scrollbars="vertical"
+                            android:text="question" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="4"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/play_game_time_counter"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:gravity="center"
+                            android:textSize="40sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/play_game_summit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Summit" />
+
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <RadioGroup
+                    android:id="@+id/play_game_rg_answer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <RadioButton
+                        android:id="@+id/play_game_answer_a"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="a" />
+
+                    <RadioButton
+                        android:id="@+id/play_game_answer_b"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="b" />
+
+                    <RadioButton
+                        android:id="@+id/play_game_answer_c"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="c" />
+
+                    <RadioButton
+                        android:id="@+id/play_game_answer_d"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="d" />
+                </RadioGroup>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/play_game_layout_answer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="visible" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/play_game_answer_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:gravity="center"
+            android:text="Answer"
+            android:textSize="25sp" />
 
-        <Button
-            android:id="@+id/button1"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:baselineAligned="false" >
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" >
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+                <TextView
+                    android:id="@+id/play_game_tv_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Game start in:" />
+
+                <TextView
+                    android:id="@+id/play_game_answer_tv_counter"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="10"
+                    android:textSize="28sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/play_game_lv_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
 
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

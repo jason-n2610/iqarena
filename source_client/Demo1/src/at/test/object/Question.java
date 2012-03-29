@@ -1,9 +1,18 @@
 package at.test.object;
 
 public class Question {
-	private String mStrContent, mStrAnswerA, mStrAnswerB, mStrAnswerC,
+	private String mStrId, mStrContent, mStrAnswerA, mStrAnswerB, mStrAnswerC,
 			mStrAnswerD;
 
+	public Question(String strId, String strContent, String strA, String strB, String strC, String strD){
+		this.setmStrId(strId);
+		this.mStrContent = strContent;
+		this.mStrAnswerA = strA;
+		this.mStrAnswerB = strB;
+		this.mStrAnswerC = strC;
+		this.mStrAnswerD = strD;
+	}
+	
 	public String getmStrContent() {
 		return mStrContent;
 	}
@@ -42,6 +51,14 @@ public class Question {
 
 	public void setmStrAnswerD(String mStrAnswerD) {
 		this.mStrAnswerD = mStrAnswerD;
+	}
+
+	public String getmStrId() {
+		return mStrId;
+	}
+
+	public void setmStrId(String mStrId) {
+		this.mStrId = mStrId;
 	}
 
 }

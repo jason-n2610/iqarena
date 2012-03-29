@@ -1,7 +1,7 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE DATABASE if not exists iqarena
-DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 USE iqarena;
 
@@ -51,11 +51,12 @@ CREATE TABLE room_members (
     room_member_id int unsigned not null auto_increment,
     user_id int unsigned not null,
     room_id int unsigned not null,
-	type tinyint unsigned not null,
+	type tinyint unsigned not null,	-- chu phong hay ko?
     question_id int unsigned,
     graft_id int unsigned,
     score float,
     combo tinyint,
+	last_answer tinyint unsigned,
     PRIMARY KEY (room_member_id)
 );
 
@@ -63,7 +64,7 @@ CREATE TABLE questions (
     question_id int unsigned not null auto_increment,
     question_type_id tinyint unsigned not null,
 	question_field_id tinyint unsigned not null,
-    question_name nvarchar(200) not null,
+    question_name nvarchar(800) not null,
     answer_a nvarchar(200) not null,
     answer_b nvarchar(200) not null,
     answer_c nvarchar(200) not null,

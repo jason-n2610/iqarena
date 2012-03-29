@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import at.test.object.MemberScore;
+import at.test.object.Question;
 import at.test.object.Room;
 import at.test.object.User;
 
@@ -23,9 +25,11 @@ public class DataInfo {
 	public static boolean value = false;
 	public static String message = null;
 	public static User userInfo = null;
+	public static Question question = null;
 	public static int roomId = 0;
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static ArrayList<User> mListMemberInRoom = new ArrayList<User>();
+	public static ArrayList<MemberScore> mListMembersScore = new ArrayList<MemberScore>();
 
 	private static final String TAG = "JSONDATA";
 
@@ -91,14 +95,14 @@ public class DataInfo {
 
 				}
 			}
-			
+
 			// message 'create_new_room'
-			else if (typeMessage.equals(Config.REQUEST_CREATE_NEW_ROOM)){
+			else if (typeMessage.equals(Config.REQUEST_CREATE_NEW_ROOM)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 				roomId = jObject.getInt("room_id");
 			}
-			
+
 			// message 'get_list_room'
 			else if (typeMessage.equals(Config.REQUEST_GET_LIST_ROOM)) {
 				Log.i(TAG, "get list room");
@@ -123,33 +127,33 @@ public class DataInfo {
 						int winScore = json_data.getInt("win_score");
 						int numberOfMember = json_data
 								.getInt("number_of_member");
-						room = new Room(roomId, roomName, ownerId, ownerName, maxMember,
-								minMember, winScore, status, numberOfMember);
+						room = new Room(roomId, roomName, ownerId, ownerName,
+								maxMember, minMember, winScore, status,
+								numberOfMember);
 						mListRoom.add(room);
 					}
-				}
-				else{
+				} else {
 					mListRoom.clear();
 					message = jObject.getString("message");
 				}
 			}
-			
+
 			// message join room
-			else if (typeMessage.equals(Config.REQUEST_JOIN_ROOM)){
+			else if (typeMessage.equals(Config.REQUEST_JOIN_ROOM)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 			}
-			
+
 			// message exit room
-			else if (typeMessage.equals(Config.REQUEST_EXIT_ROOM)){
-				
+			else if (typeMessage.equals(Config.REQUEST_EXIT_ROOM)) {
+
 			}
-			
+
 			// get members in room
-			else if (typeMessage.equals(Config.REQUEST_GET_MEMBERS_IN_ROOM)){
+			else if (typeMessage.equals(Config.REQUEST_GET_MEMBERS_IN_ROOM)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
-				if (value){
+				if (value) {
 					String jMembers = jObject.getString("members");
 					JSONArray jArray = new JSONArray(jMembers);
 					int length = jArray.length();
@@ -157,7 +161,7 @@ public class DataInfo {
 					mListMemberInRoom.clear();
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
-						
+
 						int userId = json_data.getInt("user_id");
 						String username = json_data.getString("username");
 						String email = json_data.getString("email");
@@ -169,15 +173,86 @@ public class DataInfo {
 
 						User user = new User(userId, username, email,
 								scoreLevel, registedDate, powerUser, money);
-						
+
 						mListMemberInRoom.add(user);
 					}
-				}
-				else{
+				} else {
 					mListMemberInRoom.clear();
 				}
 			}
-			
+
+			else if (typeMessage.equals(Config.REQUEST_GET_QUESTION)) {
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value) {
+					String strId = null, strQuestion = null, strA = null, strB = null, strC = null, strD = null;
+					String jQuestion = jObject.getString("question");
+					JSONArray jArray = new JSONArray(jQuestion);
+					int length = jArray.length();
+					for (int i = 0; i < length; i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+						strId = json_data.getString("question_id");
+						strQuestion = json_data.getString("question_name");
+						strA = json_data.getString("answer_a");
+						strB = json_data.getString("answer_b");
+						strC = json_data.getString("answer_c");
+						strD = json_data.getString("answer_d");
+					}
+					question = new Question(strId, strQuestion, strA, strB, strC, strD);
+				}
+			}
+			else if (typeMessage.equals(Config.REQUEST_GET_MEMBERS_ANSWER)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value){
+					String jMembers = jObject.getString("answers");
+					JSONArray jArray = new JSONArray(jMembers);
+					int length = jArray.length();
+					Log.i(TAG, "length: " + length);
+					mListMembersScore.clear();
+					for (int i = 0; i < length; i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+
+						String userId = json_data.getString("user_id");
+						String username = json_data.getString("username");
+						String lastAnswer = json_data.getString("last_answer");
+						if (lastAnswer.equals("null")){
+							lastAnswer = "-";
+						}
+						else if (lastAnswer.equals("1")){
+							lastAnswer = "A";
+						}
+						else if (lastAnswer.equals("2")){
+							lastAnswer = "B";
+						}
+						else if (lastAnswer.equals("3")){
+							lastAnswer = "C";
+						}
+						else if (lastAnswer.equals("4")){
+							lastAnswer = "D";
+						}
+						String score = json_data.getString("score");
+						if (score.equals("null")){
+							score = "-";
+						}
+						String graft = json_data
+								.getString("graft_id");
+						if (graft.equals("null")){
+							graft = "-";
+						}
+						String combo = json_data.getString("combo");
+						if (combo.equals("null")){
+							combo = "-";
+						}
+
+						MemberScore memberScore = new MemberScore(userId, username, lastAnswer,
+								score, graft, combo);
+
+						mListMembersScore.add(memberScore);
+					}
+				}
+			}
+
 			result = true;
 		} catch (JSONException e) {
 			Log.i(TAG, e.getMessage());

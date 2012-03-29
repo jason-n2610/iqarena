@@ -5,14 +5,22 @@
  * @copyright 2012
  */
 
-    // kiem tra cau tra loi cua member
-    // tra ve cho members danh sach tra loi cua cac nguoi choi trong phong
-    // dong thoi dua ra tin hieu cho members biet minh tra loi dung hay sai
+    // cap nhat cau tra loi cua user
 
     // kiem tra cac du lieu do members gui len
-    if (isset($_POST['user_id']) && isset($_POST['question_id']) && isset($_POST['question_answer']))
+    if (isset($_POST['room_id']) && isset($_POST['user_id']) && isset($_POST['question_id']) && isset($_POST['question_answer']))
     {
+        $path = getcwd();
+        include ($path . '/include/mysql.php');
+        include ($path . '/modules/models/room_members.php');
 
+        // connect server
+        MySQL::connect();
+
+        $result = RoomMembers::answerQuestion($_POST['room_id'], $_POST['user_id'], $_POST['question_id'], $_POST['question_answer']);
+        echo 'response: ' . $result;
+
+        MySQL::close();
     }
 
 ?>

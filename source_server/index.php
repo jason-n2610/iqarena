@@ -52,4 +52,13 @@
     {
         include ($path . '/modules/controls/get_question.php');
     }
+    else if ($_POST['message'] == "answer_question")
+    {
+        include ($path . '/modules/controls/answer_question.php');
+    }
+    else if ($_POST['message'] == "get_members_answer")
+    {
+        include ($path . '/modules/controls/get_members_answer.php');
+    }
+
 ?>

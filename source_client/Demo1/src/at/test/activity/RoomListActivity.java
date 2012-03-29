@@ -23,6 +23,7 @@ import android.widget.Toast;
 import at.test.R;
 import at.test.connect.CheckServer;
 import at.test.connect.RequestServer;
+import at.test.connect.RequestServer.REQUEST_TYPE;
 import at.test.data.DataInfo;
 import at.test.delegate.ICheckServer;
 import at.test.delegate.IRequestServer;
@@ -45,12 +46,11 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	ArrayList<Room> alRooms = null;
 	RoomListAdapter adapter = null;
 	
-	boolean isJoinRoom = false;
 	String TAG = "RoomListActivity";
 	String mRoomName;
 	String mRoomOwnerName;
 	// bien luu thong tin room_id khi user chon 1 room
-	int roomID = 0;
+	String roomID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +105,10 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	// khi lay duoc du lieu get_list_room tu server
 	@Override
 	public void onRequestComplete(String sResult) {
-		Log.i(TAG, "isJoinRoom: "+isJoinRoom);
 		// truong hop join room
-		if (isJoinRoom){
+		if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_JOIN_ROOM){
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
-				isJoinRoom = !isJoinRoom;
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
 				DataInfo.setData(sResult);
@@ -129,7 +127,8 @@ public class RoomListActivity extends Activity implements IRequestServer,
 		}
 		
 		// truong hop xem danh sach room
-		else{
+		else if (mRequestServer.getRequestType() == 
+				REQUEST_TYPE.REQUEST_GET_LIST_ROOM){
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
@@ -232,11 +231,10 @@ public class RoomListActivity extends Activity implements IRequestServer,
 						mRequestServer.cancel(true);
 					}
 					mRoomName = room.getRoomName();
-					roomID = room.getRoomId();
+					roomID = String.valueOf(room.getRoomId());
 					mRoomOwnerName = room.getOwnerName();
 					mRequestServer = new RequestServer(RoomListActivity.this);
 					mRequestServer.joinRoom(String.valueOf(room.getRoomId()), String.valueOf(DataInfo.userInfo.getUserId()));
-					isJoinRoom = true;
 				}
 			});
 			
