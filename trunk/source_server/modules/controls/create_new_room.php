@@ -10,6 +10,7 @@
         $path = getcwd();
         include ($path . '/include/mysql.php');
         include ($path . '/modules/models/room.php');
+        include ($path . '/modules/models/room_members.php');
 
         // connect database
         MySQL::connect();
@@ -35,7 +36,7 @@
                 $roomID . '}';
 
             // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
-            $filename = 'check_change_room.txt';
+            $filename = $path . '/check_change_room.txt';
             $fstring = "";
             if (file_exists($filename))
             {
@@ -57,6 +58,9 @@
             $fileMember = $roomID . '.txt';
             $fMember = fopen($fileMember, "w") or die("Can't open " . $fileMember);
             fclose($fMember);
+
+            // them vao table room_members
+            RoomMembers::joinRoom($roomID, $_POST['owner_id']);
         } else
         {
             echo '{"type":"create_new_room", "value":"false", "message":"không tạo được room"}';

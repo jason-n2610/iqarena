@@ -1,0 +1,10 @@
+﻿- File check_change_room.txt: dùng cho user kiểm tra xem có một room mới hay ko, mỗi khi có một user tạo room mới, nội dung trong file
+này sẽ bị thay đổi. User khác luôn kiểm tra xem nội dung file này có thay đổi ko, nếu thay đổi sẽ thực hiện request lấy về các room khác
+- File 'room_id'.txt: dùng cho user kiểm tra xem người chơi trong room có thay đổi không. Mỗi khi có một user tham gia vào room, nội dung 
+trong file sẽ được +1, nếu thoát khỏi room, nội dung file sẽ được -1. User luôn kiểm tra sự thay đổi trong nội dung file, nếu thấy khác biệt
+sẽ request lấy về những người chơi trong room.
+- File 'room_id'_question.txt: dùng lưu số lượng câu hỏi và question_id trong một room. Server dựa vào số lượng đó để lấy ra câu hỏi tiếp theo 
+phù hợp. File này được tạo ra khi chủ phòng gửi request chơi game, server tự động thêm các question_id và câu hỏi hiện tại vào file.
+- File 'room_id'_play.txt: được tạo ra khi chủ phòng request chơi game, các user khác kiểm tra file này, nếu tồn tại thì gửi request chơi game
+cho server
+

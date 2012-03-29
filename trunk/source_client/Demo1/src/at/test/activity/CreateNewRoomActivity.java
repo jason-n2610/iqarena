@@ -120,7 +120,7 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 					sResult = sResult.substring(start, length);
 					boolean isSuccess = DataInfo.setData(sResult);
 					strMessage = DataInfo.message;
-					int roomId = DataInfo.roomId;
+					String roomId = String.valueOf(DataInfo.roomId);
 					if (isSuccess) {
 						// neu create thanh cong
 						if (DataInfo.value) {

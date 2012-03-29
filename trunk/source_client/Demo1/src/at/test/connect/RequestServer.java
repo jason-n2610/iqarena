@@ -41,13 +41,14 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_LOGIN, 
 		REQUEST_REGISTER, 
 		REQUEST_GET_LIST_ROOM, 
-		REQUEST_CREATE_NEW_ROOM,
-		REQUEST_REMOVE_ROOM,
+		REQUEST_CREATE_NEW_ROOM, 
+		REQUEST_REMOVE_ROOM, 
 		REQUEST_JOIN_ROOM, 
-		REQUEST_EXIT_ROOM,
-		REQUEST_GET_MEMBERS_IN_ROOM,
-		REQUEST_PLAY_GAME, 
-		REQUEST_GET_QUESTION
+		REQUEST_EXIT_ROOM, 
+		REQUEST_GET_MEMBERS_IN_ROOM, 
+		REQUEST_PLAY_GAME, REQUEST_GET_QUESTION, 
+		REQUEST_ANSWER_QUESTION,
+		REQUEST_GET_MEMBERS_ANSWER
 	};
 
 	private REQUEST_TYPE requestType;
@@ -80,7 +81,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 			switch (requestType) {
 			case REQUEST_LOGIN:
 				nameValuePairs = new ArrayList<NameValuePair>(3);
-				nameValuePairs.add(new BasicNameValuePair("message", Config.REQUEST_LOGIN));
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_LOGIN));
 				nameValuePairs
 						.add(new BasicNameValuePair("username", params[0]));
 				nameValuePairs.add(new BasicNameValuePair("password", Utils
@@ -90,8 +92,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 
 			case REQUEST_REGISTER:
 				nameValuePairs = new ArrayList<NameValuePair>(4);
-				nameValuePairs
-						.add(new BasicNameValuePair("message", Config.REQUEST_REGISTER));
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_REGISTER));
 				nameValuePairs
 						.add(new BasicNameValuePair("username", params[0]));
 				nameValuePairs.add(new BasicNameValuePair("password", Utils
@@ -121,50 +123,75 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_REMOVE_ROOM));
-				nameValuePairs.add(new BasicNameValuePair("room_id",
-						params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
 			case REQUEST_JOIN_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(3);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_JOIN_ROOM));
-				nameValuePairs.add(new BasicNameValuePair("room_id",
-						params[0]));
-				nameValuePairs.add(new BasicNameValuePair("user_id",
-						params[1]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("user_id", params[1]));
 				break;
 			case REQUEST_EXIT_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(3);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_EXIT_ROOM));
-				nameValuePairs.add(new BasicNameValuePair("room_id",
-						params[0]));
-				nameValuePairs.add(new BasicNameValuePair("user_id",
-						params[1]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("user_id", params[1]));
 				break;
 			case REQUEST_GET_MEMBERS_IN_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_GET_MEMBERS_IN_ROOM));
-				nameValuePairs.add(new BasicNameValuePair("room_id",
-						params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
 			case REQUEST_PLAY_GAME:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_PLAY_GAME));
-				nameValuePairs.add(new BasicNameValuePair("room_id",
-						params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
-				
+
 			case REQUEST_GET_QUESTION:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_GET_QUESTION));
-				nameValuePairs.add(new BasicNameValuePair("member_id",
-						params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
-				
+
+			case REQUEST_ANSWER_QUESTION:
+				nameValuePairs = new ArrayList<NameValuePair>(5);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_ANSWER_QUESTION));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("user_id", params[1]));
+				nameValuePairs.add(new BasicNameValuePair("question_id",
+						params[2]));
+				nameValuePairs.add(new BasicNameValuePair("question_answer", params[3]));
+				break;
+
+			case REQUEST_GET_MEMBERS_ANSWER:
+				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_GET_MEMBERS_ANSWER));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				nameValuePairs
+				.add(new BasicNameValuePair("question_id", params[1]));
+				nameValuePairs
+				.add(new BasicNameValuePair("answer", params[2]));
+				break;
+
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -175,7 +202,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				HttpEntity entity = httpResponse.getEntity();
 				InputStream is = entity.getContent();
 				BufferedReader bis = new BufferedReader(new InputStreamReader(
-						is), 8);
+						is, "UTF-8"), 8);
 				StringBuilder sb = new StringBuilder();
 				sb.append(bis.readLine() + "\n");
 				String line = null;
@@ -229,40 +256,53 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		this.requestType = REQUEST_TYPE.REQUEST_CREATE_NEW_ROOM;
 		this.execute(strRoomName, strMaxMem, strBetScore);
 	}
-	
+
 	// remove room
-	public void removeRoom(String strRoomId){
+	public void removeRoom(String strRoomId) {
 		this.requestType = REQUEST_TYPE.REQUEST_REMOVE_ROOM;
 		this.execute(strRoomId);
 	}
-	
+
 	// join room
-	public void joinRoom(String strRoomID, String strUserID){
+	public void joinRoom(String strRoomID, String strUserID) {
 		this.requestType = REQUEST_TYPE.REQUEST_JOIN_ROOM;
 		this.execute(strRoomID, strUserID);
 	}
-	
+
 	// exit room
-	public void exitRoom(String strRoomID, String strUserID){
+	public void exitRoom(String strRoomID, String strUserID) {
 		this.requestType = REQUEST_TYPE.REQUEST_EXIT_ROOM;
 		this.execute(strRoomID, strUserID);
 	}
-	
+
 	// get members in room
-	public void getMembersInRoom(String strRoomID){
+	public void getMembersInRoom(String strRoomID) {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM;
 		this.execute(strRoomID);
 	}
-	
+
 	// play game
-	public void playGame(String strRoomID){
+	public void playGame(String strRoomID) {
 		this.requestType = REQUEST_TYPE.REQUEST_PLAY_GAME;
 		this.execute(strRoomID);
 	}
-	
-	// question
-	public void getQuestion(String strMemberId){
+
+	// get question
+	public void getQuestion(String strRoomId) {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_QUESTION;
-		this.execute(strMemberId);
+		this.execute(strRoomId);
+	}
+
+	// answer question
+	public void answerQuestion(String strRoomId, String strUserId,
+			String strQuesId, String strAnswer) {
+		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
+		this.execute(strRoomId, strUserId, strQuesId, strAnswer);
+	}
+	
+	// get other members answer
+	public void getMembersAnswer(String strRoomId, String strQuestionId, String strAnswer){
+		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_ANSWER;
+		this.execute(strRoomId, strQuestionId, strAnswer);
 	}
 }

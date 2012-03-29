@@ -124,15 +124,25 @@
 {
 	"type":"play_game",
 	"value":"true",
-	"question":
-	{
-		"contents":"what your name?",
-		"answer_a":"hi",
-		"answer_b":"ho",
-		"answer_c":"he",
-		"answer_d":"hu"
-	}
+	"message":"message"
 }
+
+// get question true
+{
+	"type" : "get_question",
+	"value" : "true",
+	"message" : "message",
+	"question" : [
+		{
+			"contents":"what your name?",
+			"answer_a":"hi",
+			"answer_b":"ho",
+			"answer_c":"he",
+			"answer_d":"hu"
+		}
+	]
+}
+
 
 // bat dau tro cho false
 {
@@ -141,17 +151,15 @@
 	"message":"error"
 }
 
-// tra loi cau hoi	-> true
+// members answer	-> true
 {
-	"type":"answer",
+	"type":"answer_question",
 	"value":"true",
-	"score":"50",
-	"graft":"0",	// ko nhan duoc manh ghep nao
-	"combo":"0",	// ko co combo
-	"room_answer":[
-		{"username":"abc", "answer":"b", "score":"100"},
-		{"username":"ghe", "answer":"a", "score":"50"},
-		{"username":"def", "answer":"b", "score":"100"}
+	"message":"success",
+	"answers":[
+		{"username":"abc", "answer":"b", "score":"100", ...},
+		{"username":"ghe", "answer":"a", "score":"50", ...},
+		{"username":"def", "answer":"b", "score":"100", ...}
 	]
 	"next_question":
 	{

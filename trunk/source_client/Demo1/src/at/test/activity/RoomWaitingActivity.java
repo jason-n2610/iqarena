@@ -50,7 +50,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	 */
 
 	// room id
-	int mRoomID = 0;
+	String mRoomID;
 	String mStrRoomName;
 	String mStrOwnerName;
 
@@ -62,6 +62,8 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	// bien kiem tra loai user khi vao room
 	// hoac la owner hoac la member
 	private boolean isOwner;
+	
+	Button mBtnPlay;
 
 	// // bien kiem tra xem nguoi dung an back hay an nut exit
 	// // co bien nay la do khi nguoi dung an nut 'exit' ta goi onBackPress()
@@ -82,7 +84,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		Bundle extras = getIntent().getExtras();
 		isOwner = extras.getBoolean("owner");
 
-		mRoomID = extras.getInt("room_id");
+		mRoomID = extras.getString("room_id");
 		mStrRoomName = extras.getString("room_name");
 		mStrOwnerName = extras.getString("owner_name");
 		// hide statusbar
@@ -95,7 +97,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		// init ui
 		initUI(isOwner);
 		mRequest = new RequestServer(this);
-		mRequest.getMembersInRoom(String.valueOf(mRoomID));
+		mRequest.getMembersInRoom(mRoomID);
 
 		mAlMembers = new ArrayList<User>();
 		adapter = new MembersAdapter(getApplicationContext(), mAlMembers);
@@ -107,7 +109,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	 * init ui Nhan vao la bien xac dinh xem la owner hay member
 	 */
 	void initUI(boolean isOwner) {
-		Button btnPlay = (Button) findViewById(R.id.room_waiting_btn_play);
+		mBtnPlay = (Button) findViewById(R.id.room_waiting_btn_play);
 		Button btnExit = (Button) findViewById(R.id.room_waiting_btn_exit);
 		mLvMembers = (ListView) findViewById(R.id.room_waiting_lv_member);
 		mTvCounter = (TextView) findViewById(R.id.room_waiting_tv_time);
@@ -121,50 +123,40 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		tvHeader.setText(Html.fromHtml(strHeader));
 
 		if (!isOwner) {
-			btnPlay.setVisibility(View.GONE);
+			mBtnPlay.setVisibility(View.GONE);
 		}
 		mTvCounter.setVisibility(View.INVISIBLE);
-		btnPlay.setOnClickListener(this);
+		mBtnPlay.setOnClickListener(this);
 		btnExit.setOnClickListener(this);
 
 	}
 
 	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		if (mCheck != null) {
-			if (!mCheck.isCancelled()) {
-				mCheck.cancel(true);
-			}
-		}
-	}
-
-	@Override
 	protected void onPause() {
 		super.onPause();
-		if (mCheck != null) {
-			if (!mCheck.isCancelled()) {
-				mCheck.cancel(true);
-			}
-		}
-		if (isOwner) {
-			if (mRequest != null) {
-				if (!mRequest.isCancelled()) {
-					mRequest.cancel(true);
-				}
-			}
-			mRequest = new RequestServer(this);
-			mRequest.removeRoom(String.valueOf(mRoomID));
-		} else {
-			if (mRequest != null) {
-				if (!mRequest.isCancelled()) {
-					mRequest.cancel(true);
-				}
-			}
-			mRequest = new RequestServer(this);
-			mRequest.exitRoom(String.valueOf(mRoomID),
-					String.valueOf(DataInfo.userInfo.getUserId()));
-		}
+//		if (mCheck != null) {
+//			if (!mCheck.isCancelled()) {
+//				mCheck.cancel(true);
+//			}
+//		}
+//		if (isOwner) {
+//			if (mRequest != null) {
+//				if (!mRequest.isCancelled()) {
+//					mRequest.cancel(true);
+//				}
+//			}
+//			mRequest = new RequestServer(this);
+//			mRequest.removeRoom(mRoomID);
+//		} else {
+//			if (mRequest != null) {
+//				if (!mRequest.isCancelled()) {
+//					mRequest.cancel(true);
+//				}
+//			}
+//			mRequest = new RequestServer(this);
+//			mRequest.exitRoom(mRoomID,
+//					String.valueOf(DataInfo.userInfo.getUserId()));
+//		}
 	}
 
 	@Override
@@ -177,7 +169,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.removeRoom(String.valueOf(mRoomID));
+				mRequest.removeRoom(mRoomID);
 			} else {
 				if (mRequest != null) {
 					if (!mRequest.isCancelled()) {
@@ -185,7 +177,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.exitRoom(String.valueOf(mRoomID),
+				mRequest.exitRoom(mRoomID,
 						String.valueOf(DataInfo.userInfo.getUserId()));
 			}
 		}
@@ -202,18 +194,16 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.room_waiting_btn_play:
+			
+			mBtnPlay.setEnabled(false);
+			
 			if (mRequest != null){
 				if (!mRequest.isCancelled()){
 					mRequest.cancel(true);
 				}
 			}
-//			if (mCheck != null){
-//				if (!mCheck.isCancelled()){
-//					mCheck.cancel(true);
-//				}
-//			}
 			mRequest = new RequestServer(this);
-			mRequest.playGame(String.valueOf(mRoomID));
+			mRequest.playGame(mRoomID);
 			break;
 
 		// exit
@@ -230,7 +220,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.removeRoom(String.valueOf(mRoomID));
+				mRequest.removeRoom(mRoomID);
 			} else {
 				if (mRequest != null) {
 					if (!mRequest.isCancelled()) {
@@ -238,7 +228,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					}
 				}
 				mRequest = new RequestServer(this);
-				mRequest.exitRoom(String.valueOf(mRoomID),
+				mRequest.exitRoom(mRoomID,
 						String.valueOf(DataInfo.userInfo.getUserId()));
 			}
 			break;
@@ -258,7 +248,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM) {
 			if (mCheck == null) {
 				mCheck = new CheckServer(this);
-				mCheck.checkMembersInRoom(String.valueOf(mRoomID));
+				mCheck.checkMembersInRoom(mRoomID);
 			}
 			int len = sResult.length();
 			if (sResult.contains("{") && len > 0) {
@@ -347,18 +337,25 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		
 		// tin hieu bat dau choi tu chu phong
 		else if (result.contains("play")){
+			if (mCheck != null) {
+				if (!mCheck.isCancelled()) {
+					mCheck.cancel(true);
+				}
+			}
+
+			mTvCounter.setVisibility(View.VISIBLE);
 			new CountDownTimer(5000, 1000) {
 				
 				@Override
 				public void onTick(long millisUntilFinished) {
-					mTvCounter.setVisibility(View.VISIBLE);
 					mTvCounter.setText("Game playing in " + (int)(millisUntilFinished/1000) + "...");
 				}
 				
 				@Override
 				public void onFinish() {
-					mTvCounter.setVisibility(View.INVISIBLE);
+					mTvCounter.setText("Game playing in 0...");
 					Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
+					intent.putExtra("room_id", mRoomID);
 					startActivity(intent);
 				}
 			}.start();
@@ -370,7 +367,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 				mRequest.cancel(true);
 			}
 			mRequest = new RequestServer(this);
-			mRequest.getMembersInRoom(String.valueOf(mRoomID));			
+			mRequest.getMembersInRoom(mRoomID);			
 		}
 	}
 

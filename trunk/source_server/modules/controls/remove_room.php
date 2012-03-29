@@ -22,7 +22,7 @@
             // xoa cac members trong bang room_members
             RoomMembers::removeMembersInRoom($_POST['room_id']);
 
-            // xoa file check_change_room.txt thong bao cho nguoi dung biet room nay da bi xoa
+            // thay doi file check_change_room.txt thong bao cho nguoi dung biet room nay da bi xoa
             $filename = $path . '/check_change_room.txt';
             $fstring = "";
             if (file_exists($filename))

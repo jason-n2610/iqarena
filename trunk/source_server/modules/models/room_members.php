@@ -2,6 +2,8 @@
 
     class RoomMembers
     {
+
+        // tra ve info cua members trong room
         public static function getMembersInRoom($room_id)
         {
             $query = "  SELECT
@@ -15,6 +17,16 @@
                         FROM room_members AS rm, users AS u
                         WHERE rm.user_id = u.user_id AND rm.room_id = '{$room_id}'";
             $result = @mysql_query($query) or die('getMembersInRoom: ' . mysql_error());
+            return $result;
+        }
+
+        // tra ve answer cua members trong room
+        public static function getMembersAnswer($room_id)
+        {
+            $query = "  SELECT  u.user_id, username, last_answer, score, graft_id, combo
+                        FROM    room_members AS rm, users AS u
+                        WHERE   rm.user_id = u.user_id AND rm.room_id = '{$room_id}'";
+            $result = @mysql_query($query) or die ('getMembersAnswer(): ' . mysql_error());
             return $result;
         }
 
@@ -40,6 +52,16 @@
             $query = "  DELETE FROM room_members
                         WHERE room_id = '{$room_id}' AND user_id = '{$member_id}'";
             $result = @mysql_query($query) or die('removeMemberInRoom: ' . mysql_error());
+            return $result;
+        }
+
+        // answer question
+        public static function answerQuestion($room_id, $user_id, $question_id, $last_answer)
+        {
+            $query = "  UPDATE  room_members
+                        SET     question_id='{$question_id}', last_answer='{$last_answer}'
+                        WHERE   room_id = '{$room_id}' AND user_id='{$user_id}'";
+            $result = @mysql_query($query) or die('answerQuestion() ' . mysql_error());
             return $result;
         }
     }
