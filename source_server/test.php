@@ -4,7 +4,6 @@
  * @author hoangnh
  * @copyright 2012
  */
-    header("Content-type: text/html; charset=utf-8");
     $path = getcwd();
     include ($path . '/include/mysql.php');
     include ($path . '/modules/models/user.php');
@@ -13,16 +12,20 @@
 
      // lay ra mang cac cau hoi
         MySQL::connect();
-        mysql_query("set names utf8;");
-        Question::addQuestion(1, 1, "hôm nay là thứ mấy nhỉ?", "thứ hai", "thứ 3", "thứ 4",
-                                "thứ 4", 2, "trường hợp đặc biệt");
-        $result = Question::getAllQuestions();
-
-        while($row = mysql_fetch_array($result, MYSQL_NUM))
+        // kiem tra cau tra loi cua nguoi choi
+        $trueAnswer = Question::getAnswerQuestion(6);
+        $isTrue = false;
+        
+        // lay ve cau tra loi dung
+        $strTrueAnswer = 'null';
+        if (mysql_num_rows($trueAnswer) != 0)
         {
-            var_dump($row);
-            echo '<br/>';
+            while($row = mysql_fetch_array($trueAnswer, MYSQL_NUM))
+            {
+                $strTrueAnswer = $row[0];
+                break;
+            }
         }
-        echo 'lấy dấu ở ngoài xem được ko?';
+        echo $strTrueAnswer;
         MySQL::close();
 ?>

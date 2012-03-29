@@ -139,7 +139,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 						mRbC.setText(question.getmStrAnswerC());
 						mRbD.setText(question.getmStrAnswerD());
 
-						new CountDownTimer(30000, 1000) {
+						new CountDownTimer(10000, 1000) {
 
 							@Override
 							public void onTick(long millisUntilFinished) {

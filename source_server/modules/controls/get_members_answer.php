@@ -22,17 +22,22 @@
         // kiem tra cau tra loi cua nguoi choi
         $trueAnswer = Question::getAnswerQuestion($_POST['question_id']);
         $isTrue = false;
-        $strTrueAnswer;
+        
+        // lay ve cau tra loi dung
+        $strTrueAnswer = 'null';
         if (mysql_num_rows($trueAnswer) != 0)
         {
             while($row = mysql_fetch_array($trueAnswer, MYSQL_NUM))
             {
-                if ($_POST['answer'] == $row[0])
-                {
-                    $isTrue = true;
-                    $strTrueAnswer = $row[0];
-                }
+                $strTrueAnswer = $row[0];
+                break;
             }
+        }
+        
+        // kiem tra xem member tra loi dung ko?
+        if ($_POST['answer'] == $strTrueAnswer)
+        {
+            $isTrue = true;
         }
 
         $result = RoomMembers::getMembersAnswer($_POST['room_id']);
@@ -45,7 +50,7 @@
             {
                 $output[] = $row;
             }
-            echo '{"type":"get_members_answer", "value":"true", "message":"success", "answer":"' .$strTrueAnswer. ' "answers":';
+            echo '{"type":"get_members_answer", "value":"true", "message":"success", "answer":"' .$strTrueAnswer. '", "answers":';
             echo json_encode($output);
         }
 
@@ -61,9 +66,10 @@
             $strCurrentQuestion;    // cau hoi hien tai
             for ( $i=0; $i<$len; $i++)
             {
-                if ($arrayQuestionIds[$i] == $_POST['answer'])
+                if ($arrayQuestionIds[$i] == $_POST['question_id'])
                 {
                     $strCurrentQuestion = $i;
+                    break;
                 }
             }
 
@@ -72,7 +78,7 @@
             if (mysql_num_rows($dbQuestion) != 0)
             {
                 $output = null;
-                while($row = mysql_fetch_array($dbQuestion, MYSQL_NUM))
+                while($row = mysql_fetch_assoc($dbQuestion))
                 {
                     $output[] = $row;
                 }
