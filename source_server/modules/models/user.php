@@ -56,7 +56,8 @@
                             score_level,
                             registed_date,
                             power_user,
-                            money
+                            money,
+                            status
                         FROM
                             users
                         WHERE

@@ -18,7 +18,7 @@
         $password = mysql_real_escape_string($password);
 
         $checkResult = false;
-        // lay ve user admin
+        // lay ve user
         $result = User::checkUserLogin($username, $password);
         if (mysql_num_rows($result) != 0)
         {

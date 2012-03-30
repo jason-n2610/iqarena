@@ -30,10 +30,20 @@
             return $result;
         }
 
+        // members join room
         public static function joinRoom($room_id, $user_id)
         {
             $query = "  INSERT INTO room_members(room_id, user_id)
                         VALUE('{$room_id}' , '{$user_id}')";
+            $result = @mysql_query($query) or die('joinRoom: ' . mysql_error());
+            return $result;
+        }
+
+        // them chu phong vao room
+        public static function ownerRoom($room_id, $user_id)
+        {
+            $query = "  INSERT INTO room_members(room_id, user_id, member_type)
+                        VALUE('{$room_id}' , '{$user_id}', 1)";
             $result = @mysql_query($query) or die('joinRoom: ' . mysql_error());
             return $result;
         }

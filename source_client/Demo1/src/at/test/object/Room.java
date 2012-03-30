@@ -9,21 +9,19 @@ package at.test.object;
  */
 public class Room {
 
-	private int roomId, ownerId, maxMember, minMember, status,
-			numberOfMember;
+	private int roomId, ownerId, maxMember;
 	private float betScore;
+	private int timePerQuestion;
 	private String roomName, ownerName;
 
-	public Room(int roomId, String roomName, int ownerId, String ownerName, int maxMember,
-			int minMember, float winScore, int status, int numberOfMember) {
+	public Room(int roomId, String roomName, int ownerId, String ownerName,
+			int maxMember, float betScore, int timePerQuestion) {
 		this.roomId = roomId;
 		this.ownerId = ownerId;
 		this.maxMember = maxMember;
-		this.minMember = minMember;
-		this.status = status;
-		this.numberOfMember = numberOfMember;
-		this.betScore = winScore;
+		this.betScore = betScore;
 		this.roomName = roomName;
+		this.setTimePerQuestion(timePerQuestion);
 		this.setOwnerName(ownerName);
 	}
 
@@ -51,30 +49,6 @@ public class Room {
 		this.maxMember = maxMember;
 	}
 
-	public int getMinMember() {
-		return minMember;
-	}
-
-	public void setMinMember(int minMember) {
-		this.minMember = minMember;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public int getNumber_of_member() {
-		return numberOfMember;
-	}
-
-	public void setNumber_of_member(int number_of_member) {
-		this.numberOfMember = number_of_member;
-	}
-
 	public float getBetScore() {
 		return betScore;
 	}
@@ -99,9 +73,18 @@ public class Room {
 	}
 
 	/**
-	 * @param ownerName the ownerName to set
+	 * @param ownerName
+	 *            the ownerName to set
 	 */
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+
+	public int getTimePerQuestion() {
+		return timePerQuestion;
+	}
+
+	public void setTimePerQuestion(int timePerQuestion) {
+		this.timePerQuestion = timePerQuestion;
 	}
 }

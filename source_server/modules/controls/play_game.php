@@ -44,17 +44,17 @@
         fclose($fd);
 
         $result = Question::getQuestionIds();
-        $aQuestionIds;
         while($row = mysql_fetch_array($result, MYSQL_NUM))
         {
-            $aQuestionIds[] = $row;
+            $aQuestionIds[] = $row[0];
         }
         // tao ngau nhien 2 gia tri mang question_id
-        $aRandomIndex = array_rand($aQuestionIds, 2);
+        shuffle($aQuestionIds);
         MySQL::close();
 
         // noi dung file, dong dau tien la index cau hoi hien tai cua room, cac dong sau la cau id cau hoi
-        $contentFile = implode(",", $aRandomIndex);
+        $contentFile = implode(",", $aQuestionIds);
+        echo $contentFile;
 
         // tao ra file 'room_id'_question.txt
         $pathQuestion = $path . '/' . $_POST['room_id'] . '_question.txt';

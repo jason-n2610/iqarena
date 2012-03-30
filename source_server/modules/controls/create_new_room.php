@@ -1,11 +1,11 @@
 <?php
 
     /**
-     * tao 1 room moi thi chi can room_name, owner_id, max_member, win_score
+     * tao 1 room moi thi chi can room_name, owner_id, max_member, bet_score
      */
     // neu 1 trong cac truong du lieu la khac null
-    if ((isset($_POST['room_name'])) && (isset($_POST['owner_id'])) && (isset($_POST['max_member']) &&
-        (isset($_POST['win_score']))))
+    if ((isset($_POST['room_name'])) && (isset($_POST['owner_id'])) && (isset($_POST['max_member'])) &&
+        (isset($_POST['bet_score'])) && (isset($_POST['time_per_question'])) )
     {
         $path = getcwd();
         include ($path . '/include/mysql.php');
@@ -24,11 +24,13 @@
         $_POST['max_member'] = stripcslashes($_POST['max_member']);
         $_POST['max_member'] = mysql_real_escape_string($_POST['max_member']);
 
-        $_POST['win_score'] = stripcslashes($_POST['win_score']);
-        $_POST['win_score'] = mysql_real_escape_string($_POST['win_score']);
+        $_POST['bet_score'] = stripcslashes($_POST['bet_score']);
+        $_POST['bet_score'] = mysql_real_escape_string($_POST['bet_score']);
 
-        $result = Room::createNewRoom($_POST['room_name'], $_POST['owner_id'], $_POST['max_member'],
-            2, 0, $_POST['win_score'], 1);
+        $_POST['time_per_question'] = stripcslashes($_POST['time_per_question']);
+        $_POST['time_per_question'] = mysql_real_escape_string($_POST['time_per_question']);
+
+        $result = Room::createNewRoom($_POST['room_name'], $_POST['owner_id'], $_POST['max_member'], $_POST['bet_score'], $_POST['time_per_question']);
         if ($result)
         {
             $roomID = mysql_insert_id();
@@ -59,8 +61,8 @@
             $fMember = fopen($fileMember, "w") or die("Can't open " . $fileMember);
             fclose($fMember);
 
-            // them vao table room_members
-            RoomMembers::joinRoom($roomID, $_POST['owner_id']);
+            // them vao table room_members owner
+            RoomMembers::ownerRoom($roomID, $_POST['owner_id']);
         } else
         {
             echo '{"type":"create_new_room", "value":"false", "message":"không tạo được room"}';

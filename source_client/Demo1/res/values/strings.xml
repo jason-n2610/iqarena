@@ -24,5 +24,6 @@
     <!-- create new room -->
     <string name="new_room_spinner_max_member">Choose a number</string>
     <string name="new_room_spinner_bet_score">Choose a score</string>
+    <string name="new_room_spinner_time_per_question">Choose a time</string>
 
 </resources>

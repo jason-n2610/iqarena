@@ -31,6 +31,7 @@ public class DataInfo {
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static ArrayList<User> mListMemberInRoom = new ArrayList<User>();
 	public static ArrayList<MemberScore> mListMembersScore = new ArrayList<MemberScore>();
+	public static String mTrueAnswer = null;
 
 	private static final String TAG = "JSONDATA";
 
@@ -123,14 +124,11 @@ public class DataInfo {
 						int ownerId = json_data.getInt("owner_id");
 						String ownerName = json_data.getString("username");
 						int maxMember = json_data.getInt("max_member");
-						int minMember = json_data.getInt("min_member");
-						int status = json_data.getInt("status");
-						int winScore = json_data.getInt("win_score");
-						int numberOfMember = json_data
-								.getInt("number_of_member");
+						int betScore = json_data.getInt("bet_score");
+						int timePerQuestion = json_data
+								.getInt("time_per_question");
 						room = new Room(roomId, roomName, ownerId, ownerName,
-								maxMember, minMember, winScore, status,
-								numberOfMember);
+								maxMember, betScore, timePerQuestion);
 						mListRoom.add(room);
 					}
 				} else {
@@ -250,6 +248,27 @@ public class DataInfo {
 								score, graft, combo);
 
 						mListMembersScore.add(memberScore);
+					}
+					
+					// lay ra cau tra loi dung cho cau truoc va cau hoi tiep theo neu co
+
+					mTrueAnswer = jObject.getString("answer");
+					if (input.contains("next_question")){
+						String strId = null, strQuestion = null, strA = null, strB = null, strC = null, strD = null;
+						String jQuestion = jObject.getString("next_question");
+						JSONArray jArray1 = new JSONArray(jQuestion);
+						int len = jArray1.length();
+						for (int i = 0; i < len; i++) {
+							JSONObject json_data = jArray1.getJSONObject(i);
+							strId = json_data.getString("question_id");
+							strQuestion = json_data.getString("question_name");
+							strA = json_data.getString("answer_a");
+							strB = json_data.getString("answer_b");
+							strC = json_data.getString("answer_c");
+							strD = json_data.getString("answer_d");
+						}
+						question = null;
+						question = new Question(strId, strQuestion, strA, strB, strC, strD);
 					}
 				}
 			}

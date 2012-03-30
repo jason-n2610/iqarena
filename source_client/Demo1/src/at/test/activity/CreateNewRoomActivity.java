@@ -33,7 +33,7 @@ import at.test.delegate.IRequestServer;
 public class CreateNewRoomActivity extends Activity implements OnClickListener,
 			IRequestServer{
 
-	Spinner spMaxNumber, spBetScore;
+	Spinner spMaxNumber, spBetScore, spTimePerQuestion;
 	EditText etRoomName;
 	TextView tvResult;
 	Button btnCreate;
@@ -52,6 +52,7 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 		etRoomName = (EditText) findViewById(R.id.et_room_name);
 		spMaxNumber = (Spinner) findViewById(R.id.sp_max_member);
 		spBetScore = (Spinner) findViewById(R.id.sp_bet_score);
+		spTimePerQuestion = (Spinner) findViewById(R.id.sp_time_per_question);
 		tvResult = (TextView) findViewById(R.id.tv_result);
 
 		btnCancel.setOnClickListener(this);
@@ -66,17 +67,27 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 		for (int i = 5; i < 16; i++) {
 			alBetScore.add(i * 100);
 		}
+		ArrayList<Integer> alTimePerQuestion = new ArrayList<Integer>();
+		for (int i = 1; i < 7; i++) {
+			alTimePerQuestion.add(i * 5);
+		}
 
 		ArrayAdapter<Integer> aaMaxNumber = new ArrayAdapter<Integer>(this,
 				android.R.layout.simple_spinner_item, alMaxNumber);
 		ArrayAdapter<Integer> aaBetScore = new ArrayAdapter<Integer>(this,
 				android.R.layout.simple_spinner_item, alBetScore);
+		ArrayAdapter<Integer> aaTimePerQuestion = new ArrayAdapter<Integer>(this,
+				android.R.layout.simple_spinner_item, alTimePerQuestion);
 
 		aaMaxNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		aaBetScore.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		aaTimePerQuestion.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spMaxNumber.setAdapter(aaMaxNumber);
 		spBetScore.setAdapter(aaBetScore);
+		spTimePerQuestion.setAdapter(aaTimePerQuestion);
+		
+		spTimePerQuestion.setSelection(2);
 	}
 
 	@Override
@@ -86,9 +97,10 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 			String strRoomName = etRoomName.getText().toString().trim();
 			String strMaxMember = spMaxNumber.getSelectedItem().toString();
 			String strBetScore = spBetScore.getSelectedItem().toString();
+			String strTimePerQuestion = spTimePerQuestion.getSelectedItem().toString();
 			if (strRoomName.length() > 0){
 				RequestServer requestServer = new RequestServer(this);
-				requestServer.createNewRoom(strRoomName, strMaxMember, strBetScore);
+				requestServer.createNewRoom(strRoomName, strMaxMember, strBetScore, strTimePerQuestion);
 				btnCreate.setEnabled(false);
 				setProgressBarIndeterminateVisibility(true);
 			}
@@ -129,6 +141,7 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 							intent.putExtra("room_id", roomId);
 							intent.putExtra("room_name", etRoomName.getText().toString().trim());
 							intent.putExtra("owner_name", DataInfo.userInfo.getUsername());
+							intent.putExtra("time_per_question", value);
 							startActivity(intent);
 							strMessage = "";
 						} 

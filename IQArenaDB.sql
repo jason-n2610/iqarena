@@ -32,6 +32,7 @@ CREATE TABLE users (
     registed_date datetime,
     power_user tinyint not null,
     money float,
+	status tinyint not null,
     PRIMARY KEY (user_id)
 );
 
@@ -40,10 +41,8 @@ CREATE TABLE rooms (
     room_name varchar(50) not null,
     owner_id int unsigned not null,
     max_member int,
-    min_member int,
-    status tinyint,
-    win_score float,
-    number_of_member int,
+    bet_score float,
+	time_per_question tinyint unsigned,
     PRIMARY KEY (room_id)
 );
 
@@ -51,7 +50,7 @@ CREATE TABLE room_members (
     room_member_id int unsigned not null auto_increment,
     user_id int unsigned not null,
     room_id int unsigned not null,
-	type tinyint unsigned not null,	-- chu phong hay ko?
+	member_type tinyint unsigned not null,	-- chu phong hay ko?
     question_id int unsigned,
     graft_id int unsigned,
     score float,
