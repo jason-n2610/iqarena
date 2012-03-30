@@ -86,9 +86,15 @@
                 echo json_encode($output);
             }
         }
-
+        
+        // nguoi choi tra loi sai, xoa khoi table room_members
+        else
+        {
+            
+        }
         // ket thuc choi json
         echo '}';
+        
 
         MySQL::close();
      }

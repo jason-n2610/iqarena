@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Config {
-//	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 //	public static final String REQUEST_SERVER_ADDR = "http://hoangnh29.byethost12.com";
-	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.108/iqarena/source_server/index.php";
+//	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.108/iqarena/source_server/index.php";
 	public static final String REQUEST_LOGIN = "login";
 	public static final String REQUEST_REGISTER = "register";
 	public static final String REQUEST_GET_LIST_ROOM = "get_list_room";

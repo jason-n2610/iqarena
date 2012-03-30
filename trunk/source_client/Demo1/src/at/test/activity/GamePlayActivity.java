@@ -51,7 +51,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 	String mAnswer = "0"; // luu cau tra loi cua user
 	// layout cho question va answer
 	LinearLayout mLlQuestion, mLlAnswer;
-	private static int mCurQuestion = 1;
+	private int mCurQuestion = 1;
 	int mTimePerQuestion;
 
 	// adapter cho listview hien thi tra loi cua cac nguoi choi
