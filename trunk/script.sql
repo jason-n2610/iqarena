@@ -10,3 +10,4 @@ ALTER TABLE rooms
 CHANGE COLUMN win_score bet_score float;
 ALTER TABLE users
 ADD COLUMN status tinyint not null;
+
