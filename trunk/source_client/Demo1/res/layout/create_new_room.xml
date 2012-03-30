@@ -68,6 +68,20 @@
             android:layout_margin="10dp"
             android:drawSelectorOnTop="true"
             android:prompt="@string/new_room_spinner_bet_score" />
+        
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time for an question" />
+
+        <Spinner
+            android:id="@+id/sp_time_per_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/new_room_spinner_time_per_question" />
     </LinearLayout>
 
     <LinearLayout

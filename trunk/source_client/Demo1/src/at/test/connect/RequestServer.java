@@ -107,7 +107,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						Config.REQUEST_GET_LIST_ROOM));
 				break;
 			case REQUEST_CREATE_NEW_ROOM:
-				nameValuePairs = new ArrayList<NameValuePair>();
+				nameValuePairs = new ArrayList<NameValuePair>(6);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_CREATE_NEW_ROOM));
 				nameValuePairs.add(new BasicNameValuePair("room_name",
@@ -116,8 +116,10 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						.valueOf(DataInfo.userInfo.getUserId())));
 				nameValuePairs.add(new BasicNameValuePair("max_member",
 						params[1]));
-				nameValuePairs.add(new BasicNameValuePair("win_score",
+				nameValuePairs.add(new BasicNameValuePair("bet_score",
 						params[2]));
+				nameValuePairs.add(new BasicNameValuePair("time_per_question",
+						params[3]));
 				break;
 			case REQUEST_REMOVE_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -252,9 +254,9 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 
 	// create new room
 	public void createNewRoom(String strRoomName, String strMaxMem,
-			String strBetScore) {
+			String strBetScore, String strTimePerQuestion) {
 		this.requestType = REQUEST_TYPE.REQUEST_CREATE_NEW_ROOM;
-		this.execute(strRoomName, strMaxMem, strBetScore);
+		this.execute(strRoomName, strMaxMem, strBetScore, strTimePerQuestion);
 	}
 
 	// remove room

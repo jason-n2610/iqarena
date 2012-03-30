@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.test.R;
 import at.test.connect.RequestServer;
 import at.test.connect.RequestServer.REQUEST_TYPE;
@@ -38,7 +40,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 
 	String mStrRoomId; // room_id
 	TextView mTvQuestion, mTvQuestionTimer, mTvAnswerTimer, mTvQuestionTitle,
-			mTvAnswerResult; // question and timer
+			mTvAnswerResult, mTvAnswerInfo; // question and timer
 	ListView mLvResult; // listview result answer of members in room
 
 	RadioGroup mRgAnswer; // answer group
@@ -46,9 +48,11 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 	Button mBtnSummit; // summit
 	RequestServer mRequestServer = null;
 	String mStrQuestionId = null;
-	String mAnswer = null; // luu cau tra loi cua user
+	String mAnswer = "0"; // luu cau tra loi cua user
 	// layout cho question va answer
 	LinearLayout mLlQuestion, mLlAnswer;
+	private static int mCurQuestion = 1;
+	int mTimePerQuestion;
 
 	// adapter cho listview hien thi tra loi cua cac nguoi choi
 	AnswerAdapter mAdapterAnswer;
@@ -60,11 +64,14 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 		setContentView(R.layout.play_game);
 		Bundle extra = getIntent().getExtras();
 		mStrRoomId = extra.getString("room_id");
+		mTimePerQuestion = extra.getInt("time_per_question");
+		Log.i("2", "time per quesiton: "+mTimePerQuestion);
 
 		// question
 		mLlQuestion = (LinearLayout) findViewById(R.id.play_game_layout_question);
 		mTvQuestion = (TextView) findViewById(R.id.play_game_question);
 		mTvQuestionTimer = (TextView) findViewById(R.id.play_game_time_counter);
+		mTvQuestionTitle = (TextView) findViewById(R.id.play_game_tv_question_title);
 		mBtnSummit = (Button) findViewById(R.id.play_game_summit);
 		mRgAnswer = (RadioGroup) findViewById(R.id.play_game_rg_answer);
 		mRbA = (RadioButton) findViewById(R.id.play_game_answer_a);
@@ -77,7 +84,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 		mTvAnswerResult = (TextView) findViewById(R.id.play_game_tv_result);
 		mTvAnswerTimer = (TextView) findViewById(R.id.play_game_answer_tv_counter);
 		mLvResult = (ListView) findViewById(R.id.play_game_lv_answer);
-
+		mTvAnswerInfo = (TextView) findViewById(R.id.play_game_tv_answer_info);
 		// event listener
 		mBtnSummit.setOnClickListener(this);
 		mRgAnswer.setOnCheckedChangeListener(this);
@@ -85,6 +92,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 		// visibility
 		mLlQuestion.setVisibility(View.VISIBLE);
 		mLlAnswer.setVisibility(View.GONE);
+		mTvQuestionTitle.setText("Question "+mCurQuestion);
 
 		// request cau hoi
 		mRequestServer = new RequestServer(this);
@@ -112,15 +120,34 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 			// hien thi phan hoi
 			mLlAnswer.setVisibility(View.GONE);
 			mLlQuestion.setVisibility(View.VISIBLE);
-
-			// request cau hoi
-			if (mRequestServer != null) {
-				if (!mRequestServer.isCancelled()) {
-					mRequestServer.cancel(true);
-				}
+			// enable view
+			mBtnSummit.setEnabled(true);
+			int count = mRgAnswer.getChildCount();
+			for (int i=0; i<count; i++){
+				mRgAnswer.getChildAt(i).setEnabled(true);
 			}
-			mRequestServer = new RequestServer(this);
-			mRequestServer.getQuestion(mStrRoomId);
+			
+			new CountDownTimer(mTimePerQuestion*1000, 1000) {
+
+				@Override
+				public void onTick(long millisUntilFinished) {
+					int time = (int) millisUntilFinished / 1000;
+					if (time > 20) {
+						mTvQuestionTimer.setTextColor(Color.GREEN);
+					} else if (time > 10) {
+						mTvQuestionTimer.setTextColor(Color.YELLOW);
+					} else {
+						mTvQuestionTimer.setTextColor(Color.RED);
+					}
+					mTvQuestionTimer.setText(String
+							.valueOf(millisUntilFinished / 1000));
+				}
+
+				@Override
+				public void onFinish() {
+					showLayout();
+				}
+			}.start();
 		}
 	}
 
@@ -138,8 +165,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 						mRbB.setText(question.getmStrAnswerB());
 						mRbC.setText(question.getmStrAnswerC());
 						mRbD.setText(question.getmStrAnswerD());
-
-						new CountDownTimer(10000, 1000) {
+						new CountDownTimer(mTimePerQuestion*1000, 1000) {
 
 							@Override
 							public void onTick(long millisUntilFinished) {
@@ -162,6 +188,9 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 						}.start();
 
 					}
+					else{
+						Toast.makeText(this, "sorry, do not create question, please try again", 500).show();
+					}
 				} catch (Exception e) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setTitle("Error");
@@ -174,6 +203,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 				try {
 					DataInfo.setData(sResult);
 					if (DataInfo.value) {
+						// hien thi danh sach nguoi choi trong room va phan tra loi cua moi nguoi
 						ArrayList<MemberScore> temp = DataInfo.mListMembersScore;
 						if (temp != null){
 							mAlAnswer.clear();
@@ -182,6 +212,75 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 								mAlAnswer.add(temp.get(i));
 							}
 							mAdapterAnswer.notifyDataSetChanged();
+						}
+						
+						// hien thi cau tra loi dung		
+						// so sanh xem cau tra loi cua nguoi choi dung hay ko, neu dung thi hien thi
+						// cau hoi tiep da dc lay ve
+						if (mAnswer.equals(DataInfo.mTrueAnswer)){
+							String strTrueAnswer = new String(DataInfo.mTrueAnswer);
+							if (strTrueAnswer.equals("1")){
+								strTrueAnswer = "A";
+							}
+							else if (strTrueAnswer.equals("2")){
+								strTrueAnswer = "B";
+							}if (strTrueAnswer.equals("3")){
+								strTrueAnswer = "C";
+							}if (strTrueAnswer.equals("4")){
+								strTrueAnswer = "D";
+							}
+							mTvAnswerResult.setText("Answer: "+strTrueAnswer+". You are true!");
+							// hien thi dong ho dem nguoc de cho cau tiep theo
+							new CountDownTimer(10000, 1000) {
+								
+								@Override
+								public void onTick(long millisUntilFinished) {
+									mTvAnswerTimer.setText(String.valueOf((int)millisUntilFinished/1000));
+								}
+								
+								@Override
+								public void onFinish() {
+									showLayout();
+									mCurQuestion++;
+									mTvQuestionTitle.setText("Question "+mCurQuestion);
+									Question question = DataInfo.question;
+									mStrQuestionId = question.getmStrId();
+									mTvQuestion.setText(question.getmStrContent());
+									mRbA.setText(question.getmStrAnswerA());
+									mRbB.setText(question.getmStrAnswerB());
+									mRbC.setText(question.getmStrAnswerC());
+									mRbD.setText(question.getmStrAnswerD());
+								}
+							}.start();
+						}
+						// truong hop nguoi choi tra loi sai, quay tro lai roomlist
+						else{
+							mTvAnswerInfo.setText("Game exit in:");
+							String strTrueAnswer = DataInfo.mTrueAnswer;
+							if (strTrueAnswer.equals("1")){
+								strTrueAnswer = "A";
+							}
+							else if (strTrueAnswer.equals("2")){
+								strTrueAnswer = "B";
+							}if (strTrueAnswer.equals("3")){
+								strTrueAnswer = "C";
+							}if (strTrueAnswer.equals("4")){
+								strTrueAnswer = "D";
+							}
+							mTvAnswerResult.setText("Answer: "+strTrueAnswer+". You are false!");
+							// hien thi dong ho dem nguoc roi quay ve list room khi finish
+							new CountDownTimer(10000, 1000) {
+								
+								@Override
+								public void onTick(long millisUntilFinished) {
+									mTvAnswerTimer.setText(String.valueOf((int)millisUntilFinished/1000));
+								}
+								
+								@Override
+								public void onFinish() {
+									onBackPressed();
+								}
+							}.start();
 						}
 					}
 				} catch (Exception e) {

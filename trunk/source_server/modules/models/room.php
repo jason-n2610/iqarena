@@ -11,10 +11,8 @@
                             owner_id,
                             username,
                             max_member,
-                            min_member,
-                            status,
-                            win_score,
-                            number_of_member
+                            bet_score,
+                            time_per_question
                         FROM
                             rooms AS r, users AS u
                         WHERE
@@ -24,27 +22,22 @@
         }
 
         // tao room moi
-        public static function createNewRoom($room_name, $owner_id, $max_member, $min_member,
-            $status, $win_score, $number_of_member)
+        public static function createNewRoom($room_name, $owner_id, $max_member, $bet_score, $time_per_question)
         {
             $query = "INSERT INTO
                             rooms(
                                     room_name,
                                     owner_id,
                                     max_member,
-                                    min_member,
-                                    status,
-                                    win_score,
-                                    number_of_member
+                                    bet_score,
+                                    time_per_question
                                 )
                         VALUES(
                                 '{$room_name}',
                                 '{$owner_id}',
                                 '{$max_member}',
-                                '{$min_member}',
-                                '{$status}',
-                                '{$win_score}',
-                                '{$number_of_member}'
+                                '{$bet_score}',
+                                '{$time_per_question}'
                             )";
 
             $result = @mysql_query($query) or die('addRoom(): ' . mysql_error());

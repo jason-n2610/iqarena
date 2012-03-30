@@ -49,6 +49,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 	String TAG = "RoomListActivity";
 	String mRoomName;
 	String mRoomOwnerName;
+	int mRoomTimePerQuestion;
 	// bien luu thong tin room_id khi user chon 1 room
 	String roomID;
 
@@ -118,6 +119,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					intent.putExtra("room_id", roomID);
 					intent.putExtra("room_name", mRoomName);
 					intent.putExtra("owner_name", mRoomOwnerName);
+					intent.putExtra("time_per_question", mRoomTimePerQuestion);
 					startActivity(intent);
 				}
 				else{
@@ -233,6 +235,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					mRoomName = room.getRoomName();
 					roomID = String.valueOf(room.getRoomId());
 					mRoomOwnerName = room.getOwnerName();
+					mRoomTimePerQuestion = room.getTimePerQuestion();
 					mRequestServer = new RequestServer(RoomListActivity.this);
 					mRequestServer.joinRoom(String.valueOf(room.getRoomId()), String.valueOf(DataInfo.userInfo.getUserId()));
 				}
