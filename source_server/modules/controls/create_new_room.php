@@ -34,8 +34,14 @@
         if ($result)
         {
             $roomID = mysql_insert_id();
-            echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công", "room_id":' .
-                $roomID . '}';
+            
+            // them vao table room_members owner
+            RoomMembers::ownerRoom($roomID, $_POST['owner_id']);
+            // lay ve member_id cho user
+            $memberID = mysql_insert_id();
+            
+            echo '{"type":"create_new_room", "value":"true", "message":"tạo room thành công", "room_id":"' .
+                $roomID .'", "member_id":"' . $memberID . '"}';
 
             // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
             $filename = $path . '/check_change_room.txt';
@@ -61,8 +67,6 @@
             $fMember = fopen($fileMember, "w") or die("Can't open " . $fileMember);
             fclose($fMember);
 
-            // them vao table room_members owner
-            RoomMembers::ownerRoom($roomID, $_POST['owner_id']);
         } else
         {
             echo '{"type":"create_new_room", "value":"false", "message":"không tạo được room"}';

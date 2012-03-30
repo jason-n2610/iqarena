@@ -20,6 +20,15 @@
             $result = @mysql_query($query) or die('getAllRoom(): ' . mysql_error());
             return $result;
         }
+        
+        public static function getMaxMemberOfRoom($room_id)
+        {
+            $query = "  SELECT  max_member
+                        FROM    rooms
+                        WHERE   room_id = '{$room_id}'";
+            $result = @mysql_query($query) or die ('do not getMaxMemberOfRoom '. mysql_error());
+            return $result;
+        }
 
         // tao room moi
         public static function createNewRoom($room_name, $owner_id, $max_member, $bet_score, $time_per_question)

@@ -27,7 +27,7 @@ public class DataInfo {
 	public static String message = null;
 	public static User userInfo = null;
 	public static Question question = null;
-	public static int roomId = 0;
+	public static int roomId = 0, memberId = 0;
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static ArrayList<User> mListMemberInRoom = new ArrayList<User>();
 	public static ArrayList<MemberScore> mListMembersScore = new ArrayList<MemberScore>();
@@ -103,6 +103,7 @@ public class DataInfo {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 				roomId = jObject.getInt("room_id");
+				memberId = jObject.getInt("member_id");
 			}
 
 			// message 'get_list_room'

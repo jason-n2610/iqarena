@@ -102,12 +102,6 @@
                         android:text="a" />
 
                     <RadioButton
-                        android:id="@+id/play_game_answer_d"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="d" />
-
-                    <RadioButton
                         android:id="@+id/play_game_answer_b"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -118,6 +112,12 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="c" />
+
+                    <RadioButton
+                        android:id="@+id/play_game_answer_d"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="d" />
                 </RadioGroup>
             </ScrollView>
         </LinearLayout>

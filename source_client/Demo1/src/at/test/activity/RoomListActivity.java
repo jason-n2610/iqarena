@@ -123,7 +123,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					startActivity(intent);
 				}
 				else{
-					Toast.makeText(this, "Sorry, join don't success", 300).show();
+					Toast.makeText(this, DataInfo.message, 500).show();
 				}
 			}
 		}

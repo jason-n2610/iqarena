@@ -8,24 +8,16 @@
     include ($path . '/include/mysql.php');
     include ($path . '/modules/models/user.php');
     include ($path . '/modules/models/questions.php');
+    include ($path . '/modules/models/room.php');
 
 
      // lay ra mang cac cau hoi
         MySQL::connect();
-        // kiem tra cau tra loi cua nguoi choi
-        $trueAnswer = Question::getAnswerQuestion(6);
-        $isTrue = false;
-        
-        // lay ve cau tra loi dung
-        $strTrueAnswer = 'null';
-        if (mysql_num_rows($trueAnswer) != 0)
+        $result = Room::getMaxMemberOfRoom(8);
+        while($row = mysql_fetch_array($result, MYSQL_NUM))
         {
-            while($row = mysql_fetch_array($trueAnswer, MYSQL_NUM))
-            {
-                $strTrueAnswer = $row[0];
-                break;
-            }
+            $display = $row[0];
         }
-        echo $strTrueAnswer;
+        echo $display;
         MySQL::close();
 ?>
