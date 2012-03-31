@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,6 +14,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import at.test.R;
+import at.test.data.SessionStore;
 
 public class TabHostMenuActivity extends TabActivity {
 
@@ -45,6 +48,34 @@ public class TabHostMenuActivity extends TabActivity {
 	public void onBackPressed() {
 		super.onBackPressed();
 		overridePendingTransition(R.anim.incoming, R.anim.outgoing);
+	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, Menu.NONE, "Sign out");
+		menu.add(0, 1, Menu.NONE, "Exit");
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+			intent.putExtra("resume", true);
+			startActivity(intent);
+			break;
+		case 1:
+			
+			break;
+
+		default:
+			onBackPressed();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void setupTab(final String tag, final Intent intent) {

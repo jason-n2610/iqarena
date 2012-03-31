@@ -141,6 +141,7 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 							intent.putExtra("room_id", roomId);
 							intent.putExtra("room_name", etRoomName.getText().toString().trim());
 							intent.putExtra("owner_name", DataInfo.userInfo.getUsername());
+							intent.putExtra("member_id", DataInfo.memberId);
 							intent.putExtra("time_per_question", Integer.valueOf(spTimePerQuestion.getSelectedItem().toString()));
 							startActivity(intent);
 							strMessage = "";

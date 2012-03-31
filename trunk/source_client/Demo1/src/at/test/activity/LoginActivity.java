@@ -27,11 +27,17 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 	EditText etUsername, etPassword;
 	RequestServer requestServer;
 	CheckBox ckRemember;
+	boolean isResume = false;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null){
+			// duoc goi khi nguoi dung an sign out
+			isResume = extras.getBoolean("resume");
+		}
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
@@ -62,10 +68,12 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 			etUsername.setText(SessionStore.getUsername());
 			etPassword.setText(SessionStore.getPassword());
 			ckRemember.setChecked(true);
-			setProgressBarIndeterminateVisibility(true);
-			btnLogin.setEnabled(false);
-			requestServer = new RequestServer(this);
-			requestServer.login(SessionStore.getUsername(), SessionStore.getPassword());
+			if (!isResume){
+				setProgressBarIndeterminateVisibility(true);
+				btnLogin.setEnabled(false);
+				requestServer = new RequestServer(this);
+				requestServer.login(SessionStore.getUsername(), SessionStore.getPassword());
+			}
 		}
 	}
 

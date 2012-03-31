@@ -119,6 +119,7 @@ public class RoomListActivity extends Activity implements IRequestServer,
 					intent.putExtra("room_id", roomID);
 					intent.putExtra("room_name", mRoomName);
 					intent.putExtra("owner_name", mRoomOwnerName);
+					intent.putExtra("member_id", DataInfo.memberId);
 					intent.putExtra("time_per_question", mRoomTimePerQuestion);
 					startActivity(intent);
 				}

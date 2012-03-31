@@ -10,7 +10,7 @@
      * tra ve cho user danh sach tra loi cua cac nguoi choi trong room
      */
 
-     if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['answer']))
+     if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['answer']) && isset($_POST['member_id']))
      {
         $path = getcwd();
         include ($path . '/include/mysql.php');
@@ -22,7 +22,7 @@
         // kiem tra cau tra loi cua nguoi choi
         $trueAnswer = Question::getAnswerQuestion($_POST['question_id']);
         $isTrue = false;
-        
+
         // lay ve cau tra loi dung
         $strTrueAnswer = 'null';
         if (mysql_num_rows($trueAnswer) != 0)
@@ -33,7 +33,7 @@
                 break;
             }
         }
-        
+
         // kiem tra xem member tra loi dung ko?
         if ($_POST['answer'] == $strTrueAnswer)
         {
@@ -86,15 +86,15 @@
                 echo json_encode($output);
             }
         }
-        
+
         // nguoi choi tra loi sai, xoa khoi table room_members
         else
         {
-            
+            RoomMembers::removeMemberInRoom($_POST['member_id']);
         }
         // ket thuc choi json
         echo '}';
-        
+
 
         MySQL::close();
      }

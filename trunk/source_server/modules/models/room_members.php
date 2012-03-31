@@ -57,10 +57,10 @@
         }
 
         // remove member in room
-        public static function removeMemberInRoom($member_id, $room_id)
+        public static function removeMemberInRoom($member_id)
         {
             $query = "  DELETE FROM room_members
-                        WHERE room_id = '{$room_id}' AND user_id = '{$member_id}'";
+                        WHERE room_member_id = '{$member_id}'";
             $result = @mysql_query($query) or die('removeMemberInRoom: ' . mysql_error());
             return $result;
         }
