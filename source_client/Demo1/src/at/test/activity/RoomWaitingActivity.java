@@ -53,7 +53,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 	String mRoomID;
 	String mStrRoomName;
 	String mStrOwnerName;
-	int mTimePerQuestion;
+	int mTimePerQuestion, mMemberId;
 
 	// list members in room
 	private ListView mLvMembers;
@@ -89,6 +89,8 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 		mStrRoomName = extras.getString("room_name");
 		mStrOwnerName = extras.getString("owner_name");
 		mTimePerQuestion = extras.getInt("time_per_question");
+		mMemberId = extras.getInt("member_id");
+		
 		// hide statusbar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -368,6 +370,7 @@ public class RoomWaitingActivity extends Activity implements OnClickListener,
 					Intent intent = new Intent(getApplicationContext(), GamePlayActivity.class);
 					intent.putExtra("room_id", mRoomID);
 					intent.putExtra("time_per_question", mTimePerQuestion);
+					intent.putExtra("member_id", mMemberId);
 					startActivity(intent);
 				}
 			}.start();

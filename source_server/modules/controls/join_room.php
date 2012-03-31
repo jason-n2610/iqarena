@@ -19,7 +19,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
 
     // kiem tra xem room da day chua
     $tbRoomMembers = RoomMembers::getMembersInRoom($_POST['room_id']);
-    $roomCount = count($tbRoomMembers);
+    $roomCount = mysql_num_rows($tbRoomMembers);
 
     // lay ve max_member cua room
     $maxMembers = Room::getMaxMemberOfRoom($_POST['room_id']);
@@ -29,7 +29,9 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
     while ($row = mysql_fetch_array($maxMembers, MYSQL_NUM)) {
         $max = $row[0];
     }
-    if ($roomCount == $max)
+
+
+    if ($roomCount == (int)$max)
     {
         $isFull = true;
     }
@@ -42,7 +44,8 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
     else {
         $result = RoomMembers::joinRoom($_POST['room_id'], $_POST['user_id']);
         if ($result) {
-            echo '{"type":"join_room", "value":"true", "message"="tham gia thanh cong"}';
+            $memberID = mysql_insert_id();
+            echo '{"type":"join_room", "value":"true", "message"="tham gia thanh cong", "member_id":"' . $memberID . '"}';
             $filename = $path . '/' . $_POST['room_id'] . '.txt';
             $fstring = "";
             if (file_exists($filename)) {

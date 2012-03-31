@@ -170,28 +170,32 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				break;
 
 			case REQUEST_ANSWER_QUESTION:
-				nameValuePairs = new ArrayList<NameValuePair>(5);
+				nameValuePairs = new ArrayList<NameValuePair>(6);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_ANSWER_QUESTION));
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
 				nameValuePairs
-						.add(new BasicNameValuePair("user_id", params[1]));
+				.add(new BasicNameValuePair("member_id", params[1]));
+				nameValuePairs
+						.add(new BasicNameValuePair("user_id", params[2]));
 				nameValuePairs.add(new BasicNameValuePair("question_id",
-						params[2]));
-				nameValuePairs.add(new BasicNameValuePair("question_answer", params[3]));
+						params[3]));
+				nameValuePairs.add(new BasicNameValuePair("question_answer", params[4]));
 				break;
 
 			case REQUEST_GET_MEMBERS_ANSWER:
-				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs = new ArrayList<NameValuePair>(4);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_GET_MEMBERS_ANSWER));
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
 				nameValuePairs
-				.add(new BasicNameValuePair("question_id", params[1]));
+				.add(new BasicNameValuePair("member_id", params[1]));
 				nameValuePairs
-				.add(new BasicNameValuePair("answer", params[2]));
+				.add(new BasicNameValuePair("question_id", params[2]));
+				nameValuePairs
+				.add(new BasicNameValuePair("answer", params[3]));
 				break;
 
 			}
@@ -296,15 +300,15 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	}
 
 	// answer question
-	public void answerQuestion(String strRoomId, String strUserId,
+	public void answerQuestion(String strRoomId, String strMemberId, String strUserId,
 			String strQuesId, String strAnswer) {
 		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
-		this.execute(strRoomId, strUserId, strQuesId, strAnswer);
+		this.execute(strRoomId, strMemberId, strUserId, strQuesId, strAnswer);
 	}
 	
 	// get other members answer
-	public void getMembersAnswer(String strRoomId, String strQuestionId, String strAnswer){
+	public void getMembersAnswer(String strRoomId, String strMemberId, String strQuestionId, String strAnswer){
 		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_ANSWER;
-		this.execute(strRoomId, strQuestionId, strAnswer);
+		this.execute(strRoomId, strMemberId, strQuestionId, strAnswer);
 	}
 }

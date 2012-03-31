@@ -52,7 +52,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 	// layout cho question va answer
 	LinearLayout mLlQuestion, mLlAnswer;
 	private int mCurQuestion = 1;
-	int mTimePerQuestion;
+	int mTimePerQuestion, mMemberId;
 
 	// adapter cho listview hien thi tra loi cua cac nguoi choi
 	AnswerAdapter mAdapterAnswer;
@@ -65,7 +65,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 		Bundle extra = getIntent().getExtras();
 		mStrRoomId = extra.getString("room_id");
 		mTimePerQuestion = extra.getInt("time_per_question");
-		Log.i("2", "time per quesiton: "+mTimePerQuestion);
+		mMemberId = extra.getInt("member_id");
 
 		// question
 		mLlQuestion = (LinearLayout) findViewById(R.id.play_game_layout_question);
@@ -115,7 +115,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 				}
 			}
 			mRequestServer = new RequestServer(this);
-			mRequestServer.getMembersAnswer(mStrRoomId, mStrQuestionId, mAnswer);
+			mRequestServer.getMembersAnswer(mStrRoomId, String.valueOf(mMemberId), mStrQuestionId, mAnswer);
 		} else {
 			// hien thi phan hoi
 			mLlAnswer.setVisibility(View.GONE);
@@ -314,7 +314,7 @@ public class GamePlayActivity extends Activity implements IRequestServer,
 				}
 			}
 			mRequestServer = new RequestServer(this);
-			mRequestServer.answerQuestion(mStrRoomId,
+			mRequestServer.answerQuestion(mStrRoomId, String.valueOf(mMemberId),
 					String.valueOf(DataInfo.userInfo.getUserId()),
 					mStrQuestionId, mAnswer);
 			break;

@@ -4,10 +4,11 @@
 package at.test.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.TextView;
 import at.test.R;
+import at.test.data.DataInfo;
 
 /**
  * @author Administrator
@@ -21,15 +22,9 @@ public class UserInfoActivity extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
 		setContentView(R.layout.user_info);
+		TextView tvUserInfo = (TextView) findViewById(R.id.user_info_tv_info);
+		tvUserInfo.setText( "Xin chào: " + DataInfo.userInfo.getUsername() + "\n" +
+							"Điểm hiện tại của bạn: " + (int)DataInfo.userInfo.getScoreLevel()
+							);
 	}
-
-//	@Override
-//	public void onBackPressed() {
-//		super.onBackPressed();
-//		Intent intent = new Intent(Intent.ACTION_MAIN);
-//		intent.addCategory(Intent.CATEGORY_HOME);
-//		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		startActivity(intent);
-//	}
-
 }
