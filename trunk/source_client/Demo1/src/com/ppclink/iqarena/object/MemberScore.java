@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppclink.object;
+package com.ppclink.iqarena.object;
 
 /**
  * @author hoangnh
