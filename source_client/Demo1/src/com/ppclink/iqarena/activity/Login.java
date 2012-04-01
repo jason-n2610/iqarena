@@ -18,12 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
-import com.ppclink.iqarena.delegate.IRequestServer;
-import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
-import com.ppclink.iqarena.ultil.SessionStore;
-import com.ppclink.iqarena.ultil.Utils;
 
 public class Login extends Activity implements View.OnClickListener,
 		IRequestServer {
