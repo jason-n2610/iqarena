@@ -30,8 +30,8 @@ import com.ppclink.iqarena.communication.RequestServer;
 import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
+import com.ppclink.iqarena.object.User;
 import com.ppclink.iqarena.ultil.FilterResponse;
-import com.ppclink.object.User;
 
 /**
  * @author Administrator

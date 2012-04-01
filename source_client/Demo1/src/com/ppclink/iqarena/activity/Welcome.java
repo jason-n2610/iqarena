@@ -20,12 +20,8 @@ import com.ppclink.iqarena.ultil.FilterResponse;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 
 /**
  * @author Administrator

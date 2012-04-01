@@ -1,4 +1,4 @@
-package com.ppclink.object;
+package com.ppclink.iqarena.object;
 
 public class Question {
 	private String mStrId, mStrContent, mStrAnswerA, mStrAnswerB, mStrAnswerC,

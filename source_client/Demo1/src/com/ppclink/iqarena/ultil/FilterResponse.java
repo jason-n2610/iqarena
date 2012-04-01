@@ -11,10 +11,10 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.ppclink.object.MemberScore;
-import com.ppclink.object.Question;
-import com.ppclink.object.Room;
-import com.ppclink.object.User;
+import com.ppclink.iqarena.object.MemberScore;
+import com.ppclink.iqarena.object.Question;
+import com.ppclink.iqarena.object.Room;
+import com.ppclink.iqarena.object.User;
 
 /**
  * @author hoangnh
