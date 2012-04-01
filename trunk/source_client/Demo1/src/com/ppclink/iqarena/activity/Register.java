@@ -1,4 +1,4 @@
-package at.test.activity;
+package com.ppclink.iqarena.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,53 +10,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import at.test.R;
-import at.test.connect.RequestServer;
-import at.test.data.DataInfo;
-import at.test.data.Utils;
-import at.test.delegate.IRequestServer;
 
-public class RegisterActivity extends Activity implements View.OnClickListener,
+import com.ppclink.iqarena.R;
+import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.delegate.IRequestServer;
+import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.Utils;
+
+public class Register extends Activity implements View.OnClickListener,
 		IRequestServer {
 
-	EditText etUsername, etPassword, etRePassword, etEmail;
-	String strUsername, strPassword, strRePassword, strEmail;
-	TextView tvNotice;
 	Button btnRegister;
+	EditText etUsername, etPassword, etRePassword, etEmail;
 	RequestServer requestServer;
+	String strUsername, strPassword, strRePassword, strEmail;
 	ScrollView svView;
-
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
-		setContentView(R.layout.register);
-		setProgressBarIndeterminateVisibility(false);
-		
-		etUsername = (EditText) findViewById(R.id.editText1);
-		etPassword = (EditText) findViewById(R.id.editText2);
-		etRePassword = (EditText) findViewById(R.id.editText3);
-		etEmail = (EditText) findViewById(R.id.editText4);
-		tvNotice = (TextView) findViewById(R.id.tvRegisterResult);
-		btnRegister = (Button) findViewById(R.id.btnRegister);
-		svView = (ScrollView) findViewById(R.id.scrollView1);
-
-		tvNotice.setText("");
-
-		btnRegister.setOnClickListener(this);
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.addCategory(Intent.CATEGORY_HOME);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
-	}
+	TextView tvNotice;
 
 	@Override
 	public void onClick(View v) {
@@ -66,7 +35,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener,
 			strRePassword = etRePassword.getText().toString().trim();
 			strEmail = etEmail.getText().toString().trim();
 			tvNotice.setText("");
-			svView.fullScroll(View.FOCUS_UP); 
+			svView.fullScroll(View.FOCUS_UP);
 			if (strUsername.equals("")) {
 				tvNotice.setText("Username null");
 				return;
@@ -109,17 +78,41 @@ public class RegisterActivity extends Activity implements View.OnClickListener,
 				tvNotice.setText("password ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z '.'");
 				return;
 			}
-			setProgressBarIndeterminateVisibility(true);
+
+			getParent().setProgressBarIndeterminateVisibility(true);
 			btnRegister.setEnabled(false);
 			requestServer = new RequestServer(this);
 			requestServer.register(strUsername, strPassword, strEmail);
 		}
 	}
 
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.register);
+		setProgressBarIndeterminateVisibility(false);
+
+		etUsername = (EditText) findViewById(R.id.editText1);
+		etPassword = (EditText) findViewById(R.id.editText2);
+		etRePassword = (EditText) findViewById(R.id.editText3);
+		etEmail = (EditText) findViewById(R.id.editText4);
+		tvNotice = (TextView) findViewById(R.id.tvRegisterResult);
+		btnRegister = (Button) findViewById(R.id.btnRegister);
+		svView = (ScrollView) findViewById(R.id.scrollView1);
+
+		tvNotice.setText("");
+
+		btnRegister.setOnClickListener(this);
+	}
+
 	@Override
 	public void onRequestComplete(String sResult) {
 		String message = sResult;
-		if (sResult != null){
+		if (sResult != null) {
 			sResult = sResult.trim();
 			int length = sResult.length();
 			// if co thong bao
@@ -128,21 +121,21 @@ public class RegisterActivity extends Activity implements View.OnClickListener,
 				if (sResult.contains("{")) {
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
-					boolean isSuccess = DataInfo.setData(sResult);
-					message = DataInfo.message;
+					boolean isSuccess = FilterResponse.filter(sResult);
+					message = FilterResponse.message;
 					if (isSuccess) {
-						if (DataInfo.value) {
+						if (FilterResponse.value) {
 							// dung tai khoan
 							// chuyen sang activity main menu
 							// demo
-							if (DataInfo.userInfo != null) {
+							if (FilterResponse.userInfo != null) {
 								Intent intent = new Intent(
 										getApplicationContext(),
-										TabHostMenuActivity.class);
+										TabHostMain.class);
 								startActivity(intent);
 								overridePendingTransition(R.anim.incoming,
 										R.anim.outgoing);
-								message="";
+								message = "";
 							}
 						} else {
 							// tai khoan khong hop le
@@ -157,8 +150,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener,
 				message = "Đăng kí thất bại";
 			}
 		}
-
-		setProgressBarIndeterminateVisibility(false);
+		getParent().setProgressBarIndeterminateVisibility(false);
 		btnRegister.setEnabled(true);
 		tvNotice.setText(message);
 	}

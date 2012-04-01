@@ -1,4 +1,4 @@
-package at.test.activity;
+package com.ppclink.iqarena.activity;
 
 import android.app.TabActivity;
 import android.content.Context;
@@ -13,44 +13,50 @@ import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
-import at.test.R;
-import at.test.data.SessionStore;
 
-public class TabHostMenuActivity extends TabActivity {
+import com.ppclink.iqarena.R;
+
+public class TabHostMain extends TabActivity {
+
+	private View createTabView(final Context context, final String text) {
+		View view = LayoutInflater.from(context).inflate(
+				R.layout.tah_host_menu_item, null);
+		TextView tv = (TextView) view.findViewById(R.id.tabsText);
+		tv.setText(text);
+		return view;
+	}
 
 	TabHost mTabHost;
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
-		setContentView(R.layout.tab_host_menu);
-		mTabHost = getTabHost();
-		Intent intent;
-		
-		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
-
-		intent = new Intent().setClass(this, RoomListActivity.class);
-		setupTab("Room", intent);
-
-		intent = new Intent().setClass(this, UserInfoActivity.class);
-		setupTab("User info", intent);
-
-		intent = new Intent().setClass(this, FriendActivity.class);
-		setupTab("Friends", intent);
-
-		mTabHost.setCurrentTab(1);
-	}
 
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		overridePendingTransition(R.anim.incoming, R.anim.outgoing);
 	}
-	
-	
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.tab_host_menu);
+		mTabHost = getTabHost();
+		Intent intent;
+
+		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
+
+		intent = new Intent().setClass(this, RoomList.class);
+		setupTab("Room", intent);
+
+		intent = new Intent().setClass(this, UserInfo.class);
+		setupTab("User info", intent);
+
+		intent = new Intent().setClass(this, Friend.class);
+		setupTab("Friends", intent);
+
+		mTabHost.setCurrentTab(1);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,12 +69,13 @@ public class TabHostMenuActivity extends TabActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 0:
-			Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+			Intent intent = new Intent(getApplicationContext(),
+					TabHostLogin.class);
 			intent.putExtra("resume", true);
 			startActivity(intent);
 			break;
 		case 1:
-			
+
 			break;
 
 		default:
@@ -83,13 +90,5 @@ public class TabHostMenuActivity extends TabActivity {
 		TabSpec setContent = mTabHost.newTabSpec(tag).setIndicator(tabview)
 				.setContent(intent);
 		mTabHost.addTab(setContent);
-	}
-
-	private static View createTabView(final Context context, final String text) {
-		View view = LayoutInflater.from(context).inflate(R.layout.tah_host_menu_item,
-				null);
-		TextView tv = (TextView) view.findViewById(R.id.tabsText);
-		tv.setText(text);
-		return view;
 	}
 }

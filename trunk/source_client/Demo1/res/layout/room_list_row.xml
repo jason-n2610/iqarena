@@ -5,29 +5,29 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tv_bet_score"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/textView2"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical"
-        android:text="Bet score" />
-
-    <TextView
         android:id="@+id/tv_room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="Room name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:paddingLeft="10dp" />
 
     <TextView
         android:id="@+id/tv_owner_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_room_name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:text="Owner name" />
+
+    <TextView
+        android:id="@+id/tv_bet_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:text="Bet score" 
+        android:paddingRight="10dp"/>
 
 </RelativeLayout>

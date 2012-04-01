@@ -1,7 +1,4 @@
-/**
- * 
- */
-package at.test.activity;
+package com.ppclink.iqarena.activity;
 
 import java.util.ArrayList;
 
@@ -9,41 +6,66 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SlidingDrawer;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import at.test.R;
-import at.test.connect.RequestServer;
-import at.test.data.DataInfo;
-import at.test.delegate.IRequestServer;
+
+import com.ppclink.iqarena.R;
+import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.delegate.IRequestServer;
+import com.ppclink.iqarena.ultil.FilterResponse;
 
 /**
  * @author hoangnh
  * 
  */
-public class CreateNewRoomActivity extends Activity implements OnClickListener,
-			IRequestServer{
+public class CreateNewRoom extends Activity implements OnClickListener,
+		IRequestServer {
 
-	Spinner spMaxNumber, spBetScore, spTimePerQuestion;
-	EditText etRoomName;
-	TextView tvResult;
 	Button btnCreate;
+	EditText etRoomName;
+	Spinner spMaxNumber, spBetScore, spTimePerQuestion;
+	TextView tvResult;
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_create:
+			String strRoomName = etRoomName.getText().toString().trim();
+			String strMaxMember = spMaxNumber.getSelectedItem().toString();
+			String strBetScore = spBetScore.getSelectedItem().toString();
+			String strTimePerQuestion = spTimePerQuestion.getSelectedItem()
+					.toString();
+			if (strRoomName.length() > 0) {
+				RequestServer requestServer = new RequestServer(this);
+				requestServer.createNewRoom(strRoomName, strMaxMember,
+						strBetScore, strTimePerQuestion);
+				btnCreate.setEnabled(false);
+				setProgressBarIndeterminateVisibility(true);
+			} else {
+				tvResult.setText("Tên room không hợp lệ!");
+			}
+			break;
+
+		case R.id.btn_cancel:
+			onBackPressed();
+			break;
+		default:
+			break;
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); 	
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.create_new_room);
 		setProgressBarIndeterminateVisibility(false);
 
@@ -58,7 +80,7 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 		btnCancel.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
 		tvResult.setText("");
-		
+
 		ArrayList<Integer> alMaxNumber = new ArrayList<Integer>();
 		for (int i = 0; i < 19; i++) {
 			alMaxNumber.add(i + 2);
@@ -76,52 +98,28 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 				android.R.layout.simple_spinner_item, alMaxNumber);
 		ArrayAdapter<Integer> aaBetScore = new ArrayAdapter<Integer>(this,
 				android.R.layout.simple_spinner_item, alBetScore);
-		ArrayAdapter<Integer> aaTimePerQuestion = new ArrayAdapter<Integer>(this,
-				android.R.layout.simple_spinner_item, alTimePerQuestion);
+		ArrayAdapter<Integer> aaTimePerQuestion = new ArrayAdapter<Integer>(
+				this, android.R.layout.simple_spinner_item, alTimePerQuestion);
 
-		aaMaxNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		aaBetScore.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		aaTimePerQuestion.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		aaMaxNumber
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		aaBetScore
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		aaTimePerQuestion
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spMaxNumber.setAdapter(aaMaxNumber);
 		spBetScore.setAdapter(aaBetScore);
 		spTimePerQuestion.setAdapter(aaTimePerQuestion);
-		
+
 		spTimePerQuestion.setSelection(2);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_create:
-			String strRoomName = etRoomName.getText().toString().trim();
-			String strMaxMember = spMaxNumber.getSelectedItem().toString();
-			String strBetScore = spBetScore.getSelectedItem().toString();
-			String strTimePerQuestion = spTimePerQuestion.getSelectedItem().toString();
-			if (strRoomName.length() > 0){
-				RequestServer requestServer = new RequestServer(this);
-				requestServer.createNewRoom(strRoomName, strMaxMember, strBetScore, strTimePerQuestion);
-				btnCreate.setEnabled(false);
-				setProgressBarIndeterminateVisibility(true);
-			}
-			else{
-				tvResult.setText("Tên room không hợp lệ!");
-			}
-			break;
-
-		case R.id.btn_cancel:
-			onBackPressed();
-			break;
-		default:
-			break;
-		}
 	}
 
 	// interface IRequestServer
 	@Override
 	public void onRequestComplete(String sResult) {
 		String strMessage = sResult;
-		if (strMessage != null){
+		if (strMessage != null) {
 			sResult = sResult.trim();
 			int length = sResult.length();
 			// if co thong bao
@@ -130,27 +128,31 @@ public class CreateNewRoomActivity extends Activity implements OnClickListener,
 				if (sResult.contains("{")) {
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
-					boolean isSuccess = DataInfo.setData(sResult);
-					strMessage = DataInfo.message;
-					String roomId = String.valueOf(DataInfo.roomId);
+					boolean isSuccess = FilterResponse.filter(sResult);
+					strMessage = FilterResponse.message;
+					String roomId = String.valueOf(FilterResponse.roomId);
 					if (isSuccess) {
 						// neu create thanh cong
-						if (DataInfo.value) {
-							Intent intent = new Intent(getApplicationContext(), RoomWaitingActivity.class);
+						if (FilterResponse.value) {
+							Intent intent = new Intent(getApplicationContext(),
+									RoomWaiting.class);
 							intent.putExtra("owner", true);
 							intent.putExtra("room_id", roomId);
-							intent.putExtra("room_name", etRoomName.getText().toString().trim());
-							intent.putExtra("owner_name", DataInfo.userInfo.getUsername());
-							intent.putExtra("member_id", DataInfo.memberId);
-							intent.putExtra("time_per_question", Integer.valueOf(spTimePerQuestion.getSelectedItem().toString()));
+							intent.putExtra("room_name", etRoomName.getText()
+									.toString().trim());
+							intent.putExtra("owner_name",
+									FilterResponse.userInfo.getUsername());
+							intent.putExtra("member_id", FilterResponse.memberId);
+							intent.putExtra("time_per_question", Integer
+									.valueOf(spTimePerQuestion
+											.getSelectedItem().toString()));
 							startActivity(intent);
 							strMessage = "";
-						} 
+						}
 					}
 				}
 			}
-		}
-		else{
+		} else {
 			strMessage = "Tạo room thất bại";
 		}
 		btnCreate.setEnabled(true);
