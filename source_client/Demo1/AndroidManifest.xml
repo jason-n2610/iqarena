@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="at.test"
+    package="com.ppclink.iqarena"
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" >     
+        
         <activity
-            android:name=".activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:name=".activity.Welcome"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".activity.TabHostLogin"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="Log in, Sign up"
+            android:noHistory="true" >
+           	<intent-filter>
+                <action android:name="android.intent.action.TabHostLoginActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.Login"
+            android:configChanges="orientation|keyboardHidden"
+            android:noHistory="true" >
+           	<intent-filter>
+                <action android:name="android.intent.action.LoginActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.Register"
             android:configChanges="orientation|keyboardHidden" 
             android:noHistory="true">
             <intent-filter>
@@ -35,7 +56,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TabHostMenuActivity"
+            android:name=".activity.TabHostMain"
+            android:label="Main"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.TabHostMenuActivity" />
@@ -44,7 +66,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.RoomListActivity"
+            android:name=".activity.RoomList"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.RoomActivity" />
@@ -53,7 +75,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.UserInfoActivity"
+            android:name=".activity.UserInfo"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.UserInfoActivity" />
@@ -62,7 +84,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.FriendActivity"
+            android:name=".activity.Friend"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.FriendActivity" />
@@ -71,8 +93,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.CreateNewRoomActivity"
+            android:name=".activity.CreateNewRoom"
             android:noHistory="true"
+            android:label="Create new room"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.CreateNewRoomActivity" />
@@ -81,8 +104,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.RoomWaitingActivity"
+            android:name=".activity.RoomWaiting"
             android:noHistory="true"
+            android:label="Room waiting..."
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.RoomWaitingActivity" />
@@ -91,7 +115,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.GamePlayActivity"
+            android:name=".activity.GamePlay"
+            android:label="Game Play"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.GamePlayActivity" />
