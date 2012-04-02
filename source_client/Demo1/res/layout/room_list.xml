@@ -2,25 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
     android:orientation="vertical" >
-
+
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_form1"
+        android:layout_above="@+id/rl_new_room"
+        android:layout_margin="5dp"
+        android:padding="12dp">
+        
+
     <ListView
         android:id="@+id/room_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/room_btn_new_room"
+        android:layout_above="@+id/rl_new_room"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/textView1" >
 
     </ListView>
 
-    <Button
-        android:id="@+id/room_btn_new_room"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="New Room" />
 
     <TextView
         android:id="@+id/textView1"
@@ -28,6 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:textColor="#ffffffff"
+        android:textStyle="bold"
         android:text="Room"
         android:paddingLeft="10dp" />
 
@@ -37,6 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:textColor="#ffffffff"
+        android:textStyle="bold"
         android:text="Bet Score"
         android:paddingRight="10dp" />
 
@@ -44,8 +53,29 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/room_list_view"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:textStyle="bold"
         android:text="Owner" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_new_room"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/tab_bg_selected"
+        android:layout_alignParentBottom="true">
+
+    <Button
+        android:id="@+id/room_btn_new_room"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="New Room" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

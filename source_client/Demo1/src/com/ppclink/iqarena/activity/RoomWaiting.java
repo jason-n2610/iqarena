@@ -383,7 +383,10 @@ public class RoomWaiting extends Activity implements OnClickListener,
 					adapter.notifyDataSetChanged();
 				}
 			}
-		}		
+		}
+		else{
+			onBackPressed();
+		}
 	}
 
 }

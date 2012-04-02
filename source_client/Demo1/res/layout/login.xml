@@ -3,7 +3,7 @@
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_app"
+    android:background="@drawable/bg_app2"
     android:padding="10dip" >
 
     <LinearLayout
@@ -15,12 +15,11 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_form"
+            android:background="@drawable/bg_form1"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="20dp" >
+            android:paddingLeft="20dp"
+            android:paddingRight="25dp"
+            android:paddingTop="10dp" >
 
             <TextView
                 android:id="@+id/login_result"
@@ -60,17 +59,6 @@
                 android:paddingRight="7dp"
                 android:paddingTop="8dp" >
 
-                <Button
-                    android:id="@+id/login_login"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/button"
-                    android:padding="10.0dip"
-                    android:text="@string/login_signin"
-                    android:textStyle="bold" />
-
                 <CheckBox
                     android:id="@+id/ckRemember"
                     android:layout_width="wrap_content"
@@ -85,9 +73,23 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dip"
-                android:paddingRight="7dip"
+                android:layout_marginBottom="15dp"
                 android:paddingTop="8dip" >
+
+                <Button
+                    android:id="@+id/login_login"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/button_style1"
+                    android:padding="10.0dip"
+                    android:text="@string/login_signin"
+                    android:textColor="#ffffffff"
+                    android:textStyle="bold" />
+
             </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 
