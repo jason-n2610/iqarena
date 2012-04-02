@@ -2,33 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_app2"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:text="Create New Room"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_above="@+id/linearLayout1"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_form1"
+        android:orientation="vertical"
+        android:padding="12dp" >
 
         <TextView
             android:id="@+id/tv_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_result" />
+            android:text="@string/login_result"
+            android:textColor="#00e673"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Room name" />
+            android:text="Room name"
+            android:textColor="#ffffffff" />
 
         <EditText
             android:id="@+id/et_room_name"
@@ -45,7 +44,8 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Max member" />
+            android:text="Max member"
+            android:textColor="#ffffffff" />
 
         <Spinner
             android:id="@+id/sp_max_member"
@@ -59,7 +59,8 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bet score" />
+            android:text="Bet score"
+            android:textColor="#ffffffff" />
 
         <Spinner
             android:id="@+id/sp_bet_score"
@@ -68,12 +69,13 @@
             android:layout_margin="10dp"
             android:drawSelectorOnTop="true"
             android:prompt="@string/new_room_spinner_bet_score" />
-        
+
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time for an question" />
+            android:text="Time for an question"
+            android:textColor="#ffffffff" />
 
         <Spinner
             android:id="@+id/sp_time_per_question"
@@ -89,7 +91,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
+        android:background="@drawable/tab_bg_selected"
+        android:orientation="horizontal"
+        android:padding="5dp" >
 
         <Button
             android:id="@+id/btn_create"

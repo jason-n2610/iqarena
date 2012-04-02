@@ -48,6 +48,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 				btnCreate.setEnabled(false);
 				setProgressBarIndeterminateVisibility(true);
 			} else {
+				tvResult.setVisibility(View.VISIBLE);
 				tvResult.setText("Tên room không hợp lệ!");
 			}
 			break;
@@ -80,6 +81,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		btnCancel.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
 		tvResult.setText("");
+		tvResult.setVisibility(View.GONE);
 
 		ArrayList<Integer> alMaxNumber = new ArrayList<Integer>();
 		for (int i = 0; i < 19; i++) {

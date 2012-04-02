@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -67,6 +68,10 @@ public class RoomList extends Activity implements IRequestServer,
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
+			
+			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT, 40);
+			convertView.setLayoutParams(lp);
 
 			final Room room = mListRoom.get(position);
 
