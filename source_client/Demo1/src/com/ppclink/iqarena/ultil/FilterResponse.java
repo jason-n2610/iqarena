@@ -24,7 +24,7 @@ import com.ppclink.iqarena.object.User;
 public class FilterResponse {
 
 	public static String message = null;
-	public static ArrayList<User> mListMemberInRoom = new ArrayList<User>();
+	public static ArrayList<MemberScore> mListMemberInRoom = new ArrayList<MemberScore>();
 	public static ArrayList<MemberScore> mListMembersScore = new ArrayList<MemberScore>();
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static String mTrueAnswer = null;
@@ -162,20 +162,15 @@ public class FilterResponse {
 					mListMemberInRoom.clear();
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
-
-						int userId = json_data.getInt("user_id");
+						String memberId = json_data.getString("room_member_id");
+						String userId = json_data.getString("user_id");
 						String username = json_data.getString("username");
-						String email = json_data.getString("email");
-						float scoreLevel = json_data.getInt("score_level");
-						String registedDate = json_data
-								.getString("registed_date");
-						int powerUser = json_data.getInt("power_user");
-						float money = json_data.getInt("money");
+						String memberType = json_data.getString("member_type");
 
-						User user = new User(userId, username, email,
-								scoreLevel, registedDate, powerUser, money);
+						MemberScore member = new MemberScore(memberId, userId, username, "",
+								"", "", "", memberType);
 
-						mListMemberInRoom.add(user);
+						mListMemberInRoom.add(member);
 					}
 				} else {
 					mListMemberInRoom.clear();
@@ -213,7 +208,8 @@ public class FilterResponse {
 					mListMembersScore.clear();
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
-
+						
+						String memberId = json_data.getString("room_member_id");
 						String userId = json_data.getString("user_id");
 						String username = json_data.getString("username");
 						String lastAnswer = json_data.getString("last_answer");
@@ -240,9 +236,11 @@ public class FilterResponse {
 						if (combo.equals("null")) {
 							combo = "-";
 						}
+						
+						String memberType = json_data.getString("member_type");
 
-						MemberScore memberScore = new MemberScore(userId,
-								username, lastAnswer, score, graft, combo);
+						MemberScore memberScore = new MemberScore(memberId, userId,
+								username, lastAnswer, score, graft, combo, memberType);
 
 						mListMembersScore.add(memberScore);
 					}

@@ -2,29 +2,91 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_list1"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/room_waiting_tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="Room Waiting!" />
-
-    <ListView
-        android:id="@+id/room_waiting_lv_member"
-        android:layout_width="match_parent"
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/room_waiting_tv_time"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/room_waiting_tv_header" >
+        android:layout_below="@+id/room_waiting_tv_money"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_form1"
+        android:paddingBottom="10dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="5dp" >
 
-    </ListView>
+        <RelativeLayout
+            android:id="@+id/rl_list_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/room_waiting_tv_header_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:text="Users"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/room_waiting_tv_header_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:text="Log out"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
+        </RelativeLayout>      
+        
+        <View 
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/rl_list_header"
+            android:id="@+id/horizal"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+
+        <ListView
+            android:id="@+id/room_waiting_lv_member"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/room_waiting_tv_time"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/horizal"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:smoothScrollbar="true" >
+        </ListView>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp" >
 
         <Button
             android:id="@+id/room_waiting_btn_play"
@@ -43,11 +105,24 @@
 
     <TextView
         android:id="@+id/room_waiting_tv_time"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
-        android:text="1..."
-        android:textColor="@color/red" />
+        android:layout_marginLeft="10dp"
+        android:text="Game start in ..."
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/room_waiting_tv_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/room_waiting_tv_header"
+        android:layout_marginLeft="16dp"
+        android:text="$"
+        android:textColor="#ffffffff"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -152,13 +152,16 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 							strMessage = "";
 						}
 					}
+					else{
+						tvResult.setVisibility(View.VISIBLE);
+						tvResult.setText(strMessage);
+					}
 				}
 			}
 		} else {
 			strMessage = "Tạo room thất bại";
 		}
 		btnCreate.setEnabled(true);
-		tvResult.setText(strMessage);
 		setProgressBarIndeterminateVisibility(false);
 	}
 }

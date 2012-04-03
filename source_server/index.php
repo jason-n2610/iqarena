@@ -60,5 +60,9 @@
     {
         include ($path . '/modules/controls/get_members_answer.php');
     }
+    else if ($_POST['message'] == "remove_member_in_room")
+    {
+        include ($path . '/modules/controls/remove_member_in_room.php');
+    }
 
 ?>

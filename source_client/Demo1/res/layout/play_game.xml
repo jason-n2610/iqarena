@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/bg_list1"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -10,7 +11,7 @@
         android:layout_height="fill_parent"
         android:baselineAligned="true"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -44,6 +45,9 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_form1"
+                        android:padding="10dp"
+                        android:layout_marginLeft="5dp"
                         android:orientation="horizontal" >
 
                         <TextView
@@ -52,6 +56,7 @@
                             android:layout_height="fill_parent"
                             android:gravity="center_vertical"
                             android:maxLines="5"
+                            android:textColor="#ffffffff"
                             android:scrollbars="vertical"
                             android:text="question" />
                     </LinearLayout>
@@ -59,7 +64,9 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
+                        android:background="@drawable/bg_form1"
+                        android:layout_marginRight="5dp"
                         android:orientation="horizontal" >
 
                         <TextView
@@ -77,6 +84,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_form1"
             android:orientation="vertical" >
 
             <Button
@@ -128,7 +138,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <TextView
             android:id="@+id/play_game_answer_title"
@@ -180,6 +190,9 @@
         <ListView
             android:id="@+id/play_game_lv_answer"
             android:layout_width="match_parent"
+            android:background="@drawable/bg_form1"
+            android:padding="10dp"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content" >
         </ListView>
 

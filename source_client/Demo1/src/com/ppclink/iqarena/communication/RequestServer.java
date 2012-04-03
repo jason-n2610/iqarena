@@ -37,7 +37,19 @@ import com.ppclink.iqarena.ultil.Utils;
 public class RequestServer extends AsyncTask<String, Integer, String> {
 
 	public enum REQUEST_TYPE {
-		REQUEST_ANSWER_QUESTION, REQUEST_CREATE_NEW_ROOM, REQUEST_EXIT_ROOM, REQUEST_GET_LIST_ROOM, REQUEST_GET_MEMBERS_ANSWER, REQUEST_GET_MEMBERS_IN_ROOM, REQUEST_GET_QUESTION, REQUEST_JOIN_ROOM, REQUEST_LOGIN, REQUEST_PLAY_GAME, REQUEST_REGISTER, REQUEST_REMOVE_ROOM
+		REQUEST_ANSWER_QUESTION, 
+		REQUEST_CREATE_NEW_ROOM, 
+		REQUEST_EXIT_ROOM, 
+		REQUEST_GET_LIST_ROOM, 
+		REQUEST_GET_MEMBERS_ANSWER,
+		REQUEST_GET_MEMBERS_IN_ROOM, 
+		REQUEST_REMOVE_MEMBER_IN_ROOM,
+		REQUEST_GET_QUESTION, 
+		REQUEST_JOIN_ROOM, 
+		REQUEST_LOGIN, 
+		REQUEST_PLAY_GAME, 
+		REQUEST_REGISTER, 
+		REQUEST_REMOVE_ROOM
 	}
 
 	private IRequestServer delegate;;
@@ -135,13 +147,13 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						.add(new BasicNameValuePair("user_id", params[1]));
 				break;
 			case REQUEST_EXIT_ROOM:
-				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_EXIT_ROOM));
 				nameValuePairs
-						.add(new BasicNameValuePair("room_id", params[0]));
+						.add(new BasicNameValuePair("member_id", params[0]));
 				nameValuePairs
-						.add(new BasicNameValuePair("user_id", params[1]));
+						.add(new BasicNameValuePair("room_id", params[1]));
 				break;
 			case REQUEST_GET_MEMBERS_IN_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -149,6 +161,14 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						Config.REQUEST_GET_MEMBERS_IN_ROOM));
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
+				break;
+			case REQUEST_REMOVE_MEMBER_IN_ROOM:
+				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs.add(new BasicNameValuePair("message", "remove_member_in_room"));
+				nameValuePairs
+						.add(new BasicNameValuePair("member_id", params[0]));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[1]));
 				break;
 			case REQUEST_PLAY_GAME:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -230,9 +250,9 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	}
 
 	// exit room
-	public void exitRoom(String strRoomID, String strUserID) {
+	public void exitRoom(String memberId, String roomId) {
 		this.requestType = REQUEST_TYPE.REQUEST_EXIT_ROOM;
-		this.execute(strRoomID, strUserID);
+		this.execute(memberId, roomId);
 	}
 
 	// request get list room
@@ -252,6 +272,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void getMembersInRoom(String strRoomID) {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_IN_ROOM;
 		this.execute(strRoomID);
+	}
+	
+	// remove member in room (owner action)
+	public void removeMemberInRoom(String memberId, String roomId){
+		this.requestType = REQUEST_TYPE.REQUEST_REMOVE_MEMBER_IN_ROOM;
+		this.execute(memberId, roomId);
 	}
 
 	// get question

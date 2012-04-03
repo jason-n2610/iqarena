@@ -4,7 +4,7 @@
     * Khi members thoat khoi room => remove member trong bang room_members
     * Dong thoi thong bao cho cac members khac de cap nhap members trong room
     */
-    if (isset($_POST['room_id']) && isset($_POST['user_id']))
+    if (isset($_POST['room_id']) && isset($_POST['member_id']))
     {
         $path = getcwd();
         include ($path . '/include/mysql.php');
@@ -16,16 +16,16 @@
         $_POST['room_id'] = stripcslashes($_POST['room_id']);
         $_POST['room_id'] = mysql_real_escape_string($_POST['room_id']);
 
-        $_POST['user_id'] = stripcslashes($_POST['user_id']);
-        $_POST['user_id'] = mysql_real_escape_string($_POST['user_id']);
+        $_POST['member_id'] = stripcslashes($_POST['member_id']);
+        $_POST['member_id'] = mysql_real_escape_string($_POST['member_id']);
 
         // xoa member
-        $result = RoomMembers::removeMemberInRoom($_POST['user_id'], $_POST['room_id']);
+        $result = RoomMembers::removeMemberInRoom($_POST['member_id']);
         if ($result)
         {
             echo '{"type":"exit_room", "value":"true", "message":"thoát room thành công"}';
 
-            // thong bao cho cac member khac biet user_id da thoat khoi room
+            // thong bao cho cac member khac biet member da thoat khoi room
             $filename = $path . '/' . $_POST['room_id'] . '.txt';
             $f_contentFile = "";
             if (file_exists($filename))
