@@ -11,12 +11,12 @@
         android:layout_height="fill_parent"
         android:baselineAligned="true"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="2"
+            android:layout_weight="1.2"
             android:baselineAligned="false"
             android:orientation="vertical" >
 
@@ -31,24 +31,31 @@
                     android:layout_height="fill_parent"
                     android:gravity="center"
                     android:text="Question #"
+                    android:textColor="#ffffffff"
                     android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:baselineAligned="false"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:baselineAligned="false"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_form1"
-                        android:padding="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:padding="10dp" >
 
                         <TextView
                             android:id="@+id/play_game_question"
@@ -56,17 +63,17 @@
                             android:layout_height="fill_parent"
                             android:gravity="center_vertical"
                             android:maxLines="5"
-                            android:textColor="#ffffffff"
                             android:scrollbars="vertical"
-                            android:text="question" />
+                            android:text="question"
+                            android:textColor="#ffffffff" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="3"
                         android:background="@drawable/bg_form1"
-                        android:layout_marginRight="5dp"
                         android:orientation="horizontal" >
 
                         <TextView
@@ -78,22 +85,52 @@
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_form1"
+                    android:padding="10dp" >
+
+                    <ImageButton
+                        android:id="@+id/imageButton1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:padding="5dp"
+                        android:src="@android:drawable/btn_star" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:padding="5dp"
+                        android:src="@android:drawable/btn_star" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:padding="10dp"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_form1"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="10dp" >
 
             <Button
                 android:id="@+id/play_game_summit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Summit" />
+                android:background="@drawable/button_style1"
+                android:text="Summit"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
 
             <ScrollView
                 android:id="@+id/scrollView1"
@@ -109,36 +146,44 @@
                         android:id="@+id/play_game_answer_a"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
                         android:text="a" />
 
                     <RadioButton
                         android:id="@+id/play_game_answer_b"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
                         android:text="b" />
 
                     <RadioButton
                         android:id="@+id/play_game_answer_c"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
                         android:text="c" />
 
                     <RadioButton
                         android:id="@+id/play_game_answer_d"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
                         android:text="d" />
                 </RadioGroup>
             </ScrollView>
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/play_game_layout_answer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/play_game_answer_title"
@@ -146,17 +191,22 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Answer"
+            android:textColor="#ffffffff"
             android:textSize="25sp" />
 
         <LinearLayout
+            android:id="@+id/play_game_answer_ll_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/play_game_answer_title"
             android:baselineAligned="false" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" >
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_form1"
+                android:padding="10dp" >
 
                 <TextView
                     android:id="@+id/play_game_tv_result"
@@ -166,9 +216,11 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="2"
-                android:orientation="vertical" >
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_form1"
+                android:orientation="vertical"
+                android:padding="10dp" >
 
                 <TextView
                     android:id="@+id/play_game_tv_answer_info"
@@ -187,15 +239,77 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/play_game_lv_answer"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@drawable/bg_form1"
-            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/play_game_answer_ll_info"
             android:layout_margin="5dp"
-            android:layout_height="wrap_content" >
-        </ListView>
+            android:background="@drawable/bg_form1"
+            android:padding="10dp" >
 
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/room_play_rl_answer_lv_header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="26dp"
+                    android:text="Members"
+                    android:textColor="#ffffffff" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/textView1"
+                    android:text="Answer"
+                    android:textColor="#ffffffff" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/textView2"
+                    android:text="Score"
+                    android:textColor="#ffffffff" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:text="Info"
+                    android:textColor="#ffffffff" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/room_play_line_header"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/room_play_rl_answer_lv_header"
+                android:background="@color/white" />
+
+            <ListView
+                android:id="@+id/play_game_lv_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/room_play_line_header"
+                android:clickable="true"
+                android:listSelector="@drawable/grid_selector" >
+            </ListView>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>
