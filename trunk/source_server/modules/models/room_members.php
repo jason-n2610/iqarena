@@ -7,13 +7,10 @@
         public static function getMembersInRoom($room_id)
         {
             $query = "  SELECT
+                            room_member_id,
                             u.user_id,
                             username,
-                            email,
-                            score_level,
-                            registed_date,
-                            power_user,
-                            money
+                            member_type
                         FROM room_members AS rm, users AS u
                         WHERE rm.user_id = u.user_id AND rm.room_id = '{$room_id}'";
             $result = @mysql_query($query) or die('getMembersInRoom: ' . mysql_error());
@@ -23,7 +20,7 @@
         // tra ve answer cua members trong room
         public static function getMembersAnswer($room_id)
         {
-            $query = "  SELECT  u.user_id, username, last_answer, score, graft_id, combo
+            $query = "  SELECT  u.user_id, room_member_id, username, last_answer, score, graft_id, combo, member_type
                         FROM    room_members AS rm, users AS u
                         WHERE   rm.user_id = u.user_id AND rm.room_id = '{$room_id}'";
             $result = @mysql_query($query) or die ('getMembersAnswer(): ' . mysql_error());

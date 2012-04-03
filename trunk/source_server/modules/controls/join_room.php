@@ -26,6 +26,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
 
     // bien kiem tra xem room full chua
     $isFull = false;
+    $max = 0;
     while ($row = mysql_fetch_array($maxMembers, MYSQL_NUM)) {
         $max = $row[0];
     }

@@ -15,6 +15,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -34,8 +36,8 @@ import com.ppclink.iqarena.ultil.FilterResponse;
  * @author Administrator
  * 
  */
-public class RoomList extends Activity implements IRequestServer,
-		ICheckServer, OnClickListener {
+public class RoomList extends Activity implements IRequestServer, ICheckServer,
+		OnClickListener {
 
 	public class RoomListAdapter extends ArrayAdapter<Room> {
 
@@ -68,7 +70,7 @@ public class RoomList extends Activity implements IRequestServer,
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			
+
 			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
 					android.view.ViewGroup.LayoutParams.FILL_PARENT, 40);
 			convertView.setLayoutParams(lp);
@@ -79,27 +81,16 @@ public class RoomList extends Activity implements IRequestServer,
 			holder.tvOwnerName.setText(room.getOwnerName());
 			holder.tvBetScore.setText(String.valueOf(room.getBetScore()));
 
-			convertView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!mRequestServer.isCancelled()) {
-						mRequestServer.cancel(true);
-					}
-					mRoomName = room.getRoomName();
-					roomID = String.valueOf(room.getRoomId());
-					mRoomOwnerName = room.getOwnerName();
-					mRoomTimePerQuestion = room.getTimePerQuestion();
-					mRequestServer = new RequestServer(RoomList.this);
-					mRequestServer.joinRoom(String.valueOf(room.getRoomId()),
-							String.valueOf(FilterResponse.userInfo.getUserId()));
-				}
-			});
-
 			return convertView;
 		}
 
+		@Override
+		public Room getItem(int position) {
+			return super.getItem(position);
+		}
+
 	}
+
 	static class ViewHolder {
 		TextView tvRoomName, tvOwnerName, tvBetScore;
 	}
@@ -132,8 +123,7 @@ public class RoomList extends Activity implements IRequestServer,
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.room_btn_new_room:
-			Intent i = new Intent(getApplicationContext(),
-					CreateNewRoom.class);
+			Intent i = new Intent(getApplicationContext(), CreateNewRoom.class);
 			startActivity(i);
 			break;
 
@@ -156,6 +146,24 @@ public class RoomList extends Activity implements IRequestServer,
 		alRooms = new ArrayList<Room>();
 		adapter = new RoomListAdapter(getApplicationContext(), alRooms);
 		mListViewRoom.setAdapter(adapter);
+		mListViewRoom.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				if (!mRequestServer.isCancelled()) {
+					mRequestServer.cancel(true);
+				}
+				Room room = (Room) parent.getAdapter().getItem(position);
+				mRoomName = room.getRoomName();
+				roomID = String.valueOf(room.getRoomId());
+				mRoomOwnerName = room.getOwnerName();
+				mRoomTimePerQuestion = room.getTimePerQuestion();
+				mRequestServer = new RequestServer(RoomList.this);
+				mRequestServer.joinRoom(String.valueOf(room.getRoomId()),
+						String.valueOf(FilterResponse.userInfo.getUserId()));
+			}
+		});
 	}
 
 	@Override

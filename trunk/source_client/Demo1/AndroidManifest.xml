@@ -115,7 +115,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.GamePlay"
+            android:name=".activity.RoomPlay"
             android:label="Game Play"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>

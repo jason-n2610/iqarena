@@ -27,65 +27,6 @@ public class Register extends Activity implements View.OnClickListener,
 	ScrollView svView;
 	TextView tvNotice;
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.btnRegister) {
-			strUsername = etUsername.getText().toString().trim();
-			strPassword = etPassword.getText().toString().trim();
-			strRePassword = etRePassword.getText().toString().trim();
-			strEmail = etEmail.getText().toString().trim();
-			tvNotice.setText("");
-			svView.fullScroll(View.FOCUS_UP);
-			if (strUsername.equals("")) {
-				tvNotice.setText("Username null");
-				return;
-			}
-			if (strPassword.equals("")) {
-				tvNotice.setText("password null");
-				return;
-			}
-
-			if (strPassword.length() < 6) {
-				tvNotice.setText("password phai lon hon 6 ki tu");
-				return;
-			}
-
-			if (strRePassword.equals("")) {
-				tvNotice.setText("re-password null");
-				return;
-			}
-			if (strEmail.equals("")) {
-				tvNotice.setText("email null");
-				return;
-			}
-
-			if (!strPassword.equals(strRePassword)) {
-				tvNotice.setText("Password <> Re-password");
-				return;
-			}
-
-			if (!Utils.validateEmail(strEmail)) {
-				tvNotice.setText("email invalid");
-				return;
-			}
-
-			if (!Utils.validateString(strUsername)) {
-				tvNotice.setText("username ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z .");
-				return;
-			}
-
-			if (!Utils.validateString(strPassword)) {
-				tvNotice.setText("password ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z '.'");
-				return;
-			}
-
-			getParent().setProgressBarIndeterminateVisibility(true);
-			btnRegister.setEnabled(false);
-			requestServer = new RequestServer(this);
-			requestServer.register(strUsername, strPassword, strEmail);
-		}
-	}
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,8 +46,78 @@ public class Register extends Activity implements View.OnClickListener,
 		svView = (ScrollView) findViewById(R.id.scrollView1);
 
 		tvNotice.setText("");
+		tvNotice.setVisibility(View.GONE);
 
 		btnRegister.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.btnRegister) {
+			strUsername = etUsername.getText().toString().trim();
+			strPassword = etPassword.getText().toString().trim();
+			strRePassword = etRePassword.getText().toString().trim();
+			strEmail = etEmail.getText().toString().trim();
+			tvNotice.setText("");
+			svView.fullScroll(View.FOCUS_UP);
+			if (strUsername.equals("")) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("Username null");
+				return;
+			}
+			if (strPassword.equals("")) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("password null");
+				return;
+			}
+	
+			if (strPassword.length() < 6) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("password phai lon hon 6 ki tu");
+				return;
+			}
+	
+			if (strRePassword.equals("")) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("re-password null");
+				return;
+			}
+			if (strEmail.equals("")) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("email null");
+				return;
+			}
+	
+			if (!strPassword.equals(strRePassword)) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("Password <> Re-password");
+				return;
+			}
+	
+			if (!Utils.validateEmail(strEmail)) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("email invalid");
+				return;
+			}
+	
+			if (!Utils.validateString(strUsername)) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("username ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z .");
+				return;
+			}
+	
+			if (!Utils.validateString(strPassword)) {
+				tvNotice.setVisibility(View.VISIBLE);
+				tvNotice.setText("password ko hop le, chi dc gom cac ki tu a-z 0-9 A-Z '.'");
+				return;
+			}
+	
+			tvNotice.setVisibility(View.GONE);
+			getParent().setProgressBarIndeterminateVisibility(true);
+			btnRegister.setEnabled(false);
+			requestServer = new RequestServer(this);
+			requestServer.register(strUsername, strPassword, strEmail);
+		}
 	}
 
 	@Override

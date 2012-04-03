@@ -8,19 +8,21 @@ package com.ppclink.iqarena.object;
  * 
  */
 public class MemberScore {
-	private String strUserName, strQuestionAnswer, strScore, strAbility,
-			strCombo, strUserId;
+	private String strMemberId, strUserName, strQuestionAnswer, strScore, strAbility,
+			strCombo, strUserId, strMemberType;
 
-	public MemberScore(String strUserId, String strUserName,
+	public MemberScore(String strMemberId, String strUserId, String strUserName,
 			String strQuestionAnswer, String strScore, String strAbility,
-			String strCombo) {
+			String strCombo, String strMemberType) {
 		super();
+		this.strMemberId = strMemberId;
 		this.strUserName = strUserName;
 		this.strQuestionAnswer = strQuestionAnswer;
 		this.strScore = strScore;
 		this.strAbility = strAbility;
 		this.strCombo = strCombo;
 		this.strUserId = strUserId;
+		this.strMemberType = strMemberType;
 	}
 
 	public String getStrAbility() {
@@ -69,5 +71,21 @@ public class MemberScore {
 
 	public void setStrUserName(String strUserName) {
 		this.strUserName = strUserName;
+	}
+
+	public String getStrMemberType() {
+		return strMemberType;
+	}
+
+	public void setStrMemberType(String strMemberType) {
+		this.strMemberType = strMemberType;
+	}
+
+	public String getStrMemberId() {
+		return strMemberId;
+	}
+
+	public void setStrMemberId(String strMemberId) {
+		this.strMemberId = strMemberId;
 	}
 }
