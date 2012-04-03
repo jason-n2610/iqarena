@@ -361,6 +361,8 @@ public class RoomWaiting extends Activity implements OnClickListener,
 						.inflate(R.layout.room_waiting_row, null);
 	
 				holder = new MemberHolder();
+				holder.tvIndex = (TextView) convertView
+						.findViewById(R.id.room_waiting_row_tv_index);
 				holder.tvUsername = (TextView) convertView
 						.findViewById(R.id.room_waiting_row_username);
 				holder.ibLogout = (ImageButton) convertView.findViewById(R.id.room_waiting_ib_logout);
@@ -372,6 +374,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	
 			final MemberScore member = alListMembers.get(position);
 			holder.tvUsername.setText(member.getStrUserName());
+			holder.tvIndex.setText((position+1) + "");
 			// highlight owner
 			if (member.getStrMemberType().equals("1")){
 				holder.tvUsername.setTextColor(Color.GREEN);
@@ -407,6 +410,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	 */
 	
 	static class MemberHolder {
+		TextView tvIndex;
 		TextView tvUsername;
 		ImageButton ibLogout;
 	}

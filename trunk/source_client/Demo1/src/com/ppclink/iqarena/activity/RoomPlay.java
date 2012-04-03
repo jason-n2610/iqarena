@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 	Button mBtnSummit; // summit
 	private int mCurQuestion = 1;
 	// layout cho question va answer
-	LinearLayout mLlQuestion, mLlAnswer;
+	LinearLayout mLlQuestion;
+	RelativeLayout mRlAnswer;
 	ListView mLvResult; // listview result answer of members in room
 	RadioButton mRbA, mRbB, mRbC, mRbD; // answer item
 	RequestServer mRequestServer = null;
@@ -68,7 +71,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);		
-		setContentView(R.layout.play_game);
+		setContentView(R.layout.room_play);
 		Bundle extra = getIntent().getExtras();
 		mStrRoomId = extra.getString("room_id");
 		mTimePerQuestion = extra.getInt("time_per_question");
@@ -87,7 +90,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 		mRbD = (RadioButton) findViewById(R.id.play_game_answer_d);
 	
 		// answer
-		mLlAnswer = (LinearLayout) findViewById(R.id.play_game_layout_answer);
+		mRlAnswer = (RelativeLayout) findViewById(R.id.play_game_layout_answer);
 		mTvAnswerResult = (TextView) findViewById(R.id.play_game_tv_result);
 		mTvAnswerTimer = (TextView) findViewById(R.id.play_game_answer_tv_counter);
 		mLvResult = (ListView) findViewById(R.id.play_game_lv_answer);
@@ -98,7 +101,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 	
 		// visibility
 		mLlQuestion.setVisibility(View.VISIBLE);
-		mLlAnswer.setVisibility(View.GONE);
+		mRlAnswer.setVisibility(View.GONE);
 		mTvQuestionTitle.setText("Question " + mCurQuestion);
 	
 		setProgressBarIndeterminateVisibility(true);
@@ -114,9 +117,13 @@ public class RoomPlay extends Activity implements IRequestServer,
 	void showLayout() {
 		if (mLlQuestion.getVisibility() == View.VISIBLE) {
 			// hien thi phan tra loi
-			mLlAnswer.setVisibility(View.VISIBLE);
+			mRlAnswer.setVisibility(View.VISIBLE);
 			mLlQuestion.setVisibility(View.GONE);
 			setProgressBarIndeterminateVisibility(true);
+			
+			mTvAnswerInfo.setText("");
+			mTvAnswerResult.setText("");
+			mTvAnswerTimer.setText("");
 	
 			// lay ve phan tra loi cua cac nguoi choi khac
 			if (mRequestServer != null) {
@@ -141,8 +148,15 @@ public class RoomPlay extends Activity implements IRequestServer,
 			}.start();
 		} else {
 			// hien thi phan hoi
-			mLlAnswer.setVisibility(View.GONE);
+			mRlAnswer.setVisibility(View.GONE);
 			mLlQuestion.setVisibility(View.VISIBLE);
+			
+			mTvQuestion.setText("");
+			mTvQuestionTimer.setText("");
+			mRbA.setText("");
+			mRbB.setText("");
+			mRbC.setText("");
+			mRbD.setText("");
 			// enable view
 			mBtnSummit.setEnabled(true);
 			int count = mRgAnswer.getChildCount();
@@ -229,11 +243,13 @@ public class RoomPlay extends Activity implements IRequestServer,
 
 	@Override
 	public void onRequestComplete(String sResult) {
+		// request lay ve cau hoi hoan tat
 		if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION) {
 			setProgressBarIndeterminateVisibility(false);
 			if (sResult != null) {
 				try {
 					FilterResponse.filter(sResult);
+					// co cau hoi tra ve
 					if (FilterResponse.value) {
 						Question question = FilterResponse.question;
 						mStrQuestionId = question.getmStrId();
@@ -264,7 +280,9 @@ public class RoomPlay extends Activity implements IRequestServer,
 							}
 						}.start();
 
-					} else {
+					}
+					// truong hop ko lay dc cau hoi, dua ra thong bao
+					else {
 						Toast.makeText(
 								this,
 								"sorry, do not create question, please try again",
@@ -277,7 +295,10 @@ public class RoomPlay extends Activity implements IRequestServer,
 					builder.create().show();
 				}
 			}
-		} else if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_MEMBERS_ANSWER) {
+		} 
+		
+		// neu la request lay ve list members trong room tra loi ntn
+		else if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_MEMBERS_ANSWER) {
 			setProgressBarIndeterminateVisibility(false);
 			if (sResult != null) {
 				try {
@@ -313,8 +334,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 							if (strTrueAnswer.equals("4")) {
 								strTrueAnswer = "D";
 							}
-							mTvAnswerResult.setText("Answer: " + strTrueAnswer
-									+ ". You are true!");
+							mTvAnswerResult.setText("True Answer: " + strTrueAnswer
+									+ ".\nYou are true!");
 							// hien thi dong ho dem nguoc de cho cau tiep theo
 							new CountDownTimer(10000, 1000) {
 
@@ -345,7 +366,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 						// truong hop nguoi choi tra loi sai, quay tro lai
 						// roomlist
 						else {
-							mTvAnswerInfo.setText("Game exit in:");
+							mTvAnswerInfo.setText("Press back button to exit!");
+							mTvAnswerTimer.setVisibility(View.GONE);
 							String strTrueAnswer = FilterResponse.mTrueAnswer;
 							if (strTrueAnswer.equals("1")) {
 								strTrueAnswer = "A";
@@ -358,24 +380,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 							if (strTrueAnswer.equals("4")) {
 								strTrueAnswer = "D";
 							}
-							mTvAnswerResult.setText("Answer: " + strTrueAnswer
-									+ ". You are false!");
-							// hien thi dong ho dem nguoc roi quay ve list room
-							// khi finish
-							new CountDownTimer(10000, 1000) {
-
-								@Override
-								public void onFinish() {
-									onBackPressed();
-								}
-
-								@Override
-								public void onTick(long millisUntilFinished) {
-									mTvAnswerTimer
-											.setText(String
-													.valueOf((int) millisUntilFinished / 1000));
-								}
-							}.start();
+							mTvAnswerResult.setText("True Answer: " + strTrueAnswer
+									+ ".\nYou are false!");
 						}
 					}
 				} catch (Exception e) {
@@ -404,7 +410,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 			MemberScoreHolder holder;
 			if (convertView == null) {
 				convertView = inflater.inflate(
-						R.layout.play_game_listview_answer_row, null);
+						R.layout.room_play_answer_row, null);
 	
 				holder = new MemberScoreHolder();
 				holder.tvIndex = (TextView) convertView
@@ -415,29 +421,32 @@ public class RoomPlay extends Activity implements IRequestServer,
 						.findViewById(R.id.cl_tv_answer);
 				holder.tvScore = (TextView) convertView
 						.findViewById(R.id.cl_tv_score);
-				holder.tvAbility = (TextView) convertView
-						.findViewById(R.id.cl_tv_ability);
-				holder.tvCombo = (TextView) convertView
-						.findViewById(R.id.cl_tv_combo);
+				holder.tvInfo = (TextView) convertView
+						.findViewById(R.id.cl_tv_info);
 	
 				convertView.setTag(holder);
 			} else {
 				holder = (MemberScoreHolder) convertView.getTag();
 			}
+			
+			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+					AbsListView.LayoutParams.FILL_PARENT, 40);
+			convertView.setLayoutParams(lp);
+			
 			MemberScore member = alMembers.get(position);
-			holder.tvIndex.setText(String.valueOf(position));
+			holder.tvIndex.setText((position+1)+"");
 			holder.tvUserName.setText(member.getStrUserName());
 			holder.tvAnswer.setText(member.getStrQuestionAnswer());
 			holder.tvScore.setText(member.getStrScore());
-			holder.tvAbility.setText(member.getStrAbility());
-			holder.tvCombo.setText(member.getStrCombo());
+			holder.tvInfo.setText(member.getStrAbility() + ", " + 
+								member.getStrCombo());
 	
 			return convertView;
 		}
 	}
 
 	static class MemberScoreHolder {
-		TextView tvIndex, tvUserName, tvAnswer, tvScore, tvAbility, tvCombo;
+		TextView tvIndex, tvUserName, tvAnswer, tvScore, tvInfo;
 	}
 
 }

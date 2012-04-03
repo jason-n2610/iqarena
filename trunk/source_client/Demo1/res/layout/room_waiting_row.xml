@@ -5,13 +5,36 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/room_waiting_row_username"
+        android:id="@+id/room_waiting_row_tv_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="6dp"
-        android:text="TextView" />
+        android:layout_marginLeft="5dp"
+        android:text="0" />
+    
+    <View 
+        android:layout_width="2dp"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/room_waiting_row_tv_index"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/room_waiting_row_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/room_waiting_row_tv_index"
+        android:text="username" />
+    
+    <View 
+        android:layout_width="2dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="60dp"
+        android:background="@color/white"/>
 
     <ImageButton
         android:id="@+id/room_waiting_ib_logout"
@@ -19,9 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/grid_selector"
-        android:padding="8dp"
         android:layout_marginRight="6dp"
+        android:background="@drawable/grid_selector"
+        android:contentDescription="log out"
+        android:padding="8dp"
         android:src="@drawable/ic_log_out" />
 
 </RelativeLayout>

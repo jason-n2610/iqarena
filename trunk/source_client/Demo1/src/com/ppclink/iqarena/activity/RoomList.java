@@ -39,62 +39,6 @@ import com.ppclink.iqarena.ultil.FilterResponse;
 public class RoomList extends Activity implements IRequestServer, ICheckServer,
 		OnClickListener {
 
-	public class RoomListAdapter extends ArrayAdapter<Room> {
-
-		private LayoutInflater mInflater;
-		private ArrayList<Room> mListRoom;
-
-		public RoomListAdapter(Context context, ArrayList<Room> objects) {
-			super(context, 1, objects);
-			mInflater = LayoutInflater.from(context);
-			mListRoom = objects;
-		}
-
-		@Override
-		public View getView(final int position, View convertView,
-				ViewGroup parent) {
-			ViewHolder holder;
-
-			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.room_list_row, null);
-
-				holder = new ViewHolder();
-				holder.tvRoomName = (TextView) convertView
-						.findViewById(R.id.tv_room_name);
-				holder.tvOwnerName = (TextView) convertView
-						.findViewById(R.id.tv_owner_name);
-				holder.tvBetScore = (TextView) convertView
-						.findViewById(R.id.tv_bet_score);
-
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-			}
-
-			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT, 40);
-			convertView.setLayoutParams(lp);
-
-			final Room room = mListRoom.get(position);
-
-			holder.tvRoomName.setText(room.getRoomName());
-			holder.tvOwnerName.setText(room.getOwnerName());
-			holder.tvBetScore.setText(String.valueOf(room.getBetScore()));
-
-			return convertView;
-		}
-
-		@Override
-		public Room getItem(int position) {
-			return super.getItem(position);
-		}
-
-	}
-
-	static class ViewHolder {
-		TextView tvRoomName, tvOwnerName, tvBetScore;
-	}
-
 	RoomListAdapter adapter = null;
 	ArrayList<Room> alRooms = null;
 
@@ -111,26 +55,6 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 	String roomID;
 
 	String TAG = "RoomListActivity";
-
-	@Override
-	public void onCheckServerComplete(String result) {
-		getParent().setProgressBarIndeterminateVisibility(true);
-		mRequestServer = new RequestServer(this);
-		mRequestServer.getListRoom();
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.room_btn_new_room:
-			Intent i = new Intent(getApplicationContext(), CreateNewRoom.class);
-			startActivity(i);
-			break;
-
-		default:
-			break;
-		}
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +107,41 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 		if (mCheckServer != null) {
 			mCheckServer.cancel(true);
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mCheckServer != null) {
+			if (mCheckServer.isCancelled()) {
+				// task is cancel true
+				mCheckServer = new CheckServer(this);
+				mCheckServer.checkChangeRoom();
+			}
+		}
+		mRequestServer = new RequestServer(this);
+		mRequestServer.getListRoom();
+		getParent().setProgressBarIndeterminateVisibility(true);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.room_btn_new_room:
+			Intent i = new Intent(getApplicationContext(), CreateNewRoom.class);
+			startActivity(i);
+			break;
+	
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onCheckServerComplete(String result) {
+		getParent().setProgressBarIndeterminateVisibility(true);
+		mRequestServer = new RequestServer(this);
+		mRequestServer.getListRoom();
 	}
 
 	// khi lay duoc du lieu get_list_room tu server
@@ -250,19 +209,60 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (mCheckServer != null) {
-			if (mCheckServer.isCancelled()) {
-				// task is cancel true
-				mCheckServer = new CheckServer(this);
-				mCheckServer.checkChangeRoom();
-			}
+	public class RoomListAdapter extends ArrayAdapter<Room> {
+	
+		private LayoutInflater mInflater;
+		private ArrayList<Room> mListRoom;
+	
+		public RoomListAdapter(Context context, ArrayList<Room> objects) {
+			super(context, 1, objects);
+			mInflater = LayoutInflater.from(context);
+			mListRoom = objects;
 		}
-		mRequestServer = new RequestServer(this);
-		mRequestServer.getListRoom();
-		getParent().setProgressBarIndeterminateVisibility(true);
+	
+		@Override
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
+			ViewHolder holder;
+	
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.room_list_row, null);
+	
+				holder = new ViewHolder();
+				holder.tvRoomName = (TextView) convertView
+						.findViewById(R.id.tv_room_name);
+				holder.tvOwnerName = (TextView) convertView
+						.findViewById(R.id.tv_owner_name);
+				holder.tvBetScore = (TextView) convertView
+						.findViewById(R.id.tv_bet_score);
+	
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+	
+			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT, 40);
+			convertView.setLayoutParams(lp);
+	
+			final Room room = mListRoom.get(position);
+	
+			holder.tvRoomName.setText(room.getRoomName());
+			holder.tvOwnerName.setText(room.getOwnerName());
+			holder.tvBetScore.setText(String.valueOf(room.getBetScore()));
+	
+			return convertView;
+		}
+	
+		@Override
+		public Room getItem(int position) {
+			return super.getItem(position);
+		}
+	
+	}
+
+	static class ViewHolder {
+		TextView tvRoomName, tvOwnerName, tvBetScore;
 	}
 
 }

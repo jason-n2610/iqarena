@@ -20,10 +20,10 @@ public class Config {
 	public static final String REQUEST_JOIN_ROOM = "join_room";
 	// public static final String REQUEST_SERVER_ADDR =
 	// "http://hoangnh29.byethost12.com";
-	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.108/iqarena/source_server/index.php";
+//	public static final String REQUEST_SERVER_ADDR = "http://192.168.1.108/iqarena/source_server/index.php";
 	public static final String REQUEST_LOGIN = "login";
 	public static final String REQUEST_PLAY_GAME = "play_game";
 	public static final String REQUEST_REGISTER = "register";
 	public static final String REQUEST_REMOVE_ROOM = "remove_room";
-//	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 }
