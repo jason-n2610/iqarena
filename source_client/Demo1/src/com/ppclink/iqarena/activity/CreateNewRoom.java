@@ -9,12 +9,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.communication.RequestServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
@@ -25,7 +26,7 @@ import com.ppclink.iqarena.ultil.FilterResponse;
  * 
  */
 public class CreateNewRoom extends Activity implements OnClickListener,
-		IRequestServer {
+		OnItemSelectedListener, IRequestServer {
 
 	Button btnCreate;
 	EditText etRoomName;
@@ -115,7 +116,9 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		spTimePerQuestion.setAdapter(aaTimePerQuestion);
 
 		spTimePerQuestion.setSelection(2);
-		spMaxNumber.setSelection(4);
+		spMaxNumber.setSelection(3);
+		
+		spBetScore.setOnItemSelectedListener(this);
 	}
 
 	// interface IRequestServer
@@ -164,5 +167,25 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		}
 		btnCreate.setEnabled(true);
 		setProgressBarIndeterminateVisibility(false);
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
+			long id) {
+		int betScore = (pos+5)*100;
+		if (betScore > (int)FilterResponse.userInfo.getScoreLevel()){
+			btnCreate.setEnabled(false);
+			tvResult.setVisibility(View.VISIBLE);
+			tvResult.setText("Không đủ điểm để tham gia cược");
+		}
+		else{
+			btnCreate.setEnabled(true);
+			tvResult.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		
 	}
 }

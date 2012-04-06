@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -18,22 +19,6 @@ import com.ppclink.iqarena.R;
 
 public class TabHostMain extends TabActivity {
 
-	private View createTabView(final Context context, final String text) {
-		View view = LayoutInflater.from(context).inflate(
-				R.layout.tah_host_menu_item, null);
-		TextView tv = (TextView) view.findViewById(R.id.tabsText);
-		tv.setText(text);
-		return view;
-	}
-
-	TabHost mTabHost;
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		overridePendingTransition(R.anim.incoming, R.anim.outgoing);
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,22 +26,32 @@ public class TabHostMain extends TabActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.tab_host_menu);
+		LinearLayout llMain = (LinearLayout) findViewById(R.id.tab_host_ll_main);
+		llMain.setBackgroundResource(R.drawable.bg_app_sky_night);
 		mTabHost = getTabHost();
 		Intent intent;
-
+	
 		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
-
+	
 		intent = new Intent().setClass(this, RoomList.class);
 		setupTab("Room", intent);
-
+	
 		intent = new Intent().setClass(this, UserInfo.class);
 		setupTab("User info", intent);
-
+	
 		intent = new Intent().setClass(this, Friend.class);
 		setupTab("Friends", intent);
-
+	
 		mTabHost.setCurrentTab(1);
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(R.anim.incoming, R.anim.outgoing);
+	}
+
+	TabHost mTabHost;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,6 +78,14 @@ public class TabHostMain extends TabActivity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private View createTabView(final Context context, final String text) {
+		View view = LayoutInflater.from(context).inflate(
+				R.layout.tah_host_menu_item, null);
+		TextView tv = (TextView) view.findViewById(R.id.tabsText);
+		tv.setText(text);
+		return view;
 	}
 
 	private void setupTab(final String tag, final Intent intent) {

@@ -3,95 +3,83 @@
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_app2"
-    	android:scrollbars="none"
-    android:padding="10dip" >
+    android:padding="10dip"
+    android:scrollbars="none" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:background="@drawable/bg_form1"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="25dp"
+        android:paddingTop="10dp" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/login_result"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_form1"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="25dp"
-            android:paddingTop="10dp" >
+            android:text="@string/login_result"
+            android:textColor="#00e673"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/login_result"
-                android:text="@string/login_result"
+        <TextView
+            style="@style/TextViewStyle"
+            android:text="@string/login_username_title" />
+
+        <EditText
+            android:id="@+id/login_username"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            style="@style/TextViewStyle"
+            android:text="@string/login_password_title" />
+
+        <EditText
+            android:id="@+id/login_password"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:inputType="textPassword"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="8dp" >
+
+            <CheckBox
+                android:id="@+id/ckRemember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#00e673"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/login_remember" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:paddingLeft="10dip"
+            android:paddingTop="8dip" >
+
+            <Button
+                android:id="@+id/login_login"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_style1"
+                android:padding="10.0dip"
+                android:text="@string/login_signin"
+                android:textColor="#ffffffff"
                 android:textStyle="bold" />
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:text="@string/login_username_title" />
-
-            <EditText
-                android:id="@+id/login_username"
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:inputType="textEmailAddress" />
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:text="@string/login_password_title" />
-
-            <EditText
-                android:id="@+id/login_password"
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:inputType="textPassword"
-                android:password="true" />
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:paddingTop="8dp" >
-
-                <CheckBox
-                    android:id="@+id/ckRemember"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/login_remember" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:layout_marginBottom="15dp"
-                android:paddingTop="8dip" >
-
-                <Button
-                    android:id="@+id/login_login"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/button_style1"
-                    android:padding="10.0dip"
-                    android:text="@string/login_signin"
-                    android:textColor="#ffffffff"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

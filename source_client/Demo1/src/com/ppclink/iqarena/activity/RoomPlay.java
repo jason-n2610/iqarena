@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 	RadioGroup mRgAnswer; // answer group
 
 	String mStrQuestionId = null;
+	String strTrueAnswer = null;
 	String mStrRoomId; // room_id
 
 	int mTimePerQuestion, mMemberId;
@@ -310,6 +312,21 @@ public class RoomPlay extends Activity implements IRequestServer,
 				try {
 					FilterResponse.filter(sResult);
 					if (FilterResponse.value) {
+						// lay ve cau tra loi dung
+						strTrueAnswer = new String(
+								FilterResponse.mTrueAnswer);
+						if (strTrueAnswer.equals("1")) {
+							strTrueAnswer = "A";
+						} else if (strTrueAnswer.equals("2")) {
+							strTrueAnswer = "B";
+						}
+						else if (strTrueAnswer.equals("3")) {
+							strTrueAnswer = "C";
+						}
+						else if (strTrueAnswer.equals("4")) {
+							strTrueAnswer = "D";
+						}
+						
 						// hien thi danh sach nguoi choi trong room va phan tra
 						// loi cua moi nguoi
 						ArrayList<MemberScore> temp = FilterResponse.mListMembersScore;
@@ -322,6 +339,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 							mAdapterAnswer.notifyDataSetChanged();
 							mLvResult.setVisibility(View.VISIBLE);
 						}
+						
+						
 
 						// hien thi cau tra loi dung
 						// so sanh xem cau tra loi cua nguoi choi dung hay ko,
@@ -330,75 +349,50 @@ public class RoomPlay extends Activity implements IRequestServer,
 						if (mAnswer.equals(FilterResponse.mTrueAnswer)) {
 							// reset lai cau tra loi
 							mAnswer = "0";
-							String strTrueAnswer = new String(
-									FilterResponse.mTrueAnswer);
-							if (strTrueAnswer.equals("1")) {
-								strTrueAnswer = "A";
-							} else if (strTrueAnswer.equals("2")) {
-								strTrueAnswer = "B";
-							}
-							if (strTrueAnswer.equals("3")) {
-								strTrueAnswer = "C";
-							}
-							if (strTrueAnswer.equals("4")) {
-								strTrueAnswer = "D";
-							}
 							mTvAnswerResult.setText("True Answer: " + strTrueAnswer
 									+ "\nYou are true!");
-							mTvAnswerInfo.setText("Next question in:");
-							// hien thi dong ho dem nguoc de cho cau tiep theo
-							new CountDownTimer(10000, 1000) {
+							// truong hop cuoc choi con tiep tuc
+							if (FilterResponse.question != null){
+								mTvAnswerInfo.setText("Next question in:");
+								// hien thi dong ho dem nguoc de cho cau tiep theo
+								new CountDownTimer(10000, 1000) {
 
-								@Override
-								public void onFinish() {
-									showLayout();
-									mCurQuestion++;
-									mTvQuestionTitle.setText("Question "
-											+ mCurQuestion);
-									Question question = FilterResponse.question;
-									mStrQuestionId = question.getmStrId();
-									mTvQuestion.setText(question
-											.getmStrContent());
-									mRbA.setText(question.getmStrAnswerA());
-									mRbB.setText(question.getmStrAnswerB());
-									mRbC.setText(question.getmStrAnswerC());
-									mRbD.setText(question.getmStrAnswerD());
-								}
+									@Override
+									public void onFinish() {
+										showLayout();
+										mCurQuestion++;
+										mTvQuestionTitle.setText("Question "
+												+ mCurQuestion);
+										Question question = FilterResponse.question;
+										mStrQuestionId = question.getmStrId();
+										mTvQuestion.setText(question
+												.getmStrContent());
+										mRbA.setText(question.getmStrAnswerA());
+										mRbB.setText(question.getmStrAnswerB());
+										mRbC.setText(question.getmStrAnswerC());
+										mRbD.setText(question.getmStrAnswerD());
+									}
 
-								@Override
-								public void onTick(long millisUntilFinished) {
-									mTvAnswerTimer
-											.setText(String
-													.valueOf((int) millisUntilFinished / 1000));
-								}
-							}.start();
+									@Override
+									public void onTick(long millisUntilFinished) {
+										mTvAnswerTimer
+												.setText(String
+														.valueOf((int) millisUntilFinished / 1000));
+									}
+								}.start();
+							}
 						}
 						// truong hop nguoi choi tra loi sai, quay tro lai
 						// roomlist
 						else {
 							mTvAnswerInfo.setText("Press back button to exit!");
 							mTvAnswerTimer.setVisibility(View.GONE);
-							String strTrueAnswer = FilterResponse.mTrueAnswer;
-							if (strTrueAnswer.equals("1")) {
-								strTrueAnswer = "A";
-							} else if (strTrueAnswer.equals("2")) {
-								strTrueAnswer = "B";
-							}
-							if (strTrueAnswer.equals("3")) {
-								strTrueAnswer = "C";
-							}
-							if (strTrueAnswer.equals("4")) {
-								strTrueAnswer = "D";
-							}
 							mTvAnswerResult.setText("True Answer: " + strTrueAnswer
 									+ ".\nYou are false!");
 						}
 					}
 				} catch (Exception e) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setTitle("Error");
-					builder.setMessage(e.getMessage());
-					builder.create().show();
+					Log.e("RoomPlay", e.getMessage());
 				}
 			}
 		}
@@ -450,7 +444,14 @@ public class RoomPlay extends Activity implements IRequestServer,
 			holder.tvScore.setText(member.getStrScore());
 			holder.tvInfo.setText(member.getStrAbility() + ", " + 
 								member.getStrCombo());
-	
+			
+			if (member.getStrQuestionAnswer().equals(strTrueAnswer)){
+				holder.tvUserName.setTextColor(Color.BLUE);
+			}
+			else{
+				holder.tvUserName.setTextColor(Color.RED);
+			}
+			
 			return convertView;
 		}
 	}
