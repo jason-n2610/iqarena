@@ -213,7 +213,7 @@ public class FilterResponse {
 						String userId = json_data.getString("user_id");
 						String username = json_data.getString("username");
 						String lastAnswer = json_data.getString("last_answer");
-						if (lastAnswer.equals("null")) {
+						if (lastAnswer.equals("null") || lastAnswer.equals("0")) {
 							lastAnswer = "-";
 						} else if (lastAnswer.equals("1")) {
 							lastAnswer = "A";

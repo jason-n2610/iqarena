@@ -90,9 +90,10 @@
         // nguoi choi tra loi sai, xoa khoi table room_members
         else
         {
+            sleep(3);
             RoomMembers::removeMemberInRoom($_POST['member_id']);
         }
-        // ket thuc choi json
+        // ket thuc chuoi json
         echo '}';
 
 

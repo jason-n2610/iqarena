@@ -61,10 +61,9 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	}
 
 	// answer question
-	public void answerQuestion(String strRoomId, String strMemberId,
-			String strUserId, String strQuesId, String strAnswer) {
+	public void answerQuestion(String strMemberId, String strRoomId, String strQuesId, String strAnswer) {
 		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
-		this.execute(strRoomId, strMemberId, strUserId, strQuesId, strAnswer);
+		this.execute(strMemberId, strRoomId, strQuesId, strAnswer);
 	}
 
 	// create new room
@@ -187,19 +186,17 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				break;
 
 			case REQUEST_ANSWER_QUESTION:
-				nameValuePairs = new ArrayList<NameValuePair>(6);
+				nameValuePairs = new ArrayList<NameValuePair>(5);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_ANSWER_QUESTION));
-				nameValuePairs
-						.add(new BasicNameValuePair("room_id", params[0]));
 				nameValuePairs.add(new BasicNameValuePair("member_id",
+						params[0]));
+				nameValuePairs.add(new BasicNameValuePair("room_id",
 						params[1]));
-				nameValuePairs
-						.add(new BasicNameValuePair("user_id", params[2]));
 				nameValuePairs.add(new BasicNameValuePair("question_id",
-						params[3]));
+						params[2]));
 				nameValuePairs.add(new BasicNameValuePair("question_answer",
-						params[4]));
+						params[3]));
 				break;
 
 			case REQUEST_GET_MEMBERS_ANSWER:

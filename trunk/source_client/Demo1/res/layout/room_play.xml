@@ -16,23 +16,24 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1.2"
+            android:layout_weight="1.5"
             android:baselineAligned="false"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="4" >
+                android:layout_weight="8" >
 
                 <TextView
                     android:id="@+id/play_game_tv_question_title"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="bold"
                     android:text="Question #"
                     android:textColor="#ffffffff"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -95,21 +96,34 @@
                     android:background="@drawable/bg_form1"
                     android:padding="10dp" >
 
-                    <ImageButton
-                        android:id="@+id/imageButton1"
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/room_play_btn_help_x2"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/grid_selector"
-                        android:padding="5dp"
-                        android:src="@android:drawable/btn_star" />
+                        android:background="@drawable/button_style1"
+                        android:text="x2"
+                        android:textStyle="bold"
+                        android:textColor="#ffffffff" />
 
-                    <ImageButton
-                        android:id="@+id/imageButton2"
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/room_play_btn_help_release"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/grid_selector"
-                        android:padding="5dp"
-                        android:src="@android:drawable/btn_star" />
+                        android:background="@drawable/button_style1"
+                        android:text="-25%"
+                        android:textStyle="bold"
+                        android:textColor="#ffffffff"/>
+
+                    <Button
+                        android:id="@+id/button3"
+                        android:layout_width="65dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_style1"
+                        android:text="#"
+                        android:textStyle="bold"
+                        android:textColor="#ffffffff" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -189,10 +203,11 @@
             android:id="@+id/play_game_answer_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="Answer"
             android:textColor="#ffffffff"
-            android:textSize="25sp" />
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/play_game_answer_ll_info"

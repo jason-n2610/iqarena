@@ -63,12 +63,32 @@
         }
 
         // answer question
-        public static function answerQuestion($room_id, $user_id, $question_id, $last_answer)
+        public static function answerQuestion($member_id, $question_id, $last_answer)
         {
             $query = "  UPDATE  room_members
                         SET     question_id='{$question_id}', last_answer='{$last_answer}'
-                        WHERE   room_id = '{$room_id}' AND user_id='{$user_id}'";
+                        WHERE   room_member_id = '{$member_id}'";
             $result = @mysql_query($query) or die('answerQuestion() ' . mysql_error());
+            return $result;
+        }
+
+        // update score
+        public static function updateScore($member_id, $score)
+        {
+            $query = "  UPDATE  room_members
+                        SET     score = score + '{$score}'
+                        WHERE   room_member_id = '{$member_id}'";
+            $result = @mysql_query($query) or die('updateScore() ' . mysql_error());
+            return $result;
+        }
+
+        // get question_id cua member
+        public static function getQuestionIdOfMember($member_id)
+        {
+            $query = "  SELECT  question_id
+                        FROM    room_members
+                        WHERE   room_member_id = '{$member_id}'";
+            $result = @mysql_query($query) or die('getQuestionIdOfMember() ' . mysql_error());
             return $result;
         }
     }

@@ -84,7 +84,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		tvResult.setVisibility(View.GONE);
 
 		ArrayList<Integer> alMaxNumber = new ArrayList<Integer>();
-		for (int i = 0; i < 19; i++) {
+		for (int i = 0; i < 9; i++) {
 			alMaxNumber.add(i + 2);
 		}
 		ArrayList<Integer> alBetScore = new ArrayList<Integer>();
@@ -115,6 +115,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		spTimePerQuestion.setAdapter(aaTimePerQuestion);
 
 		spTimePerQuestion.setSelection(2);
+		spMaxNumber.setSelection(4);
 	}
 
 	// interface IRequestServer

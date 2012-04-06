@@ -53,7 +53,7 @@ CREATE TABLE room_members (
 	member_type tinyint unsigned not null,	-- chu phong hay ko?
     question_id int unsigned,
     graft_id int unsigned,
-    score float,
+    score float not null,
     combo tinyint,
 	last_answer tinyint unsigned,
     PRIMARY KEY (room_member_id)
