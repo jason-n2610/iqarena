@@ -38,7 +38,6 @@ public class FilterResponse {
 	public static boolean filter(String input) {
 		boolean result = false;
 		try {
-			Log.i(TAG, input);
 			JSONObject jObject = new JSONObject(input);
 			String typeMessage = jObject.getString("type");
 
@@ -52,7 +51,6 @@ public class FilterResponse {
 					String jInfo = jObject.getString("info");
 					JSONArray jArray = new JSONArray(jInfo);
 					int length = jArray.length();
-					Log.i(TAG, "length: " + length);
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						int userId = json_data.getInt("user_id");
@@ -80,7 +78,6 @@ public class FilterResponse {
 					String jInfo = jObject.getString("info");
 					JSONArray jArray = new JSONArray(jInfo);
 					int length = jArray.length();
-					Log.i(TAG, "length: " + length);
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						int userId = json_data.getInt("user_id");
@@ -108,14 +105,12 @@ public class FilterResponse {
 
 			// message 'get_list_room'
 			else if (typeMessage.equals(Config.REQUEST_GET_LIST_ROOM)) {
-				Log.i(TAG, "get list room");
 				value = jObject.getBoolean("value");
 				// truong hop co room tra ve
 				if (value) {
 					String jInfo = jObject.getString("info");
 					JSONArray jArray = new JSONArray(jInfo);
 					int length = jArray.length();
-					Log.i(TAG, "length: " + length);
 					mListRoom.clear();
 					for (int i = 0; i < length; i++) {
 						Room room;
@@ -158,7 +153,6 @@ public class FilterResponse {
 					String jMembers = jObject.getString("members");
 					JSONArray jArray = new JSONArray(jMembers);
 					int length = jArray.length();
-					Log.i(TAG, "length: " + length);
 					mListMemberInRoom.clear();
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
@@ -204,7 +198,6 @@ public class FilterResponse {
 					String jMembers = jObject.getString("answers");
 					JSONArray jArray = new JSONArray(jMembers);
 					int length = jArray.length();
-					Log.i(TAG, "length: " + length);
 					mListMembersScore.clear();
 					for (int i = 0; i < length; i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
@@ -249,7 +242,8 @@ public class FilterResponse {
 					// theo neu co
 
 					mTrueAnswer = jObject.getString("answer");
-					if (input.contains("next_question")) {
+					question = null;
+					if (jObject.has("next_question")) {
 						String strId = null, strQuestion = null, strA = null, strB = null, strC = null, strD = null;
 						String jQuestion = jObject.getString("next_question");
 						JSONArray jArray1 = new JSONArray(jQuestion);
@@ -263,7 +257,6 @@ public class FilterResponse {
 							strC = json_data.getString("answer_c");
 							strD = json_data.getString("answer_d");
 						}
-						question = null;
 						question = new Question(strId, strQuestion, strA, strB,
 								strC, strD);
 					}

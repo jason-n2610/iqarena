@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_list1"
+    android:background="@drawable/bg_app_sky_night"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -320,9 +320,7 @@
                 android:id="@+id/play_game_lv_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/room_play_line_header"
-                android:clickable="true"
-                android:listSelector="@drawable/grid_selector" >
+                android:layout_below="@+id/room_play_line_header">
             </ListView>
         </RelativeLayout>
     </RelativeLayout>

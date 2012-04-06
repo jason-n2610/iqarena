@@ -1,0 +1,4 @@
+﻿Trừ điểm của các members khi chủ phòng ấn nút start
+Cộng điểm đặt cược cho winner
+Cộng điểm cược chia đều cho nhiều người chơi khi ko tìm ra được người chiến thắng cuối cùng.
+xử lý các trợ giúp

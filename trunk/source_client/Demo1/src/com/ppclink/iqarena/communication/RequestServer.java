@@ -52,25 +52,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_REMOVE_ROOM
 	}
 
-	private IRequestServer delegate;;
-
-	private REQUEST_TYPE requestType;
-
 	public RequestServer(IRequestServer delegate) {
 		this.delegate = delegate;
-	}
-
-	// answer question
-	public void answerQuestion(String strMemberId, String strRoomId, String strQuesId, String strAnswer) {
-		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
-		this.execute(strMemberId, strRoomId, strQuesId, strAnswer);
-	}
-
-	// create new room
-	public void createNewRoom(String strRoomName, String strMaxMem,
-			String strBetScore, String strTimePerQuestion) {
-		this.requestType = REQUEST_TYPE.REQUEST_CREATE_NEW_ROOM;
-		this.execute(strRoomName, strMaxMem, strBetScore, strTimePerQuestion);
 	}
 
 	@Override
@@ -80,12 +63,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpParameters, 15000);
 			HttpConnectionParams.setSoTimeout(httpParameters, 15000);
-
+	
 			HttpClient httpClient = new DefaultHttpClient(httpParameters);
 			HttpPost httpPost = new HttpPost(Config.REQUEST_SERVER_ADDR);
 			// post data
 			List<NameValuePair> nameValuePairs = null;
-
+	
 			switch (requestType) {
 			case REQUEST_LOGIN:
 				nameValuePairs = new ArrayList<NameValuePair>(3);
@@ -97,7 +80,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						.md5(params[1])));
 				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				break;
-
+	
 			case REQUEST_REGISTER:
 				nameValuePairs = new ArrayList<NameValuePair>(4);
 				nameValuePairs.add(new BasicNameValuePair("message",
@@ -108,7 +91,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						.md5(params[1])));
 				nameValuePairs.add(new BasicNameValuePair("email", params[2]));
 				break;
-
+	
 			case REQUEST_GET_LIST_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(1);
 				nameValuePairs.add(new BasicNameValuePair("message",
@@ -176,7 +159,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
-
+	
 			case REQUEST_GET_QUESTION:
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
@@ -184,13 +167,15 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
-
+	
 			case REQUEST_ANSWER_QUESTION:
-				nameValuePairs = new ArrayList<NameValuePair>(5);
+				nameValuePairs = new ArrayList<NameValuePair>(6);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_ANSWER_QUESTION));
 				nameValuePairs.add(new BasicNameValuePair("member_id",
 						params[0]));
+				nameValuePairs.add(new BasicNameValuePair("user_id",
+						String.valueOf(FilterResponse.userInfo.getUserId())));
 				nameValuePairs.add(new BasicNameValuePair("room_id",
 						params[1]));
 				nameValuePairs.add(new BasicNameValuePair("question_id",
@@ -198,7 +183,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("question_answer",
 						params[3]));
 				break;
-
+	
 			case REQUEST_GET_MEMBERS_ANSWER:
 				nameValuePairs = new ArrayList<NameValuePair>(4);
 				nameValuePairs.add(new BasicNameValuePair("message",
@@ -211,10 +196,10 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						params[2]));
 				nameValuePairs.add(new BasicNameValuePair("answer", params[3]));
 				break;
-
+	
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
+	
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			int responseCode = httpResponse.getStatusLine().getStatusCode();
 			switch (responseCode) {
@@ -242,8 +227,31 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		} catch (IOException e) {
 			result = e.getMessage();
 		}
-
+	
 		return result;
+	}
+
+	private IRequestServer delegate;;
+
+	private REQUEST_TYPE requestType;
+
+	@Override
+	protected void onPostExecute(String result) {
+		super.onPostExecute(result);
+		delegate.onRequestComplete(result);
+	}
+
+	// answer question
+	public void answerQuestion(String strMemberId, String strRoomId, String strQuesId, String strAnswer) {
+		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
+		this.execute(strMemberId, strRoomId, strQuesId, strAnswer);
+	}
+
+	// create new room
+	public void createNewRoom(String strRoomName, String strMaxMem,
+			String strBetScore, String strTimePerQuestion) {
+		this.requestType = REQUEST_TYPE.REQUEST_CREATE_NEW_ROOM;
+		this.execute(strRoomName, strMaxMem, strBetScore, strTimePerQuestion);
 	}
 
 	// exit room
@@ -259,7 +267,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	}
 
 	// get other members answer
-	public void getMembersAnswer(String strRoomId, String strMemberId,
+	public void getMembersAnswer(String strRoomId, String strMemberId, 
 			String strQuestionId, String strAnswer) {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_MEMBERS_ANSWER;
 		this.execute(strRoomId, strMemberId, strQuestionId, strAnswer);
@@ -297,12 +305,6 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void login(String username, String password) {
 		this.requestType = REQUEST_TYPE.REQUEST_LOGIN;
 		this.execute(username, password);
-	}
-
-	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
-		delegate.onRequestComplete(result);
 	}
 
 	// play game

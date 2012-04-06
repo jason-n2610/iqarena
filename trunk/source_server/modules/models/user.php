@@ -45,6 +45,19 @@
             $result = @mysql_query($query) or die('getUserByUserName(): ' . mysql_error());
             return $result;
         }
+        
+        // get score dung de lay diem cua user -> kiem tra join_room
+        public static function getScore($user_id){
+            
+            $query = "  SELECT
+                            score_level
+                        FROM
+                            users
+                        WHERE
+                            user_id = '{$user_id}' ";
+            $result = @mysql_query($query) or die('getScore(): ' . mysql_error());
+            return $result;
+        }        
 
         // kiem tra account da ton tai chua
         public static function checkUserLogin($username, $password)
@@ -89,6 +102,15 @@
                                 '{$power_user}',
                                 '{$money}' )";
             $result = mysql_query($query) or die('addUser(): ' . mysql_error());
+            return $result;
+        }
+        
+        // update score
+        public static function updateScore($user_id, $member_id){
+            $query = "  UPDATE users
+                        SET score_level = score_level + (SELECT score FROM room_members WHERE room_member_id = '{$member_id}')
+                        WHERE user_id = '{$user_id}'";
+            $result = mysql_query($query) or die('updateScore(): ' . mysql_error());
             return $result;
         }
     }

@@ -91,6 +91,27 @@
             $result = @mysql_query($query) or die('getQuestionIdOfMember() ' . mysql_error());
             return $result;
         }
+        
+        // kiểm tra xem người chơi cập nhật câu trả lời chưa
+        // nếu chưa thì cập nhật câu trả lời hiện tại của người chơi là NULL
+        public static function checkMemberSubmitAnswer($member_id, $question_id, $last_answer)
+        {
+//            $query = " SELECT IF (
+//                                (SELECT question_id
+//                                 FROM   room_members
+//                                 WHERE  room_member_id = '{$member_id}')
+//                                = '{$question_id}',
+//                                0,
+//                                (UPDATE room_members
+//                                SET    last_answer=0
+//                                WHERE  room_member_id = '{$member_id}')
+//                            )";
+            $query = "  UPDATE room_members
+                        SET last_answer = IF(question_id='{$question_id}',last_answer, 0)
+                        WHERE room_member_id = '{$member_id}'";
+            $result = @mysql_query($query) or die ('checkMemberSubmitAnswer' . mysql_error());
+            return $result;
+        }
     }
 
 ?>
