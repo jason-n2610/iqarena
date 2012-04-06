@@ -48,6 +48,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 	ArrayList<MemberScore> mAlAnswer = new ArrayList<MemberScore>();
 	String mAnswer = "0"; // luu cau tra loi cua user
 	Button mBtnSummit; // summit
+	// button help 
+	Button mBtnHelpX2, mBtnHelpRelease;
 	private int mCurQuestion = 1;
 	// layout cho question va answer
 	LinearLayout mLlQuestion;
@@ -88,7 +90,11 @@ public class RoomPlay extends Activity implements IRequestServer,
 		mRbB = (RadioButton) findViewById(R.id.play_game_answer_b);
 		mRbC = (RadioButton) findViewById(R.id.play_game_answer_c);
 		mRbD = (RadioButton) findViewById(R.id.play_game_answer_d);
-	
+		
+		// button help
+		mBtnHelpX2 = (Button) findViewById(R.id.room_play_btn_help_x2);
+		mBtnHelpRelease = (Button) findViewById(R.id.room_play_btn_help_release);
+		
 		// answer
 		mRlAnswer = (RelativeLayout) findViewById(R.id.play_game_layout_answer);
 		mTvAnswerResult = (TextView) findViewById(R.id.play_game_tv_result);
@@ -119,6 +125,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 			// hien thi phan tra loi
 			mRlAnswer.setVisibility(View.VISIBLE);
 			mLlQuestion.setVisibility(View.GONE);
+			mLvResult.setVisibility(View.INVISIBLE);
 			setProgressBarIndeterminateVisibility(true);
 			
 			mTvAnswerInfo.setText("");
@@ -209,9 +216,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 				}
 			}
 			mRequestServer = new RequestServer(this);
-			mRequestServer.answerQuestion(mStrRoomId,
-					String.valueOf(mMemberId),
-					String.valueOf(FilterResponse.userInfo.getUserId()),
+			mRequestServer.answerQuestion(
+					String.valueOf(mMemberId), mStrRoomId,
 					mStrQuestionId, mAnswer);
 			break;
 
@@ -314,6 +320,7 @@ public class RoomPlay extends Activity implements IRequestServer,
 								mAlAnswer.add(temp.get(i));
 							}
 							mAdapterAnswer.notifyDataSetChanged();
+							mLvResult.setVisibility(View.VISIBLE);
 						}
 
 						// hien thi cau tra loi dung
@@ -321,6 +328,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 						// neu dung thi hien thi
 						// cau hoi tiep da dc lay ve
 						if (mAnswer.equals(FilterResponse.mTrueAnswer)) {
+							// reset lai cau tra loi
+							mAnswer = "0";
 							String strTrueAnswer = new String(
 									FilterResponse.mTrueAnswer);
 							if (strTrueAnswer.equals("1")) {
@@ -335,7 +344,8 @@ public class RoomPlay extends Activity implements IRequestServer,
 								strTrueAnswer = "D";
 							}
 							mTvAnswerResult.setText("True Answer: " + strTrueAnswer
-									+ ".\nYou are true!");
+									+ "\nYou are true!");
+							mTvAnswerInfo.setText("Next question in:");
 							// hien thi dong ho dem nguoc de cho cau tiep theo
 							new CountDownTimer(10000, 1000) {
 

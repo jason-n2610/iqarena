@@ -111,6 +111,14 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				is.close();
 				result = sb.toString();
 				Log.i(TAG, "result:" + result);
+				if (result.equals("play")){
+					onPostExecute(result);
+					break;
+				}
+				else if (result.equals("exit")){
+					onPostExecute(result);
+					break;
+				}
 				if (oldResult == null) {
 					oldResult = result;
 				}

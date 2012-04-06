@@ -13,7 +13,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Html;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.MemberScore;
-import com.ppclink.iqarena.object.User;
 import com.ppclink.iqarena.ultil.FilterResponse;
 
 /**
