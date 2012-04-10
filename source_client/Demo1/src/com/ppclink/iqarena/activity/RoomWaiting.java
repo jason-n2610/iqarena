@@ -106,6 +106,102 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	}
 
 	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.test.delegate.ICheckServer#onCheckServerComplete()
+	 */
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.test.delegate.ICheckServer#onCheckServerComplete()
+	 */
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// if (mCheck != null) {
+		// if (!mCheck.isCancelled()) {
+		// mCheck.cancel(true);
+		// }
+		// }
+		// if (isOwner) {
+		// if (mRequest != null) {
+		// if (!mRequest.isCancelled()) {
+		// mRequest.cancel(true);
+		// }
+		// }
+		// mRequest = new RequestServer(this);
+		// mRequest.removeRoom(mRoomID);
+		// } else {
+		// if (mRequest != null) {
+		// if (!mRequest.isCancelled()) {
+		// mRequest.cancel(true);
+		// }
+		// }
+		// mRequest = new RequestServer(this);
+		// mRequest.exitRoom(mRoomID,
+		// String.valueOf(DataInfo.userInfo.getUserId()));
+		// }
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (isOwner) {
+				mRequest = new RequestServer(this);
+				mRequest.removeRoom(mRoomID);
+			} else {
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(mRoomID,
+						String.valueOf(FilterResponse.userInfo.getUserId()));
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * khi click vao button Play hay Exit
+	 */
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.room_waiting_btn_play:
+	
+			mBtnPlay.setEnabled(false);
+			mBtnExit.setEnabled(false);
+			
+			mRequest = new RequestServer(this);
+			mRequest.playGame(mRoomID);
+			break;
+	
+		// exit
+		case R.id.room_waiting_btn_exit:
+	
+			// // xac lap bien isBackPress = false => chung to ko phai an Back
+			// de thoat
+			// isBackPress = false;
+	
+			if (isOwner) {
+				mRequest = new RequestServer(this);
+				mRequest.removeRoom(mRoomID);
+			} else {
+				mRequest = new RequestServer(this);
+				mRequest.exitRoom(String.valueOf(mMemberId), mRoomID);
+			}
+			if (mCheck != null) {
+				if (!mCheck.isCancelled()) {
+					mCheck.cancel(true);
+				}
+			}
+			break;
+	
+		default:
+			break;
+		}
+	}
+
+	/*
 	 * init ui Nhan vao la bien xac dinh xem la owner hay member
 	 */
 	void initUI(boolean isOwner) {
@@ -183,46 +279,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 		}
 	}
 
-	/*
-	 * khi click vao button Play hay Exit
-	 */
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.room_waiting_btn_play:
-
-			mBtnPlay.setEnabled(false);
-			mBtnExit.setEnabled(false);
-			
-			mRequest = new RequestServer(this);
-			mRequest.playGame(mRoomID);
-			break;
-
-		// exit
-		case R.id.room_waiting_btn_exit:
-
-			// // xac lap bien isBackPress = false => chung to ko phai an Back
-			// de thoat
-			// isBackPress = false;
-
-			if (isOwner) {
-				mRequest = new RequestServer(this);
-				mRequest.removeRoom(mRoomID);
-			} else {
-				mRequest = new RequestServer(this);
-				mRequest.exitRoom(String.valueOf(mMemberId), mRoomID);
-			}
-			if (mCheck != null) {
-				if (!mCheck.isCancelled()) {
-					mCheck.cancel(true);
-				}
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
+	
 
 	
 
@@ -232,48 +289,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	 * @see at.test.delegate.ICheckServer#onCheckServerComplete()
 	 */
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (isOwner) {
-				mRequest = new RequestServer(this);
-				mRequest.removeRoom(mRoomID);
-			} else {
-				mRequest = new RequestServer(this);
-				mRequest.exitRoom(mRoomID,
-						String.valueOf(FilterResponse.userInfo.getUserId()));
-			}
-		}
-		return true;
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// if (mCheck != null) {
-		// if (!mCheck.isCancelled()) {
-		// mCheck.cancel(true);
-		// }
-		// }
-		// if (isOwner) {
-		// if (mRequest != null) {
-		// if (!mRequest.isCancelled()) {
-		// mRequest.cancel(true);
-		// }
-		// }
-		// mRequest = new RequestServer(this);
-		// mRequest.removeRoom(mRoomID);
-		// } else {
-		// if (mRequest != null) {
-		// if (!mRequest.isCancelled()) {
-		// mRequest.cancel(true);
-		// }
-		// }
-		// mRequest = new RequestServer(this);
-		// mRequest.exitRoom(mRoomID,
-		// String.valueOf(DataInfo.userInfo.getUserId()));
-		// }
-	}
+	
 
 	/*
 	 * holder adapter
@@ -384,6 +400,15 @@ public class RoomWaiting extends Activity implements OnClickListener,
 			}
 			if (!isOwner){
 				holder.ibLogout.setVisibility(View.INVISIBLE);
+			}
+			
+			// highlight user
+			if (member.getStrMemberId().equals(String.valueOf(mMemberId))){
+				convertView.setBackgroundDrawable(getResources().
+						getDrawable(R.drawable.focused_application_background));
+			}
+			else{
+				convertView.setBackgroundColor(android.R.color.transparent);
 			}
 			
 			// logout member

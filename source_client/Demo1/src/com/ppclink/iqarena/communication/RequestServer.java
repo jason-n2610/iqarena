@@ -49,7 +49,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_LOGIN, 
 		REQUEST_PLAY_GAME, 
 		REQUEST_REGISTER, 
-		REQUEST_REMOVE_ROOM
+		REQUEST_REMOVE_ROOM,
+		REQUEST_MEMBER_READY
 	}
 
 	public RequestServer(IRequestServer delegate) {
@@ -185,7 +186,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				break;
 	
 			case REQUEST_GET_MEMBERS_ANSWER:
-				nameValuePairs = new ArrayList<NameValuePair>(4);
+				nameValuePairs = new ArrayList<NameValuePair>(6);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_GET_MEMBERS_ANSWER));
 				nameValuePairs
@@ -194,7 +195,18 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						params[1]));
 				nameValuePairs.add(new BasicNameValuePair("question_id",
 						params[2]));
-				nameValuePairs.add(new BasicNameValuePair("answer", params[3]));
+				nameValuePairs.add(new BasicNameValuePair("answer", 
+						params[3]));
+				nameValuePairs.add(new BasicNameValuePair("user_id",
+						String.valueOf(FilterResponse.userInfo.getUserId())));
+				break;
+				
+			case REQUEST_MEMBER_READY:
+				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_MEMBER_READY));
+				nameValuePairs.add(new BasicNameValuePair("member_id", params[0]));
+				nameValuePairs.add(new BasicNameValuePair("room_id", params[1]));
 				break;
 	
 			}
@@ -217,7 +229,6 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				bis.close();
 				is.close();
 				result = sb.toString();
-				Log.i("REQUEST_SERVER", result);
 				break;
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -227,6 +238,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		} catch (IOException e) {
 			result = e.getMessage();
 		}
+		Log.i("REQUEST_SERVER", result);
 	
 		return result;
 	}
@@ -323,6 +335,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void removeRoom(String strRoomId) {
 		this.requestType = REQUEST_TYPE.REQUEST_REMOVE_ROOM;
 		this.execute(strRoomId);
+	}
+	
+	// member ready for next question
+	public void readyForGame(String memberID, String roomID){
+		this.requestType = REQUEST_TYPE.REQUEST_MEMBER_READY;
+		this.execute(memberID, roomID);
 	}
 
 	public void setRequestType(REQUEST_TYPE requestType) {

@@ -45,10 +45,10 @@
             $result = @mysql_query($query) or die('getUserByUserName(): ' . mysql_error());
             return $result;
         }
-        
+
         // get score dung de lay diem cua user -> kiem tra join_room
         public static function getScore($user_id){
-            
+
             $query = "  SELECT
                             score_level
                         FROM
@@ -57,7 +57,7 @@
                             user_id = '{$user_id}' ";
             $result = @mysql_query($query) or die('getScore(): ' . mysql_error());
             return $result;
-        }        
+        }
 
         // kiem tra account da ton tai chua
         public static function checkUserLogin($username, $password)
@@ -104,12 +104,54 @@
             $result = mysql_query($query) or die('addUser(): ' . mysql_error());
             return $result;
         }
-        
-        // update score
-        public static function updateScore($user_id, $member_id){
-            $query = "  UPDATE users
-                        SET score_level = score_level + (SELECT score FROM room_members WHERE room_member_id = '{$member_id}')
-                        WHERE user_id = '{$user_id}'";
+
+        // update score for loser
+        public static function updateScoreForLosersAfterGame($user_id, $member_id, $room_id){
+            $query = "  UPDATE  users
+                        SET     score_level =
+                                    score_level +
+                                    (SELECT score
+                                     FROM   room_members
+                                     WHERE  room_member_id = '{$member_id}') -
+                                    (SELECT bet_score
+                                     FROM   rooms
+                                     WHERE  room_id = '{$room_id}'
+                                     LIMIT  1)
+                        WHERE   user_id = '{$user_id}'";
+            $result = mysql_query($query) or die('updateScore(): ' . mysql_error());
+            return $result;
+        }
+
+        // update score for winner
+        public static function updateScoreForWinnerAfterGame($user_id, $member_id, $room_id){
+            $query = "  UPDATE  users
+                        SET     score_level =
+                                    score_level +
+                                    (SELECT score
+                                     FROM   room_members
+                                     WHERE  room_member_id = '{$member_id}') +
+                                    (SELECT bet_score * number_of_members
+                                     FROM   rooms
+                                     WHERE  room_id = '{$room_id}'
+                                     LIMIT  1)
+                        WHERE   user_id = '{$user_id}'";
+            $result = mysql_query($query) or die('updateScore(): ' . mysql_error());
+            return $result;
+        }
+
+        // update score for multiple winners
+        public static function updateScoreForMultiWinnersAfterGame($user_id, $member_id, $room_id, $members){
+            $query = "  UPDATE  users
+                        SET     score_level =
+                                    score_level +
+                                    (SELECT score
+                                     FROM   room_members
+                                     WHERE  room_member_id = '{$member_id}') +
+                                    ((SELECT bet_score * number_of_members
+                                     FROM   rooms
+                                     WHERE  room_id = '{$room_id}'
+                                     LIMIT  1) / '{$members}')
+                        WHERE   user_id = '{$user_id}'";
             $result = mysql_query($query) or die('updateScore(): ' . mysql_error());
             return $result;
         }

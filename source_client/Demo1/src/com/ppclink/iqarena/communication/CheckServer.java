@@ -34,8 +34,9 @@ import com.ppclink.iqarena.ultil.Config;
 
 public class CheckServer extends AsyncTask<String, Integer, String> {
 
-	enum REQUEST_TYPE {
-		REQUEST_CHECK_CHANGE_ROOM, REQUEST_CHECK_MEMBERS_IN_ROOM
+	public enum REQUEST_CHECK_TYPE {
+		REQUEST_CHECK_CHANGE_ROOM, REQUEST_CHECK_MEMBERS_IN_ROOM,
+		REQUEST_CHECK_OTHERS_ANSWER, REQUEST_CHECK_ROOM_READY
 	}
 
 	private ICheckServer delegate;;
@@ -43,7 +44,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	String mPost = null;
 
 	private int requestTime = 1000;
-	private REQUEST_TYPE requestType;
+	private REQUEST_CHECK_TYPE requestType;
 
 	String TAG = "CheckServer";
 
@@ -51,33 +52,22 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 		this.delegate = delegate;
 	}
 
-	// request check change room
-	public void checkChangeRoom() {
-		this.requestType = REQUEST_TYPE.REQUEST_CHECK_CHANGE_ROOM;
-		this.execute();
-	}
-
-	// request check change members in room
-	public void checkMembersInRoom(String strRoomID) {
-		this.requestType = REQUEST_TYPE.REQUEST_CHECK_MEMBERS_IN_ROOM;
-		this.execute(strRoomID);
-	}
-
 	@Override
 	protected String doInBackground(String... params) {
 		String result = null;
+		Log.i("2", "vao do in background");
 		try {
 			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpParameters, 15000);
 			HttpConnectionParams.setSoTimeout(httpParameters, 15000);
-
+	
 			HttpClient httpClient = new DefaultHttpClient(httpParameters);
 			HttpPost httpPost = new HttpPost(Config.REQUEST_SERVER_ADDR);
 			// post data
 			List<NameValuePair> nameValuePairs = null;
-
+	
 			switch (requestType) {
-
+	
 			case REQUEST_CHECK_CHANGE_ROOM:
 				nameValuePairs = new ArrayList<NameValuePair>(1);
 				nameValuePairs.add(new BasicNameValuePair("message",
@@ -87,6 +77,20 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_CHECK_MEMBERS_IN_ROOM));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				break;
+			case REQUEST_CHECK_OTHERS_ANSWER:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_CHECK_OTHERS_ANSWER));
+				nameValuePairs
+						.add(new BasicNameValuePair("room_id", params[0]));
+				break;
+			case REQUEST_CHECK_ROOM_READY:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_CHECK_ROOM_READY));
 				nameValuePairs
 						.add(new BasicNameValuePair("room_id", params[0]));
 				break;
@@ -111,12 +115,16 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 				is.close();
 				result = sb.toString();
 				Log.i(TAG, "result:" + result);
-				if (result.equals("play")){
-					onPostExecute(result);
+				if (result.contains("play")){
 					break;
 				}
-				else if (result.equals("exit")){
-					onPostExecute(result);
+				else if (result.contains("exit")){
+					break;
+				}
+				else if (result.contains("get")){
+					break;	
+				}
+				else if (result.contains("ready")){
 					break;
 				}
 				if (oldResult == null) {
@@ -128,7 +136,7 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 					publishProgress(1);
 				}
 			}
-
+	
 		} catch (UnsupportedEncodingException e) {
 			result = e.getMessage();
 		} catch (MalformedURLException e) {
@@ -136,22 +144,51 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 		} catch (IOException e) {
 			result = e.getMessage();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	
 		return result;
 	}
 
 	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
-		delegate.onCheckServerComplete(result);
+	protected void onProgressUpdate(Integer... values) {
+		if (mPost != null){
+			Log.i("CheckServer", "onProgressUpdate");
+			delegate.onCheckServerComplete(mPost);
+		}
 	}
 
 	@Override
-	protected void onProgressUpdate(Integer... values) {
-		super.onProgressUpdate(values);
-		delegate.onCheckServerComplete(mPost);
+	protected void onPostExecute(String result) {
+		Log.i("CheckServer", "onPostExecute");
+		delegate.onCheckServerComplete(result);
+	}
+
+	// request check change room
+	public void checkChangeRoom() {
+		this.requestType = REQUEST_CHECK_TYPE.REQUEST_CHECK_CHANGE_ROOM;
+		this.execute();
+	}
+
+	// request check change members in room
+	public void checkMembersInRoom(String roomID) {
+		this.requestType = REQUEST_CHECK_TYPE.REQUEST_CHECK_MEMBERS_IN_ROOM;
+		this.execute(roomID);
+	}
+	
+	// request check other member answer?
+	public void checkOthersAnswer(String roomID){
+		this.requestType = REQUEST_CHECK_TYPE.REQUEST_CHECK_OTHERS_ANSWER;
+		this.execute(roomID);
+	}
+	
+	// check others member ready?
+	public void checkRoomReady(String roomID){
+		this.requestType = REQUEST_CHECK_TYPE.REQUEST_CHECK_ROOM_READY;
+		this.execute(roomID);
+	}
+
+	public REQUEST_CHECK_TYPE getRequestType() {
+		return requestType;
 	}
 }

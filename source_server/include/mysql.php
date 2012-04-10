@@ -18,5 +18,10 @@
         {
             return mysql_close(self::$connection);
         }
+        
+        public static function excuteQuery($query){
+            $result = @mysql_query($query) or die (mysql_error());
+            return $result;
+        }
     }
 ?>

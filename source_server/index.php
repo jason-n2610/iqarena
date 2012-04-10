@@ -64,5 +64,17 @@
     {
         include ($path . '/modules/controls/remove_member_in_room.php');
     }
+    else if ($_POST['message'] == "check_others_answer")
+    {
+        include ($path . '/modules/controls/check_others_answer.php');
+    }
+    else if ($_POST['message'] == "ready_for_game")
+    {
+        include ($path . '/modules/controls/ready_for_game.php');
+    }
+    else if ($_POST['message'] == "check_room_ready")
+    {
+        include ($path . '/modules/controls/check_room_ready.php');
+    }
 
 ?>

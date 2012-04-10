@@ -17,14 +17,20 @@ import com.ppclink.iqarena.ultil.FilterResponse;
  */
 public class UserInfo extends Activity {
 
+	TextView mTvUserInfo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.user_info);
-		TextView tvUserInfo = (TextView) findViewById(R.id.user_info_tv_info);
-		tvUserInfo.setText("Xin chào: " + FilterResponse.userInfo.getUsername()
+		mTvUserInfo = (TextView) findViewById(R.id.user_info_tv_info);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mTvUserInfo.setText("Xin chào: " + FilterResponse.userInfo.getUsername()
 				+ "\n" + "Điểm hiện tại của bạn: "
 				+ (int) FilterResponse.userInfo.getScoreLevel());
 	}

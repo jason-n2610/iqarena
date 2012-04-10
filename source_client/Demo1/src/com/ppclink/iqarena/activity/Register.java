@@ -164,5 +164,6 @@ public class Register extends Activity implements View.OnClickListener,
 		getParent().setProgressBarIndeterminateVisibility(false);
 		btnRegister.setEnabled(true);
 		tvNotice.setText(message);
+		tvNotice.setVisibility(View.VISIBLE);
 	}
 }

@@ -32,6 +32,7 @@ public class FilterResponse {
 	public static int roomId = 0, memberId = 0;
 	private static final String TAG = "JSONDATA";
 	public static User userInfo = null;
+	public static float updateScore = 0;
 
 	public static boolean value = false;
 
@@ -240,7 +241,6 @@ public class FilterResponse {
 
 					// lay ra cau tra loi dung cho cau truoc va cau hoi tiep
 					// theo neu co
-
 					mTrueAnswer = jObject.getString("answer");
 					question = null;
 					if (jObject.has("next_question")) {
@@ -259,6 +259,12 @@ public class FilterResponse {
 						}
 						question = new Question(strId, strQuestion, strA, strB,
 								strC, strD);
+					}
+					
+					// update score cho user khi nguoi choi ket thuc tro choi
+					if (jObject.has("score")){
+						updateScore = jObject.getInt("score");
+						FilterResponse.userInfo.setScoreLevel(updateScore);
 					}
 				}
 			}

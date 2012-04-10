@@ -9,6 +9,7 @@
         $path = getcwd();
         include ($path . '/include/mysql.php');
         include ($path . '/modules/models/room_members.php');
+        include ($path . '/modules/models/room.php');
 
         // connect database
         MySQL::connect();
@@ -18,6 +19,9 @@
 
         $_POST['member_id'] = stripcslashes($_POST['member_id']);
         $_POST['member_id'] = mysql_real_escape_string($_POST['member_id']);
+
+        // giam so luong nguoi choi trong room
+        Room::decreateMemberOfRoom($_POST['room_id']);
 
         // xoa member
         $result = RoomMembers::removeMemberInRoom($_POST['member_id']);
