@@ -28,7 +28,7 @@ CREATE TABLE users (
     username varchar(30) not null,
     password varchar(32) not null,
     email varchar(100) not null,
-    score_level float,
+    score_level float not null,
     registed_date datetime,
     power_user tinyint not null,
     money float,
@@ -41,8 +41,10 @@ CREATE TABLE rooms (
     room_name varchar(50) not null,
     owner_id int unsigned not null,
     max_member int,
+	number_of_members int not null,
     bet_score float,
 	time_per_question tinyint unsigned,
+	status tinyint unsigned not null,	-- status: 0-waiting, 1-playing
     PRIMARY KEY (room_id)
 );
 
@@ -56,6 +58,7 @@ CREATE TABLE room_members (
     score float not null,
     combo tinyint,
 	last_answer tinyint unsigned,
+	status tinyint unsigned not null,
     PRIMARY KEY (room_member_id)
 );
 

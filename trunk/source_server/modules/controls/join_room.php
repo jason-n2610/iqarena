@@ -22,33 +22,34 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
     // điều kiến user->score -> bet_score của room
     $scoreUser; // diem cua user
     $scoreBetRoom;  // diem cuoc cua room
+    Room::increateMemberOfRoom($_POST['room_id']);
     $tblUser = User::getScore($_POST['user_id']);
     $tblRoom = Room::getBetScoreOfRoom($_POST['room_id']);
     while($row = mysql_fetch_assoc($tblUser)){
         $scoreUser = $row['score_level'];
     }
-    while($row = mysql_fetch_assoc($tblUser)){
+    while($row = mysql_fetch_assoc($tblRoom)){
         $scoreBetRoom = $row['bet_score'];
     }
     if ($scoreUser < $scoreBetRoom){
-        // truong hop user khong du diem tham gia room        
+        // truong hop user khong du diem tham gia room
         echo '{"type":"join_room", "value":"false", "message":"Bạn không đủ điểm tham gia phòng chơi"}';
     }
-    else{        
+    else{
         // kiem tra xem room da day chua
         $tbRoomMembers = RoomMembers::getMembersInRoom($_POST['room_id']);
         $roomCount = mysql_num_rows($tbRoomMembers);
-    
+
         // lay ve max_member cua room
         $maxMembers = Room::getMaxMemberOfRoom($_POST['room_id']);
-    
+
         // bien kiem tra xem room full chua
         $isFull = false;
         $max = 0;
         while ($row = mysql_fetch_array($maxMembers, MYSQL_NUM)) {
             $max = $row[0];
         }
-    
+
         if ($roomCount == (int)$max)
         {
             $isFull = true;
@@ -57,7 +58,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
         if ($isFull) {
             echo '{"type":"join_room", "value":"false", "message":"phòng chơi đã đầy"}';
         }
-    
+
         // user tham gia dc room
         else {
             $result = RoomMembers::joinRoom($_POST['room_id'], $_POST['user_id']);
@@ -69,7 +70,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
                 if (file_exists($filename)) {
                     $fstring = file_get_contents($filename);
                 }
-    
+
                 // thay doi noi dung file 'roomid'.txt
                 settype($fstring, "integer");
                 $fstring = $fstring + 1;
@@ -81,7 +82,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
             }
         }
     }
-    
+
     unset($result);
 
     // dong ket noi

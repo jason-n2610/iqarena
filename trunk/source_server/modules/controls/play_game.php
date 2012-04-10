@@ -19,10 +19,11 @@
 
         // lay ra mang cac cau hoi
         MySQL::connect();
-        // xoa row trong table rooms
-        Room::removeRoom($_POST['room_id']);
+        // update trang thai playing cho room
+        Room::changeRoomToPlaying($_POST['room_id']);
         // xoa file 'roomid'.txt chua cac room_members
         unlink($path . '/' . $_POST['room_id'] . '.txt');
+        
 
          // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
         $filename = $path . '/check_change_room.txt';
@@ -48,7 +49,7 @@
         {
             $aQuestionIds[] = $row[0];
         }
-        // tao ngau nhien 2 gia tri mang question_id
+        // tao ngau nhien cau hoi
         shuffle($aQuestionIds);
         MySQL::close();
 
