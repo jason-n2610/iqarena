@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.communication.CheckServer;
@@ -230,6 +231,11 @@ public class RoomWaiting extends Activity implements OnClickListener,
 
 	@Override
 	public void onCheckServerComplete(String result) {
+		
+		if (result.contains("time")){
+			Toast.makeText(this, result, 500).show();
+			return;
+		}
 
 		// tin hieu thoat khoi phong - chu phong da xoa phong
 		if (result.contains("exit")) {
@@ -238,6 +244,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 					mCheck.cancel(true);
 				}
 			}
+			Toast.makeText(this, "Owner destroy room", 500).show();
 			onBackPressed();
 		}
 
@@ -344,6 +351,9 @@ public class RoomWaiting extends Activity implements OnClickListener,
 					mAlMembers.clear();
 					adapter.notifyDataSetChanged();
 				}
+			}
+			else{
+				Toast.makeText(this, sResult, 500).show();
 			}
 		}
 		else if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_EXIT_ROOM ||

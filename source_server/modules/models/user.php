@@ -130,7 +130,7 @@
                                     (SELECT score
                                      FROM   room_members
                                      WHERE  room_member_id = '{$member_id}') +
-                                    (SELECT bet_score * number_of_members
+                                    (SELECT bet_score * (number_of_members-1)
                                      FROM   rooms
                                      WHERE  room_id = '{$room_id}'
                                      LIMIT  1)
@@ -147,10 +147,10 @@
                                     (SELECT score
                                      FROM   room_members
                                      WHERE  room_member_id = '{$member_id}') +
-                                    ((SELECT bet_score * number_of_members
+                                    ((SELECT bet_score * (number_of_members/'{$members}'-1)
                                      FROM   rooms
                                      WHERE  room_id = '{$room_id}'
-                                     LIMIT  1) / '{$members}')
+                                     LIMIT  1))
                         WHERE   user_id = '{$user_id}'";
             $result = mysql_query($query) or die('updateScore(): ' . mysql_error());
             return $result;

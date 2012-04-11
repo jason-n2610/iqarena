@@ -124,6 +124,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 	// interface IRequestServer
 	@Override
 	public void onRequestComplete(String sResult) {
+		boolean isResult = false;
 		String strMessage = sResult;
 		if (strMessage != null) {
 			sResult = sResult.trim();
@@ -132,6 +133,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 			if (length > 0) {
 				// kiem tra xem co thong tin tu server tra ve ko?
 				if (sResult.contains("{")) {
+					isResult = true;
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
 					boolean isSuccess = FilterResponse.filter(sResult);
@@ -164,6 +166,10 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 			}
 		} else {
 			strMessage = "Tạo room thất bại";
+		}
+		if (!isResult){
+			tvResult.setVisibility(View.VISIBLE);
+			tvResult.setText(strMessage);
 		}
 		btnCreate.setEnabled(true);
 		setProgressBarIndeterminateVisibility(false);

@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,6 +43,7 @@ import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.MemberScore;
 import com.ppclink.iqarena.object.Question;
 import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.Rotate3dAnimation;
 
 /**
  * @author hoangnh
@@ -68,8 +72,9 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 	RadioButton mRbA, mRbB, mRbC, mRbD; // answer item
 	RadioGroup mRgAnswer; // answer group
 	TextView mTvQuestion, mTvQuestionTimer, mTvAnswerTimer, mTvQuestionTitle,
-			mTvAnswerResult, mTvAnswerInfo; // question and timer
+			mTvAnswerResult, mTvAnswerInfo, mTvAnswerTitle; // question and timer
 	CheckBox mCkReady;
+	private ViewGroup mContainer;
 
 	RequestServer mRequestServer = null;
 	CheckServer mCheckServer = null;
@@ -86,6 +91,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		mTimePerQuestion = extra.getInt("time_per_question");
 		mMemberId = extra.getInt("member_id");
 	
+		mContainer = (ViewGroup) findViewById(R.id.container);
 		// question
 		mLlQuestion = (LinearLayout) findViewById(R.id.play_game_layout_question);
 		mTvQuestion = (TextView) findViewById(R.id.play_game_question);
@@ -109,6 +115,10 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		mTvAnswerInfo = (TextView) findViewById(R.id.play_game_tv_answer_info);
 		mLvResult = (ListView) findViewById(R.id.play_game_lv_answer);
 		mCkReady = (CheckBox) findViewById(R.id.play_game_ck_ready);
+		mTvAnswerTitle = (TextView) findViewById(R.id.play_game_answer_title);
+		
+		mContainer.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE);
+		
 		// event listener
 		mBtnSummit.setOnClickListener(this);
 		mRgAnswer.setOnCheckedChangeListener(this);
@@ -149,20 +159,23 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		if (mLlQuestion.getVisibility() == View.VISIBLE) {
 			// hien thi phan tra loi
 			mCkReady.setChecked(false);
-			mRlAnswer.setVisibility(View.VISIBLE);
-			mLlQuestion.setVisibility(View.GONE);
+			// hieu ung hien thi phan tra loi
+			applyRotation(1, 180, 90);
+			
 			mLvResult.setVisibility(View.INVISIBLE);
 			setProgressBarIndeterminateVisibility(true);
 			
 			mTvAnswerInfo.setText("");
 			mTvAnswerResult.setText("");
 			mTvAnswerTimer.setText("");
+			
+			mTvAnswerTitle.setText("Waiting for others answer...");
 	
 		} else {
 			// hien thi phan hoi
 			mTimer.cancel();
-			mRlAnswer.setVisibility(View.GONE);
-			mLlQuestion.setVisibility(View.VISIBLE);
+			// hieu ung hien thi phan cau hoi
+			applyRotation(0, 0, 90);
 			
 			mCurQuestion++;
 			mTvQuestionTitle.setText("Question "
@@ -206,14 +219,15 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 								mCheckServer.cancel(true);
 							}
 						}
-						mRequestServer = new RequestServer(RoomPlay.this);
-						mRequestServer.answerQuestion(
-								String.valueOf(mMemberId), mStrRoomId,
-								mStrQuestionId, "0");
 						
 						// check others answer
 						mCheckServer = new CheckServer(RoomPlay.this);
 						mCheckServer.checkOthersAnswer(mStrRoomId);
+						
+						mRequestServer = new RequestServer(RoomPlay.this);
+						mRequestServer.answerQuestion(
+								String.valueOf(mMemberId), mStrRoomId,
+								mStrQuestionId, "0");
 						showLayout();
 					}
 				}
@@ -352,14 +366,22 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 											mRequestServer.cancel(true);
 										}
 									}
-									mRequestServer = new RequestServer(RoomPlay.this);
-									mRequestServer.answerQuestion(
-											String.valueOf(mMemberId), mStrRoomId,
-											mStrQuestionId, "0");
+									if (mCheckServer != null) {
+										if (!mCheckServer.isCancelled()) {
+											mCheckServer.cancel(true);
+										}
+									}
 									
 									// check others answer
 									mCheckServer = new CheckServer(RoomPlay.this);
 									mCheckServer.checkOthersAnswer(mStrRoomId);
+									
+									mRequestServer = new RequestServer(RoomPlay.this);
+									mRequestServer.answerQuestion(
+											String.valueOf(mMemberId), mStrRoomId,
+											mStrQuestionId, "0");
+
+									showLayout();
 								}
 							}
 
@@ -390,7 +412,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				} catch (Exception e) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setTitle("Error");
-					builder.setMessage(e.getMessage());
+					builder.setMessage(sResult);
 					builder.create().show();
 				}
 			}
@@ -401,6 +423,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			if (!mCheckServer.isCancelled()){
 				mCheckServer.cancel(true);
 			}
+			mTvAnswerTitle.setText("Members answer");
 			setProgressBarIndeterminateVisibility(false);
 			if (sResult != null || sResult != "null") {
 				try {
@@ -499,6 +522,10 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 						}
 					}
 				} catch (Exception e) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("Error");
+					builder.setMessage(sResult);
+					builder.create().show();
 				}
 			}
 		}
@@ -506,6 +533,10 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 	@Override
 	public void onCheckServerComplete(String result) {
+		if (result.contains("time")){
+			Toast.makeText(this, result, 500).show();
+			return;
+		}
 		if (result.contains("get")){
 			if (mCheckServer != null) {
 				if (!mCheckServer.isCancelled()) {
@@ -529,6 +560,90 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			}
 		}
 	}
+	
+	/**
+     * Setup a new 3D rotation on the container view.
+     *
+     * @param position the item that was clicked to show a picture, or -1 to show the list
+     * @param start the start angle at which the rotation must begin
+     * @param end the end angle of the rotation
+     */
+    private void applyRotation(int type, float start, float end) {
+        // Find the center of the container
+        final float centerX = mContainer.getWidth() / 2.0f;
+        final float centerY = mContainer.getHeight() / 2.0f;
+
+        // Create a new 3D rotation with the supplied parameter
+        // The animation listener is used to trigger the next animation
+        final Rotate3dAnimation rotation =
+                new Rotate3dAnimation(start, end, centerX, centerY, 310.0f, true);
+        rotation.setDuration(500);
+        rotation.setFillAfter(true);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new DisplayNextView(type));
+
+        mContainer.startAnimation(rotation);
+    }
+    
+    /**
+     * This class listens for the end of the first half of the animation.
+     * It then posts a new action that effectively swaps the views when the container
+     * is rotated 90 degrees and thus invisible.
+     */
+    private final class DisplayNextView implements Animation.AnimationListener {
+        private final int mType;
+    	
+    	public DisplayNextView(int type){
+    		this.mType = type;
+    	}
+
+        public void onAnimationStart(Animation animation) {
+        }
+
+        public void onAnimationEnd(Animation animation) {
+            mContainer.post(new SwapViews(mType));
+        }
+
+        public void onAnimationRepeat(Animation animation) {
+        }
+    }
+    /**
+     * This class is responsible for swapping the views and start the second
+     * half of the animation.
+     */
+    private final class SwapViews implements Runnable {
+        private final int mType;
+
+        public SwapViews(int type) {
+            mType = type;
+        }
+
+        public void run() {
+            final float centerX = mContainer.getWidth() / 2.0f;
+            final float centerY = mContainer.getHeight() / 2.0f;
+            Rotate3dAnimation rotation;
+            
+            if (mType == 0) {
+            	// hien thi cau hoi
+                mLlQuestion.setVisibility(View.VISIBLE);
+                mRlAnswer.setVisibility(View.GONE);
+
+                rotation = new Rotate3dAnimation(90, 180, centerX, centerY, 310.0f, false);
+            } else {
+            	// hien thi phan tra loi
+            	mLlQuestion.setVisibility(View.GONE);
+            	mRlAnswer.setVisibility(View.VISIBLE);
+
+                rotation = new Rotate3dAnimation(90, 0, centerX, centerY, 310.0f, false);
+            }
+
+            rotation.setDuration(500);
+            rotation.setFillAfter(true);
+            rotation.setInterpolator(new DecelerateInterpolator());
+
+            mContainer.startAnimation(rotation);
+        }
+    }
 
 	class AnswerAdapter extends ArrayAdapter<MemberScore> {
 	
