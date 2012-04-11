@@ -29,14 +29,6 @@
             $result = @mysql_query($query) or die ('do not getMaxMemberOfRoom '. mysql_error());
             return $result;
         }
-        
-        public static function getBetScoreOfRoom($room_id){
-            $query = "  SELECT  bet_score
-                        FROM    rooms
-                        WHERE   room_id = '{$room_ID}'";
-            $result = @mysql_query($query) or die ('getBetScoreOfRoom() '. mysql_error());
-            return $result;
-        }
 
         public static function getBetScoreOfRoom($room_id){
             $query = "  SELECT  bet_score

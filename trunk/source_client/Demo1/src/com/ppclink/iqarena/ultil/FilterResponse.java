@@ -138,7 +138,9 @@ public class FilterResponse {
 			else if (typeMessage.equals(Config.REQUEST_JOIN_ROOM)) {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
-				memberId = jObject.getInt("member_id");
+				if (value){
+					memberId = jObject.getInt("member_id");
+				}
 			}
 
 			// message exit room

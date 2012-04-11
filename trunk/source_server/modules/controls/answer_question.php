@@ -8,8 +8,7 @@
     // cap nhat cau tra loi cua user
 
     // kiem tra cac du lieu do members gui len
-    if (isset($_POST['member_id']) && isset($_POST['room_id']) && isset($_POST['question_id']) &&
-        isset($_POST['question_answer']))
+    if (isset($_POST['member_id']) && isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['question_answer']))
     {
         $path = getcwd();
         include ($path . '/include/mysql.php');

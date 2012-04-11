@@ -168,6 +168,9 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 					Toast.makeText(this, FilterResponse.message, 500).show();
 				}
 			}
+			else{
+				Toast.makeText(this, sResult, 500).show();
+			}
 		}
 
 		// truong hop xem danh sach room
@@ -195,17 +198,15 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 					adapter.notifyDataSetChanged();
 				}
 			}
+			else{
+				Toast.makeText(this, sResult, 500).show();
+			}
 
 			getParent().setProgressBarIndeterminateVisibility(false);
 			if (mCheckServer == null) {
 				mCheckServer = new CheckServer(this);
 				mCheckServer.checkChangeRoom();
 			}
-			// else {
-			// mCheckServer.cancel(true);
-			// mCheckServer = new CheckServer(this);
-			// mCheckServer.checkChangeRoom();
-			// }
 		}
 	}
 
