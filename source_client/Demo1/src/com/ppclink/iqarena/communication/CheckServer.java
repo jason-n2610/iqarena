@@ -55,7 +55,6 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	@Override
 	protected String doInBackground(String... params) {
 		String result = null;
-		Log.i("2", "vao do in background");
 		try {
 			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpParameters, 15000);
@@ -153,14 +152,12 @@ public class CheckServer extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 		if (mPost != null){
-			Log.i("CheckServer", "onProgressUpdate");
 			delegate.onCheckServerComplete(mPost);
 		}
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
-		Log.i("CheckServer", "onPostExecute");
 		delegate.onCheckServerComplete(result);
 	}
 

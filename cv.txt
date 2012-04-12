@@ -1,6 +1,4 @@
-﻿test viec khi co 2 nguoi choi, nguoi choi tra loi sai thi score_level bi ve null
+﻿Xây dựng market để bán các bộ câu hỏi cho người chơi.
+Bán avatar và các vật dụng khác
 
-Trừ điểm của các members khi chủ phòng ấn nút start
-Cộng điểm đặt cược cho winner
-Cộng điểm cược chia đều cho nhiều người chơi khi ko tìm ra được người chiến thắng cuối cùng.
-xử lý các trợ giúp
+hoan thiet not file java playgame help 5050

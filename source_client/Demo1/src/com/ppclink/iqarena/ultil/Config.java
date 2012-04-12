@@ -29,4 +29,5 @@ public class Config {
 	public static final String REQUEST_CHECK_MEMBERS_IN_ROOM = "check_members_in_room";
 	public static final String REQUEST_CHECK_OTHERS_ANSWER = "check_others_answer";
 	public static final String REQUEST_CHECK_ROOM_READY = "check_room_ready";
+	public static final String REQUEST_HELP_5050 = "help_5050";
 }
