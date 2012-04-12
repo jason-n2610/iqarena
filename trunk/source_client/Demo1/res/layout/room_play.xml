@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/bg_app_sky_night"
     android:id="@+id/container"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/play_game_layout_question"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:id="@+id/play_game_layout_question"        
+        android:persistentDrawingCache="animation|scrolling"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:baselineAligned="true"
         android:orientation="vertical"
         android:visibility="visible" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.5"
             android:baselineAligned="false"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="8" >
 
                 <TextView
                     android:id="@+id/play_game_tv_question_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"
                     android:text="Question #"
@@ -38,21 +39,21 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:baselineAligned="false"
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal" >
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_form1"
@@ -61,8 +62,8 @@
 
                         <TextView
                             android:id="@+id/play_game_question"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:maxLines="5"
                             android:scrollbars="vertical"
@@ -71,8 +72,8 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="5dp"
                         android:layout_weight="3"
                         android:background="@drawable/bg_form1"
@@ -80,8 +81,8 @@
 
                         <TextView
                             android:id="@+id/play_game_time_counter"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:gravity="center"
                             android:textSize="40sp"
                             android:textStyle="bold" />
@@ -89,8 +90,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
@@ -117,12 +118,12 @@
                         android:textColor="#ffffffff"/>
 
                     <Button
-                        android:id="@+id/button3"
+                        android:id="@+id/room_play_btn_help_50_50"
                         android:layout_width="65dp"
                         android:layout_marginLeft="10dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_style1"
-                        android:text="#"
+                        android:text="50:50"
                         android:textStyle="bold"
                         android:textColor="#ffffffff" />
                 </LinearLayout>
@@ -130,8 +131,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/bg_form1"
@@ -149,17 +150,17 @@
 
             <ScrollView
                 android:id="@+id/scrollView1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
                 <RadioGroup
                     android:id="@+id/play_game_rg_answer"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
                     <RadioButton
                         android:id="@+id/play_game_answer_a"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grid_selector"
                         android:paddingLeft="40dp"
@@ -167,7 +168,7 @@
 
                     <RadioButton
                         android:id="@+id/play_game_answer_b"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grid_selector"
                         android:paddingLeft="40dp"
@@ -175,7 +176,7 @@
 
                     <RadioButton
                         android:id="@+id/play_game_answer_c"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grid_selector"
                         android:paddingLeft="40dp"
@@ -183,7 +184,7 @@
 
                     <RadioButton
                         android:id="@+id/play_game_answer_d"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grid_selector"
                         android:paddingLeft="40dp"
@@ -195,14 +196,15 @@
 
     <RelativeLayout
         android:id="@+id/play_game_layout_answer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:persistentDrawingCache="animation|scrolling"
         android:visibility="gone" >
 
         <TextView
             android:id="@+id/play_game_answer_title"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Answer"
             android:textColor="#ffffffff"
@@ -212,7 +214,7 @@
         
         <LinearLayout 
             android:id="@+id/play_game_answer_ll_message"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/bg_form1"
             android:layout_below="@+id/play_game_answer_title">            
@@ -224,13 +226,13 @@
 
         <LinearLayout
             android:id="@+id/play_game_answer_ll_info"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/play_game_answer_ll_message"
             android:baselineAligned="false" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_form1"
@@ -246,7 +248,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_form1"
@@ -255,14 +257,14 @@
 
                 <TextView
                     android:id="@+id/play_game_tv_answer_info"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Next question in:" />
 
                 <TextView
                     android:id="@+id/play_game_answer_tv_counter"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="10"
@@ -281,7 +283,7 @@
 
             <RelativeLayout
                 android:id="@+id/room_play_rl_answer_lv_header"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
                 <TextView
@@ -327,7 +329,7 @@
 
             <View
                 android:id="@+id/room_play_line_header"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/room_play_rl_answer_lv_header"
                 android:background="@color/white" />

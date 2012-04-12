@@ -24,8 +24,10 @@ import com.ppclink.iqarena.object.User;
 public class FilterResponse {
 
 	public static String message = null;
-	public static ArrayList<MemberScore> mListMemberInRoom = new ArrayList<MemberScore>();
-	public static ArrayList<MemberScore> mListMembersScore = new ArrayList<MemberScore>();
+	public static ArrayList<MemberScore> mListMemberInRoom = 
+			new ArrayList<MemberScore>();
+	public static ArrayList<MemberScore> mListMembersScore = 
+			new ArrayList<MemberScore>();
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static String mTrueAnswer = null;
 	public static Question question = null;
@@ -33,6 +35,7 @@ public class FilterResponse {
 	private static final String TAG = "JSONDATA";
 	public static User userInfo = null;
 	public static float updateScore = 0;
+	public static int help_5050_remove1=0, help_5050_remove2=0; 
 
 	public static boolean value = false;
 
@@ -164,7 +167,8 @@ public class FilterResponse {
 						String username = json_data.getString("username");
 						String memberType = json_data.getString("member_type");
 
-						MemberScore member = new MemberScore(memberId, userId, username, "",
+						MemberScore member = new MemberScore(memberId, 
+								userId, username, "",
 								"", "", "", memberType);
 
 						mListMemberInRoom.add(member);
@@ -178,7 +182,8 @@ public class FilterResponse {
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
 				if (value) {
-					String strId = null, strQuestion = null, strA = null, strB = null, strC = null, strD = null;
+					String strId = null, strQuestion = null, 
+							strA = null, strB = null, strC = null, strD = null;
 					String jQuestion = jObject.getString("question");
 					JSONArray jArray = new JSONArray(jQuestion);
 					int length = jArray.length();
@@ -236,7 +241,8 @@ public class FilterResponse {
 						String memberType = json_data.getString("member_type");
 
 						MemberScore memberScore = new MemberScore(memberId, userId,
-								username, lastAnswer, score, graft, combo, memberType);
+								username, lastAnswer, score, 
+								graft, combo, memberType);
 
 						mListMembersScore.add(memberScore);
 					}
@@ -246,7 +252,8 @@ public class FilterResponse {
 					mTrueAnswer = jObject.getString("answer");
 					question = null;
 					if (jObject.has("next_question")) {
-						String strId = null, strQuestion = null, strA = null, strB = null, strC = null, strD = null;
+						String strId = null, strQuestion = null, 
+								strA = null, strB = null, strC = null, strD = null;
 						String jQuestion = jObject.getString("next_question");
 						JSONArray jArray1 = new JSONArray(jQuestion);
 						int len = jArray1.length();
@@ -268,6 +275,16 @@ public class FilterResponse {
 						updateScore = jObject.getInt("score");
 						FilterResponse.userInfo.setScoreLevel(updateScore);
 					}
+				}
+			}
+			
+			// request help 5050
+			else if (typeMessage.equals(Config.REQUEST_HELP_5050)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value) {
+					help_5050_remove1 = jObject.getInt("remove1");
+					help_5050_remove2 = jObject.getInt("remove2");
 				}
 			}
 

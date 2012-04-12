@@ -50,7 +50,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_PLAY_GAME, 
 		REQUEST_REGISTER, 
 		REQUEST_REMOVE_ROOM,
-		REQUEST_MEMBER_READY
+		REQUEST_MEMBER_READY, 
+		REQUEST_HELP_5050
 	}
 
 	public RequestServer(IRequestServer delegate) {
@@ -208,7 +209,13 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("member_id", params[0]));
 				nameValuePairs.add(new BasicNameValuePair("room_id", params[1]));
 				break;
-	
+				
+			case REQUEST_HELP_5050:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_HELP_5050));
+				nameValuePairs.add(new BasicNameValuePair("question_id", params[0]));				
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
@@ -238,7 +245,9 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		} catch (IOException e) {
 			result = e.getMessage();
 		}
-		Log.i("REQUEST_SERVER", result);
+		if (result != null){
+			Log.i("REQUEST_SERVER", result);
+		}
 	
 		return result;
 	}
@@ -341,6 +350,12 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void readyForGame(String memberID, String roomID){
 		this.requestType = REQUEST_TYPE.REQUEST_MEMBER_READY;
 		this.execute(memberID, roomID);
+	}
+	
+	// help
+	public void help5050(String question_id){
+		this.requestType = REQUEST_TYPE.REQUEST_HELP_5050;
+		this.execute(question_id);
 	}
 
 	public void setRequestType(REQUEST_TYPE requestType) {

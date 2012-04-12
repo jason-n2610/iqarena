@@ -76,5 +76,9 @@
     {
         include ($path . '/modules/controls/check_room_ready.php');
     }
+    else if ($_POST['message'] == "help_5050")
+    {
+        include ($path . '/modules/controls/help_5050.php');
+    }
 
 ?>

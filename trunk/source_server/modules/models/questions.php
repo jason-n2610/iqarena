@@ -52,7 +52,7 @@
         // lay ve answer cua mot cau hoi dua vao question_id
         public static function getAnswerQuestion($question_id)
         {
-            $query = "  SELECT  answer, describle_answer
+            $query = "  SELECT  answer
                         FROM    questions
                         WHERE   question_id = '{$question_id}'";
             $result = @mysql_query($query) or die('getAnswerQuestion() ' . mysql_error());
