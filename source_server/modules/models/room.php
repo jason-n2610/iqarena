@@ -30,14 +30,6 @@
             return $result;
         }
 
-        public static function getBetScoreOfRoom($room_id){
-            $query = "  SELECT  bet_score
-                        FROM    rooms
-                        WHERE   room_id = '{$room_id}'";
-            $result = @mysql_query($query) or die ('getBetScoreOfRoom() '. mysql_error());
-            return $result;
-        }
-
         // tao room moi
         public static function createNewRoom($room_name, $owner_id, $max_member, $bet_score, $time_per_question)
         {
