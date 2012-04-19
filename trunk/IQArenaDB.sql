@@ -8,9 +8,9 @@ USE iqarena;
 -- check if any table exists
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS rooms;
+DROP TABLE IF EXISTS room_members;
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS question_types;
-DROP TABLE IF EXISTS room_members;
 DROP TABLE IF EXISTS question_fields;
 DROP TABLE IF EXISTS room_questions;
 DROP TABLE IF EXISTS markets;
