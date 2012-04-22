@@ -84,7 +84,9 @@
         public static function getQuestionIds()
         {
             $query = "  SELECT  question_id
-                        FROM    questions ";
+                        FROM    questions
+                        ORDER By RAND()
+                        LIMIT   15 ";
             $result = @mysql_query($query) or die('getQuestionIds() ' . mysql_error());
             return $result;
         }
