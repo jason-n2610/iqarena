@@ -67,7 +67,7 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             User::updateScoreForWinnerAfterGame($_POST['user_id'], $_POST['member_id'], $_POST['room_id']);
 
             // xoa room
-            sleep(1);
+            //sleep(1);
             Room::removeRoom($_POST['room_id']);
             // xoa member
             RoomMembers::removeMemberInRoom($_POST['member_id']);
@@ -125,12 +125,12 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             // truong hop ko co nguoi choi nao tra loi dung
             // cong diem cho nhung user chien thang cuoi cung
             User::updateScoreForMultiWinnersAfterGame($_POST['user_id'], $_POST['member_id'], $_POST['room_id'], $countMember);
-            sleep(1);
+            //sleep(1);
             // xoa file cau hoi
             if (file_exists($strPathQuestionFile)){
                 unlink($strPathQuestionFile);
             }
-            sleep(1);
+            //sleep(1);
             // xoa room
             Room::removeRoom($_POST['room_id']);
             // xoa member
@@ -148,7 +148,7 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             // diem cong = diem tra loi cau hoi + (-diem dat coc)
             User::updateScoreForLosersAfterGame($_POST['user_id'], $_POST['member_id'], $_POST['room_id']);
             // xoa nguoi choi
-            sleep(1);
+            //sleep(1);
             RoomMembers::removeMemberInRoom($_POST['member_id']);
         }
 

@@ -24,7 +24,7 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
     $scoreBetRoom;  // diem cuoc cua room
     Room::increateMemberOfRoom($_POST['room_id']);
     $tblUser = User::getScore($_POST['user_id']);
-    $tblRoom = Room::getBetScoreOfRoom($_POST['room_id']);
+    $tblRoom = Room::getBetScore($_POST['room_id']);
     while($row = mysql_fetch_assoc($tblUser)){
         $scoreUser = $row['score_level'];
     }
