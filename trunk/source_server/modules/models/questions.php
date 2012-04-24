@@ -4,8 +4,14 @@
     {
 
         public static function getAllQuestions()
-        {$query = " SELECT  *
-                    FROM    questions";
+        {
+            mysql_query("set names utf8;");
+            $query = "  SELECT  q.question_id, q.question_type_id, q.question_name, q.answer_a,
+                                q.answer_b, q.answer_c, q.answer_d, q.answer,
+                                q.describle_answer,
+                                q.question_field_id, qt.question_type_name
+                        FROM    questions AS q, question_types AS qt
+                        WHERE   q.question_type_id = qt.question_type_id";
             $result = @mysql_query($query) or die('getAllQuestions() ' .
                 mysql_error());
             return $result;
@@ -40,6 +46,7 @@
         // lay ra mot cau hoi ngau nhien tu csdl
         public static function getQuestion()
         {
+            mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
                         FROM    questions
                         ORDER   BY RAND()
@@ -63,7 +70,7 @@
         public static function getQuestionById($question_id)
         {
             mysql_query("set names utf8;");
-            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
+            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer
                         FROM    questions
                         WHERE   question_id = '{$question_id}'";
             $result = @mysql_query($query) or die('getQuestionById() ' . mysql_error());

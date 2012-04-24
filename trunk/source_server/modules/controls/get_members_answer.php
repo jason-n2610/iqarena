@@ -66,11 +66,11 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             // cong diem
             User::updateScoreForWinnerAfterGame($_POST['user_id'], $_POST['member_id'], $_POST['room_id']);
 
-            // xoa room
-            //sleep(1);
-            Room::removeRoom($_POST['room_id']);
-            // xoa member
-            RoomMembers::removeMemberInRoom($_POST['member_id']);
+// xoa room
+//sleep(1);
+            //Room::removeRoom($_POST['room_id']);
+// xoa member
+            //RoomMembers::removeMemberInRoom($_POST['member_id']);
 
             // xoa file cau hoi
             if (file_exists($strPathQuestionFile)){
@@ -130,11 +130,11 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             if (file_exists($strPathQuestionFile)){
                 unlink($strPathQuestionFile);
             }
-            //sleep(1);
-            // xoa room
-            Room::removeRoom($_POST['room_id']);
-            // xoa member
-            RoomMembers::removeMemberInRoom($_POST['member_id']);
+        //sleep(1);
+        // xoa room
+            //Room::removeRoom($_POST['room_id']);
+        // xoa member
+            //RoomMembers::removeMemberInRoom($_POST['member_id']);
 
             // xoa file get list
             $pathGetAnswer = $path . '/' . $_POST['room_id'] . '_get_list_answer.txt';

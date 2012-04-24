@@ -62,7 +62,8 @@
                         DELETE FROM rooms
                         WHERE room_id = '{$room_id}'
                         ";
-            return @mysql_query($query) or die('removeRoom(): ' . mysql_error());
+            $result = @mysql_query($query) or die('removeRoom(): ' . mysql_error());
+            return $result;
         }
 
         // lấy về bet_score của room
@@ -70,14 +71,16 @@
             $query = "  SELECT  bet_score
                         FROM    rooms
                         WHERE   room_id = '{$room_id}'";
-            return @mysql_query($query) or die('getBetScore(): ' . mysql_error());
+            $result = mysql_query($query) or die('getBetScore(): ' . mysql_error());
+            return $result;
         }
 
         public static function changeRoomToPlaying($room_id){
             $query = "  UPDATE  rooms
                         SET     status = 1
                         WHERE   room_id = '{$room_id}'";
-            return @mysql_query($query) or die('changeRoomToPlaying(): ' . mysql_error());
+            $result = @mysql_query($query) or die('changeRoomToPlaying(): ' . mysql_error());
+            return $result;
         }
 
         // tự động +1 vào number_of_members của room
@@ -86,6 +89,7 @@
                         SET     number_of_members = number_of_members + 1
                         WHERE   room_id = '{$room_id}'";
             $result = @mysql_query($query) or die ('updateMemberOfRoom '  . mysql_error());
+            return $result;
         }
 
         // tự động -1 vào number_of_members của room
@@ -94,6 +98,7 @@
                         SET     number_of_members = number_of_members - 1
                         WHERE   room_id = '{$room_id}'";
             $result = @mysql_query($query) or die ('updateMemberOfRoom '  . mysql_error());
+            return $result;
         }
     }
 

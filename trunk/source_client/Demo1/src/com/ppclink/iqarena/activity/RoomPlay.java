@@ -596,7 +596,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				} catch (Exception e) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setTitle("Error");
-					builder.setMessage(sResult);
+					builder.setMessage(e.getMessage());
 					builder.create().show();
 				}
 			} 

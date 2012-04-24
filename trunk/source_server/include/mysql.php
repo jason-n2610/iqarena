@@ -4,9 +4,10 @@
         public static $connection = '';
 
         public static function connect()
-        {            
+        {
             $path = getcwd();
-            include ($path.'/config/config.php');
+            //include ($path.'/config/config.php');
+            include ('D:\\xampp\\htdocs\\iqarena\\source_server\\config\\config.php');
             // tạo connect tới localhost
             self::$connection = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD) or die('Could not connect to mysql: ' . mysql_error());
             // lấy dữ liệu từ database
@@ -18,7 +19,7 @@
         {
             return mysql_close(self::$connection);
         }
-        
+
         public static function excuteQuery($query){
             $result = @mysql_query($query) or die (mysql_error());
             return $result;
