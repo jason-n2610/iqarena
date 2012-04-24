@@ -25,11 +25,12 @@ if (isset($_POST['room_id']) && isset($_POST['user_id'])) {
     Room::increateMemberOfRoom($_POST['room_id']);
     $tblUser = User::getScore($_POST['user_id']);
     $tblRoom = Room::getBetScore($_POST['room_id']);
-    while($row = mysql_fetch_assoc($tblUser)){
-        $scoreUser = $row['score_level'];
+    echo $_POST['room_id'];
+    while($row = mysql_fetch_array($tblUser, MYSQL_NUM)){
+        $scoreUser = $row[0];
     }
-    while($row = mysql_fetch_assoc($tblRoom)){
-        $scoreBetRoom = $row['bet_score'];
+    while($row = mysql_fetch_array($tblRoom, MYSQL_NUM)){
+        $scoreBetRoom = $row[0];
     }
     if ($scoreUser < $scoreBetRoom){
         // truong hop user khong du diem tham gia room

@@ -80,7 +80,7 @@ CREATE TABLE question_types (
     question_type_id tinyint unsigned not null auto_increment,
     question_type_value tinyint unsigned not null,
 	question_type_name nvarchar(50),
-    score float not null,
+    score float,
     PRIMARY KEY (question_type_id)
 );
 
