@@ -36,6 +36,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.Main"
+            android:configChanges="orientation|keyboardHidden"
+            android:noHistory="true" >
+           	<intent-filter>
+                <action android:name="android.intent.action.MainActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.Login"
             android:configChanges="orientation|keyboardHidden"
             android:noHistory="true" >

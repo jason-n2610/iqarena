@@ -1,5 +1,5 @@
 ﻿Xây dựng market để bán các bộ câu hỏi cho người chơi.
 Bán avatar và các vật dụng khác
 
-hoan thiet not file java playgame help 5050
-quiz online pro
+hoàn thiện lớp sqlitehelper
+bat dau test va xay dung offline dau truong kien thuc
