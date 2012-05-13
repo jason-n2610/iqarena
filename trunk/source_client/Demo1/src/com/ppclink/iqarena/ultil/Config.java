@@ -3,7 +3,7 @@ package com.ppclink.iqarena.ultil;
 import android.os.Environment;
 
 public class Config {
-	public static final String REQUEST_SERVER_ADDR = "http://10.0.0.206/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 //	public static final String REQUEST_SERVER_ADDR = "http://hoangnh29.byethost12.com";
 //	public static final String REQUEST_SERVER_ADDR = "http://10.0.0.108/iqarena/source_server/index.php";
 		

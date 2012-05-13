@@ -31,6 +31,24 @@ public class Login extends Activity implements View.OnClickListener,
 	RequestServer requestServer;
 	TextView tvLoginResult;
 
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.login);
+
+		btnLogin = (Button) findViewById(R.id.login_login);
+		tvLoginResult = (TextView) findViewById(R.id.login_result);
+		etUsername = (EditText) findViewById(R.id.login_username);
+		etPassword = (EditText) findViewById(R.id.login_password);
+		ckRemember = (CheckBox) findViewById(R.id.ckRemember);
+
+		tvLoginResult.setText("");
+		btnLogin.setOnClickListener(this);
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -63,25 +81,7 @@ public class Login extends Activity implements View.OnClickListener,
 			requestServer.login(strUsername, strPassword);
 			break;
 		}
-
-	}
-
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.login);
-
-		btnLogin = (Button) findViewById(R.id.login_login);
-		tvLoginResult = (TextView) findViewById(R.id.login_result);
-		etUsername = (EditText) findViewById(R.id.login_username);
-		etPassword = (EditText) findViewById(R.id.login_password);
-		ckRemember = (CheckBox) findViewById(R.id.ckRemember);
-
-		tvLoginResult.setText("");
-		btnLogin.setOnClickListener(this);
+	
 	}
 
 	@Override

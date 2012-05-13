@@ -17,17 +17,17 @@
         android:orientation="vertical"
         android:layout_weight="1">
         <Button
-            android:id="@+id/main_btn_single_player" 
+            android:id="@+id/main_btn_local_mode" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Single Player"/>
+            android:text="Local mode"/>
         <Button
-            android:id="@+id/main_btn_multi_player" 
+            android:id="@+id/main_btn_network_mode" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Multi player"/>
+            android:text="Network mode"/>
         <Button
             android:id="@+id/main_btn_option" 
             android:layout_width="fill_parent"
