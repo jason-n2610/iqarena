@@ -149,7 +149,7 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
             User::updateScoreForLosersAfterGame($_POST['user_id'], $_POST['member_id'], $_POST['room_id']);
             // xoa nguoi choi
             //sleep(1);
-            RoomMembers::removeMemberInRoom($_POST['member_id']);
+            //RoomMembers::removeMemberInRoom($_POST['member_id']);
         }
 
         // cập nhật điểm mới cho user

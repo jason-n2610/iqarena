@@ -1,5 +1,7 @@
 package com.ppclink.iqarena.activity;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.communication.RequestServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
+import com.ppclink.iqarena.ultil.Config;
 import com.ppclink.iqarena.ultil.FilterResponse;
 import com.ppclink.iqarena.ultil.Utils;
 
@@ -49,6 +52,12 @@ public class Register extends Activity implements View.OnClickListener,
 		tvNotice.setVisibility(View.GONE);
 
 		btnRegister.setOnClickListener(this);
+
+		String path = getApplication().getExternalFilesDir(null).toString();
+		File configFile = new File(path, Config.FILE_CONFIG_NAME);
+		if (configFile.exists()) {
+			configFile.delete();
+		}
 	}
 
 	@Override
