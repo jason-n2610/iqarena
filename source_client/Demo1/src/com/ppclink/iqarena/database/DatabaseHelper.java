@@ -13,6 +13,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.ppclink.iqarena.object.QuestionLite;
 
@@ -26,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private SQLiteDatabase myDataBase; 
  
     private final Context mContext;
+    private String tag = "DatabaseHelper";
 	
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, 1);
@@ -52,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
  
     	}catch(SQLiteException e){
  
-    		//database does't exist yet.
+    		Log.e(tag, e.getMessage());
  
     	}
  
@@ -126,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	 
     	//Open the database
         String myPath = DB_PATH + DB_NAME;
-    	myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+    	myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS );
  
     }
     
@@ -150,17 +152,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		ArrayList<QuestionLite> alQuestion = null;
 		if (myDataBase != null){
 			alQuestion = new ArrayList<QuestionLite>();
-			String query = "SELECT question_id, question_name, " +
+			String query = "SELECT _id, question_name, " +
 					"question_type, answer_a, answer_b, answer_c, " +
-					"answer_d, answer, describle_answer" +
-					"FROM questions" +
-					"LIMIT 5";
+					"answer_d, answer, describle_answer " +
+					"FROM questions";
 			Cursor c = myDataBase.rawQuery(query, null);
 
 			if (c != null) {
 				if (c.moveToFirst()) {
 					do {
-						int quesId = c.getInt(c.getColumnIndex("question_id"));
+						int quesId = c.getInt(c.getColumnIndex("_id"));
 						String quesName = c.getString(c.
 								getColumnIndex("question_name"));
 						int quesType = c.getInt(c.getColumnIndex("question_type"));
@@ -179,6 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 					} while (c.moveToNext());
 				}
 			}
+			c.close();
 		}
     	return alQuestion;
     }
@@ -195,13 +197,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 		
 	}
 

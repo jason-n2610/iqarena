@@ -90,7 +90,8 @@ public class Welcome extends Activity implements IRequestServer {
 	 */
 	public ArrayList<String> getConfigFile() {
 		ArrayList<String> result = null;
-		File configFile = new File(Config.PATH_CONFIG, Config.FILE_CONFIG_NAME);
+		String path = getApplication().getExternalFilesDir(null).toString();
+		File configFile = new File(path, Config.FILE_CONFIG_NAME);
 		if (configFile.exists()) {
 			try {
 				BufferedReader buffReader = new BufferedReader(new FileReader(
@@ -115,7 +116,7 @@ public class Welcome extends Activity implements IRequestServer {
 	 */
 	public boolean saveConfigFile(ArrayList<String> content) {
 		boolean result = true;
-		String path = Config.PATH_CONFIG;
+		String path = getApplication().getExternalFilesDir(null).toString();
 		File rootDir = new File(path);
 		if (!(rootDir.exists() && rootDir.isDirectory())) {
 			try {

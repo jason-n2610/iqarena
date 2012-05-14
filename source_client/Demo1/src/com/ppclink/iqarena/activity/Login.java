@@ -145,7 +145,7 @@ public class Login extends Activity implements View.OnClickListener,
 	 */
 	public boolean saveConfigFile(String str1, String str2) {
 		boolean result = true;
-		String path = Config.PATH_CONFIG;
+		String path = getApplication().getExternalFilesDir(null).toString();
 		File rootDir = new File(path);
 		if (!(rootDir.exists() && rootDir.isDirectory())) {
 			try {
@@ -176,7 +176,8 @@ public class Login extends Activity implements View.OnClickListener,
 	}
 
 	public boolean destroyConfigFile() {
-		File configFile = new File(Config.PATH_CONFIG, Config.FILE_CONFIG_NAME);
+		String path = getApplication().getExternalFilesDir(null).toString();
+		File configFile = new File(path, Config.FILE_CONFIG_NAME);
 		if (configFile.exists()) {
 			return configFile.delete();
 		}
