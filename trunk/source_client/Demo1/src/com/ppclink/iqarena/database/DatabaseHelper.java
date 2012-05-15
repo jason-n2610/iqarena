@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.ppclink.iqarena.object.Award;
 import com.ppclink.iqarena.object.QuestionLite;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
@@ -169,6 +170,39 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     		}
     	}
     	return result;
+    }
+    
+    public ArrayList<Award> getAwards(){
+    	ArrayList<Award> awards = null;
+    	if (myDataBase != null){
+    		awards = new ArrayList<Award>();
+    		String query = "SELECT _id, name, score" +
+    				"FROM awards";
+    		Cursor c = myDataBase.rawQuery(query, null);
+			if (c != null) {
+				if (c.moveToFirst()) {
+					do {
+						int _id = c.getInt(c.getColumnIndex("_id"));
+						String name = c.getString(c.
+								getColumnIndex("name"));
+						int score = c.getInt(c.getColumnIndex("score"));
+						Award award = new Award(_id, name, score);
+						awards.add(award);
+						
+					} while (c.moveToNext());
+				}
+			}
+			c.close();
+    	}
+    	return awards;
+    }
+    
+    public void insertAward(String name, int score){
+    	if (myDataBase != null){
+			String query = "INSERT INTO " + "awards(name, score) " + "VALUES ('"
+					+ name + "', " + score + "); ";
+			myDataBase.execSQL(query);
+    	}
     }
     
     public QuestionLite getData(int type){
