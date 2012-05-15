@@ -98,27 +98,8 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.main_btn_local_mode:
-			if (mDataHelper == null) {
-				mDataHelper = new DatabaseHelper(this);
-			}
-			try {
-				mDataHelper.createDataBase();
-			} catch (IOException e) {
-				Log.e(tag, e.getMessage());
-			}
-
-			try {
-				mDataHelper.openDataBase();
-			} catch (SQLException e) {
-				Log.e(tag, e.getMessage());
-			}
-			ArrayList<QuestionLite> alQuestion = mDataHelper.getData();
-			int size = alQuestion.size();
-			Log.i(tag, "size: " + size);
-			for (int i = 0; i < size; i++) {
-				Log.i(tag, alQuestion.get(i).getQuesName());
-			}
-			mDataHelper.close();
+			Intent i = new Intent(this, LocalMode.class);
+			startActivity(i);
 
 			break;
 		case R.id.main_btn_network_mode:

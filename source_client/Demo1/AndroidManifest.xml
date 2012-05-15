@@ -131,6 +131,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.LocalMode"
+            android:label="Local Mode"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.LocalMode" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
