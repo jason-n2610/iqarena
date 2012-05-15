@@ -50,6 +50,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
  
     	try{
     		String myPath = DB_PATH + DB_NAME;
+    		File file = new File(myPath);
+    		if (!file.exists()){
+    			return false;
+    		}
     		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
  
     	}catch(SQLiteException e){
@@ -148,16 +152,37 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	return result;
     }
     
-    public ArrayList<QuestionLite> getData(){
-		ArrayList<QuestionLite> alQuestion = null;
-		if (myDataBase != null){
-			alQuestion = new ArrayList<QuestionLite>();
-			String query = "SELECT _id, question_name, " +
-					"question_type, answer_a, answer_b, answer_c, " +
-					"answer_d, answer, describle_answer " +
-					"FROM questions";
-			Cursor c = myDataBase.rawQuery(query, null);
+    public boolean insertData(ArrayList<QuestionLite> questions){
+    	boolean result = false;
+    	if (myDataBase != null){
+    		String query1 = "INSERT INTO questions(question_name, question_type, " +
+    				"answer_a, answer_b, answer_c, answer_d, answer) \n";
+    		int size = questions.size();
+    		for (int i=0; i<size; i++){
+    			QuestionLite question = questions.get(i);
+    			String query = query1 + "VALUES ('"+question.getQuesName()+"', " + question.getQuesType()+", "
+    					+"'"+question.getAnswerA()+"', "+"'"+question.getAnswerB()+"', "
+    					+"'"+question.getAnswerC()+"', "+"'"+question.getAnswerD()+"', "
+    					+question.getAnswer() + ") \n";
 
+        		myDataBase.execSQL(query.toString());
+    		}
+    	}
+    	return result;
+    }
+    
+    public QuestionLite getData(int type){
+    	QuestionLite question= null;
+    	if (myDataBase != null){
+			String query = 
+						"SELECT _id, question_name, " +
+						"question_type, answer_a, answer_b, answer_c, " +
+						"answer_d, answer, describle_answer " +
+						"FROM questions " +
+						"WHERE question_type="+type+" "+
+						"ORDER BY RANDOM() " +
+						"LIMIT 1 ";
+			Cursor c = myDataBase.rawQuery(query, null);
 			if (c != null) {
 				if (c.moveToFirst()) {
 					do {
@@ -172,15 +197,28 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 						int answer = c.getInt(c.getColumnIndex("answer"));
 						String desAnswer = c.getString(c.
 								getColumnIndex("describle_answer"));
-						QuestionLite question = new QuestionLite(quesId, 
+						question = new QuestionLite(quesId, 
 								quesName, quesType, answerA, answerB, answerC, 
 								answerD, answer, desAnswer);
-						alQuestion.add(question);
 						
 					} while (c.moveToNext());
 				}
 			}
 			c.close();
+		}
+    	return question;
+    }
+    
+    public ArrayList<QuestionLite> getData(){
+		ArrayList<QuestionLite> alQuestion = null;
+		if (myDataBase != null){
+			alQuestion = new ArrayList<QuestionLite>();
+			for (int i=0; i<15; i++){
+				QuestionLite question = getData(i+1);
+				if (question != null){
+					alQuestion.add(question);
+				}
+			}
 		}
     	return alQuestion;
     }
