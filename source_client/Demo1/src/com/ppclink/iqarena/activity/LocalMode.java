@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.database.DatabaseHelper;
@@ -38,8 +39,8 @@ public class LocalMode extends Activity implements OnClickListener {
 	AlertDialog mDialog;
 
 	private final static int TIME_PER_QUESTION = 30000;
-	
-	private static int score = 0;
+
+	private static int mScore = 0;
 
 	private CountDownTimer mTimer;
 
@@ -48,6 +49,9 @@ public class LocalMode extends Activity implements OnClickListener {
 	private ArrayList<QuestionLite> mQuestions;
 
 	private String tag = "LocalMode";
+	// mang 15 phan tu tuong ung so diem cho moi cau
+	private int[] mScoreLevels = { 10, 10, 10, 10, 10, 50, 100, 200, 500, 1000,
+			2000, 3000, 5000, 8000, 2000 };
 
 	DatabaseHelper mDataHelper;
 
@@ -73,7 +77,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mRbB = (RadioButton) findViewById(R.id.local_mode_rb_answer_b);
 		mRbC = (RadioButton) findViewById(R.id.local_mode_rb_answer_c);
 		mRbD = (RadioButton) findViewById(R.id.local_mode_rb_answer_d);
-		
+
 		mBtnSummit = (Button) findViewById(R.id.local_mode_btn_summit);
 
 		// event listener
@@ -103,9 +107,10 @@ public class LocalMode extends Activity implements OnClickListener {
 		}
 		mQuestions = mDataHelper.getData();
 		int size = mQuestions.size();
-		Log.i(tag, "size: "+size);
-		for (int i=0; i<size; i++){
-			Log.i(tag, mQuestions.get(i).getQuesName() + " \n"+ mQuestions.get(i).getQuesType());
+		Log.i(tag, "size: " + size);
+		for (int i = 0; i < size; i++) {
+			Log.i(tag, mQuestions.get(i).getQuesName() + " \n"
+					+ mQuestions.get(i).getQuesType());
 		}
 		mDataHelper.close();
 		// --> ket thuc lay du lieu
@@ -121,7 +126,7 @@ public class LocalMode extends Activity implements OnClickListener {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
-							
+
 							// hien thi cau hoi
 							if (mQuestions == null) {
 								return;
@@ -135,12 +140,12 @@ public class LocalMode extends Activity implements OnClickListener {
 							mRbB.setText(question.getAnswerB());
 							mRbC.setText(question.getAnswerC());
 							mRbD.setText(question.getAnswerD());
-							
+
 							// bat du tinh thoi gian
 							mTimer = new CountDownTimer(TIME_PER_QUESTION, 1000) {
 
 								@Override
-								public void onTick(long millisUntilFinished) {									
+								public void onTick(long millisUntilFinished) {
 
 									// dem thoi gian
 									int time = (int) millisUntilFinished / 1000;
@@ -160,7 +165,7 @@ public class LocalMode extends Activity implements OnClickListener {
 
 								@Override
 								public void onFinish() {
-									showDilogTimeLimit();
+									showDialogTimeLimit();
 								}
 							};
 							mTimer.start();
@@ -168,42 +173,42 @@ public class LocalMode extends Activity implements OnClickListener {
 					});
 			builder.create().show();
 		}
-		
+
 		// init UI
 		initUISuportMultiScreen();
 	}
-	
-	private void initUISuportMultiScreen(){
+
+	private void initUISuportMultiScreen() {
 		Display display = getWindowManager().getDefaultDisplay();
-        int screenWidth = display.getWidth();
-        if (screenWidth == 1280 || screenWidth == 800){
-        	mTvQuestion.setTextSize(24);
-        	mTvQuestionTimer.setTextSize(48);
-        	
-        	mRbA.setHeight(56);
-        	mRbA.setTextSize(20);
-        	mRbB.setHeight(56);
-        	mRbB.setTextSize(20);
-        	mRbC.setHeight(56);
-        	mRbC.setTextSize(20);
-        	mRbD.setHeight(56);
-        	mRbD.setTextSize(20);
-        	
-        	mBtnHelp5050.setTextSize(20);
-        	mBtnHelpRelease.setTextSize(20);
-        	mBtnHelpX2.setTextSize(20);
-        	mBtnSummit.setTextSize(20);
-        	
-        	mBtnHelp5050.setWidth(160);
-        	mBtnHelpRelease.setWidth(160);
-        	mBtnHelpX2.setWidth(160);
-        	mBtnSummit.setWidth(160);
-        	
-        	mBtnHelp5050.setHeight(60);
-        	mBtnHelpRelease.setHeight(60);
-        	mBtnHelpX2.setHeight(60);
-        	mBtnSummit.setHeight(60);
-        }
+		int screenWidth = display.getWidth();
+		if (screenWidth == 1280 || screenWidth == 800) {
+			mTvQuestion.setTextSize(24);
+			mTvQuestionTimer.setTextSize(48);
+
+			mRbA.setHeight(56);
+			mRbA.setTextSize(20);
+			mRbB.setHeight(56);
+			mRbB.setTextSize(20);
+			mRbC.setHeight(56);
+			mRbC.setTextSize(20);
+			mRbD.setHeight(56);
+			mRbD.setTextSize(20);
+
+			mBtnHelp5050.setTextSize(20);
+			mBtnHelpRelease.setTextSize(20);
+			mBtnHelpX2.setTextSize(20);
+			mBtnSummit.setTextSize(20);
+
+			mBtnHelp5050.setWidth(160);
+			mBtnHelpRelease.setWidth(160);
+			mBtnHelpX2.setWidth(160);
+			mBtnSummit.setWidth(160);
+
+			mBtnHelp5050.setHeight(60);
+			mBtnHelpRelease.setHeight(60);
+			mBtnHelpX2.setHeight(60);
+			mBtnSummit.setHeight(60);
+		}
 	}
 
 	@Override
@@ -223,9 +228,19 @@ public class LocalMode extends Activity implements OnClickListener {
 			mRgAnswer.getChildAt(sample.get(1)).setEnabled(false);
 			break;
 		case R.id.local_mode_btn_help_release:
-
+			// cau binh thuong
+			if (mCurrentQues != 14){
+				mBtnHelpRelease.setEnabled(false);
+				showDialogTrueAnswer(1);
+			}
+			else{
+				// cau thu 15
+				Toast.makeText(this, "Do not use for question 15", 800).show();
+			}
 			break;
 		case R.id.local_mode_btn_help_x2:
+			mBtnHelpX2.setEnabled(false);
+			mScoreLevels[mCurrentQues] = mScoreLevels[mCurrentQues] * 2;
 
 			break;
 		case R.id.local_mode_rb_answer_a:
@@ -240,24 +255,29 @@ public class LocalMode extends Activity implements OnClickListener {
 		case R.id.local_mode_rb_answer_d:
 
 			break;
-			
+
 		case R.id.local_mode_btn_summit:
-			if (mTimer != null){
+			if (mTimer != null) {
 				// disable answer
 				int count = mRgAnswer.getChildCount();
 				for (int i = 0; i < count; i++) {
 					mRgAnswer.getChildAt(i).setEnabled(false);
 				}
 				mTimer.cancel();
-				
+
 				// check answer
 				int answer = mRgAnswer.indexOfChild(findViewById(mRgAnswer
 						.getCheckedRadioButtonId())) + 1;
-				if (answer == mQuestions.get(mCurrentQues).getAnswer()){
-					// hien thi dialog tra loi dung
-					showDialogTrueAnswer();
-				}
-				else{
+				if (answer == mQuestions.get(mCurrentQues).getAnswer()) {
+					if (mCurrentQues != 14){
+						// hien thi dialog tra loi dung
+						showDialogTrueAnswer(0);
+					}
+					else{
+						// victory
+						showDialogVictory();
+					}
+				} else {
 					// hien thi dialog tra loi sai
 					showDialogFalseAnswer();
 				}
@@ -268,12 +288,34 @@ public class LocalMode extends Activity implements OnClickListener {
 			break;
 		}
 	}
-	
-	private void showDialogTrueAnswer(){
+
+	private void showDialogTrueAnswer(int type) {
+		// type 0 la cho truong hop tra loi dung
+		// type 1 cho truong hop help release
+		// lay ve ket qua dung
+		String result = getAnswer();
+		if (result == null){
+			return;
+		}
+
+		// score
+		if (type != 1){
+			mScore = mScore + mScoreLevels[mCurrentQues];
+		}
+		// hien thi score
+		mTvScore.setText(String.valueOf(mScore));
+
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
 		builder.setTitle("Result");
-		builder.setMessage("You are TRUE. Ready for next question?");
+		if (type == 0){
+			builder.setMessage(result + " is TRUE answer. Your score is: " + mScore
+					+ "\nReady for next question?");
+		}
+		else if (type == 1){
+			builder.setMessage("You have choose help release. "+ result + " is TRUE answer. Your score is: " + mScore
+					+ "\nReady for next question?");
+		}
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
@@ -285,17 +327,16 @@ public class LocalMode extends Activity implements OnClickListener {
 					mRgAnswer.getChildAt(i).setEnabled(true);
 				}
 				mRgAnswer.clearCheck();
-				
+
 				int size = mQuestions.size();
-				if ((mCurrentQues+1) > size){
+				if ((mCurrentQues + 1) > size) {
 					return;
 				}
-				
+
 				mCurrentQues++;
-				
+
 				// hien thi cau hoi
-				QuestionLite question = mQuestions
-						.get(mCurrentQues);
+				QuestionLite question = mQuestions.get(mCurrentQues);
 				mTvQuestionTitle.setText("Question "
 						+ String.valueOf(mCurrentQues + 1));
 				mTvQuestion.setText(question.getQuesName());
@@ -303,24 +344,21 @@ public class LocalMode extends Activity implements OnClickListener {
 				mRbB.setText(question.getAnswerB());
 				mRbC.setText(question.getAnswerC());
 				mRbD.setText(question.getAnswerD());
-				
+
 				// bat du tinh thoi gian
 				mTimer = new CountDownTimer(TIME_PER_QUESTION, 1000) {
 
 					@Override
-					public void onTick(long millisUntilFinished) {									
+					public void onTick(long millisUntilFinished) {
 
 						// dem thoi gian
 						int time = (int) millisUntilFinished / 1000;
 						if (time > 20) {
-							mTvQuestionTimer
-									.setTextColor(Color.GREEN);
+							mTvQuestionTimer.setTextColor(Color.GREEN);
 						} else if (time > 10) {
-							mTvQuestionTimer
-									.setTextColor(Color.YELLOW);
+							mTvQuestionTimer.setTextColor(Color.YELLOW);
 						} else {
-							mTvQuestionTimer
-									.setTextColor(Color.RED);
+							mTvQuestionTimer.setTextColor(Color.RED);
 						}
 						mTvQuestionTimer.setText(String
 								.valueOf(millisUntilFinished / 1000));
@@ -328,27 +366,32 @@ public class LocalMode extends Activity implements OnClickListener {
 
 					@Override
 					public void onFinish() {
-						showDilogTimeLimit();
+						showDialogTimeLimit();
 					}
 				};
 				mTimer.start();
-				
+
 			}
 		});
 		dialog = builder.create();
 		dialog.show();
 	}
-	
-	private void showDialogFalseAnswer(){		
+
+	private void showDialogFalseAnswer() {
 		mBtnHelp5050.setEnabled(false);
 		mBtnHelpRelease.setEnabled(false);
 		mBtnHelpX2.setEnabled(false);
 		mBtnSummit.setEnabled(false);
 		
+		String result = getAnswer();
+		if (result == null){
+			return;
+		}
+
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
 		builder.setTitle("Result");
-		builder.setMessage("You are FALSE");
+		builder.setMessage("You are FALSE. True answer is: " + result);
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
@@ -360,98 +403,148 @@ public class LocalMode extends Activity implements OnClickListener {
 		dialog = builder.create();
 		dialog.show();
 	}
-	
-	private void showDilogTimeLimit(){
-		int count = mRgAnswer.getChildCount();
-		for (int i=0; i<count; i++){
-			mRgAnswer.getChildAt(i).setEnabled(false);
+
+	private void showDialogVictory(){
+		
+		// lay ve ket qua dung
+		String result = getAnswer();
+		if (result == null){
+			return;
 		}
-		
-		mBtnHelp5050.setEnabled(false);
-		mBtnHelpRelease.setEnabled(false);
-		mBtnHelpX2.setEnabled(false);
-		mBtnSummit.setEnabled(false);
-		
+
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
-		builder.setTitle("Result");
-		builder.setMessage("Time limited. You are lost");
-		builder.setPositiveButton("Show result", new DialogInterface.OnClickListener() {
+		builder.setTitle("Victory");
+		builder.setMessage(result + " is TRUE answer. You are victory!");
+		builder.setPositiveButton("Show award", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 				// hien thi ket qua
+				
 			}
 		});
 		dialog = builder.create();
 		dialog.show();
+		
 	}
 	
-	public ArrayList<QuestionLite> insertDataToDB(){
+	private void showDialogTimeLimit() {
+		int count = mRgAnswer.getChildCount();
+		for (int i = 0; i < count; i++) {
+			mRgAnswer.getChildAt(i).setEnabled(false);
+		}
+
+		mBtnHelp5050.setEnabled(false);
+		mBtnHelpRelease.setEnabled(false);
+		mBtnHelpX2.setEnabled(false);
+		mBtnSummit.setEnabled(false);
+
+		AlertDialog dialog = null;
+		Builder builder = new Builder(this);
+		builder.setTitle("Result");
+		builder.setMessage("Time limited. You are lost");
+		builder.setPositiveButton("Show result",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						// hien thi ket qua
+					}
+				});
+		dialog = builder.create();
+		dialog.show();
+	}
+	
+	private String getAnswer(){
+		String result = null;
+		int answer = mQuestions.get(mCurrentQues).getAnswer();
+		switch (answer) {
+		case 1:
+			result = "A";
+			break;
+		case 2:
+			result = "B";
+			break;
+		case 3:
+			result = "C";
+			break;
+		case 4:
+			result = "D";
+			break;
+
+		default:
+			result = null;
+			break;
+		}
+		return result;
+	}
+
+	public ArrayList<QuestionLite> insertDataToDB() {
 		ArrayList<QuestionLite> questions = new ArrayList<QuestionLite>();
 		try {
-			for (int i=1; i<57; i++){
-				
-				InputStream is = this.getAssets().open(i+".txt");
-				BufferedReader br = new BufferedReader(new InputStreamReader(is) , 8192);
+			for (int i = 1; i < 57; i++) {
+
+				InputStream is = this.getAssets().open(i + ".txt");
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(is), 8192);
 				String line;
 				QuestionLite question;
 				ArrayList<String> temp = new ArrayList<String>();
-				while((line = br.readLine()) != null){
+				while ((line = br.readLine()) != null) {
 					temp.add(line);
 				}
 				int size = temp.size();
-				if (size == 6){
+				if (size == 6) {
 					String quesName = temp.get(0);
-					if (quesName.contains(".")){
-						quesName = quesName.substring(quesName.indexOf(".")+1);
+					if (quesName.contains(".")) {
+						quesName = quesName
+								.substring(quesName.indexOf(".") + 1);
 					}
-					if (quesName.contains("'")){
+					if (quesName.contains("'")) {
 						quesName = quesName.replace("'", " ");
 					}
 					String a = temp.get(1);
-					if (a.contains("'")){
+					if (a.contains("'")) {
 						a = a.replace("'", "-");
 					}
 					String b = temp.get(2);
-					if (b.contains("'")){
+					if (b.contains("'")) {
 						b = b.replace("'", "-");
 					}
 					String c = temp.get(3);
-					if (c.contains("'")){
+					if (c.contains("'")) {
 						c = c.replace("'", "-");
 					}
 					String d = temp.get(4);
-					if (d.contains("'")){
+					if (d.contains("'")) {
 						d = d.replace("'", "-");
 					}
 					int answer;
-					if (temp.get(5).trim().equals("a")){
+					if (temp.get(5).trim().equals("a")) {
 						answer = 1;
-					}
-					else if (temp.get(5).trim().equals("b")){
+					} else if (temp.get(5).trim().equals("b")) {
 						answer = 2;
-					}
-					else if (temp.get(5).trim().equals("c")){
+					} else if (temp.get(5).trim().equals("c")) {
 						answer = 3;
-					}
-					else if (temp.get(5).trim().equals("d")){
+					} else if (temp.get(5).trim().equals("d")) {
 						answer = 4;
-					}
-					else{
+					} else {
 						answer = 0;
 					}
-					question = new QuestionLite(0, quesName, 15, a, b, c, d, answer, "");
+					question = new QuestionLite(0, quesName, 15, a, b, c, d,
+							answer, "");
 					questions.add(question);
-				}			
+				}
 			}
-//			int size = questions.size();
-//			Log.i(tag, "size insert: "+size);
-//			for (int i=0; i<size; i++){
-//				Log.i(tag, "question: "+questions.get(i).getQuesName());
-//			}
-			
+			// int size = questions.size();
+			// Log.i(tag, "size insert: "+size);
+			// for (int i=0; i<size; i++){
+			// Log.i(tag, "question: "+questions.get(i).getQuesName());
+			// }
+
 		} catch (IOException e) {
 			Log.e(tag, e.getMessage());
 		}
