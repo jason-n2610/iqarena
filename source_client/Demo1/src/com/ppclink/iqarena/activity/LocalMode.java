@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.database.DatabaseHelper;
@@ -34,7 +35,7 @@ public class LocalMode extends Activity implements OnClickListener {
 	RadioButton mRbA, mRbB, mRbC, mRbD; // answer item
 	RadioGroup mRgAnswer; // answer group
 	TextView mTvQuestion, mTvQuestionTimer, mTvQuestionTitle, mTvScore;
-
+	private ViewFlipper mVfMain;
 	Button mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnSummit;
 	AlertDialog mDialog;
 
@@ -50,8 +51,8 @@ public class LocalMode extends Activity implements OnClickListener {
 
 	private String tag = "LocalMode";
 	// mang 15 phan tu tuong ung so diem cho moi cau
-	private int[] mScoreLevels = { 10, 10, 10, 10, 10, 50, 100, 200, 500, 1000,
-			2000, 3000, 5000, 8000, 2000 };
+	private int[] mScoreLevels = { 10, 10, 10, 10, 20, 50, 100, 200, 500, 1000,
+			2000, 3000, 5000, 8000, 10000 };
 
 	DatabaseHelper mDataHelper;
 
@@ -60,6 +61,8 @@ public class LocalMode extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.local_mode);
 
+		mVfMain = (ViewFlipper) findViewById(R.id.local_mode_vf_main);
+		
 		// question & timer
 		mTvQuestionTitle = (TextView) findViewById(R.id.local_mode_tv_question_title);
 		mTvQuestion = (TextView) findViewById(R.id.local_mode_tv_question_name);
