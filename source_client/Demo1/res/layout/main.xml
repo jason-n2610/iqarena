@@ -2,13 +2,15 @@
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_vf_main"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="@drawable/bg_app_main">
 
-    <ImageView
-        android:id="@+id/main_iv_welcome"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:src="@drawable/bg_app_startup" />
+<!--     <ImageView -->
+<!--         android:id="@+id/main_iv_welcome" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:src="@drawable/bg_app_startup" -->
+<!--         android:visibility="gone" /> -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -19,7 +21,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="2"
-            android:background="@color/white"
             android:orientation="vertical" >
         </LinearLayout>
 
