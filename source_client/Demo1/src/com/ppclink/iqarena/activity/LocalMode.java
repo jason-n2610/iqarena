@@ -36,7 +36,7 @@ public class LocalMode extends Activity implements OnClickListener {
 	RadioGroup mRgAnswer; // answer group
 	TextView mTvQuestion, mTvQuestionTimer, mTvQuestionTitle, mTvScore;
 	private ViewFlipper mVfMain;
-	Button mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnSummit;
+	Button mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnSummit, mBtnHelpChangeQuestion;
 	AlertDialog mDialog;
 
 	private final static int TIME_PER_QUESTION = 30000;
@@ -73,6 +73,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mBtnHelpX2 = (Button) findViewById(R.id.local_mode_btn_help_x2);
 		mBtnHelpRelease = (Button) findViewById(R.id.local_mode_btn_help_release);
 		mBtnHelp5050 = (Button) findViewById(R.id.local_mode_btn_help_50_50);
+		mBtnHelpChangeQuestion = (Button) findViewById(R.id.local_mode_btn_help_change_question);
 
 		// answer
 		mRgAnswer = (RadioGroup) findViewById(R.id.local_mode_rg_answer);
@@ -92,6 +93,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mRbC.setOnClickListener(this);
 		mRbD.setOnClickListener(this);
 		mBtnSummit.setOnClickListener(this);
+		mBtnHelpChangeQuestion.setOnClickListener(this);
 
 		// connect database and get data
 		if (mDataHelper == null) {
@@ -108,7 +110,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		} catch (SQLException e) {
 			Log.e(tag, e.getMessage());
 		}
-		mQuestions = mDataHelper.getData();
+		mQuestions = mDataHelper.getQuestions();
 		int size = mQuestions.size();
 		Log.i(tag, "size: " + size);
 		for (int i = 0; i < size; i++) {
@@ -231,6 +233,10 @@ public class LocalMode extends Activity implements OnClickListener {
 			mRgAnswer.getChildAt(sample.get(1)).setEnabled(false);
 			break;
 		case R.id.local_mode_btn_help_release:
+			mBtnHelpRelease.setEnabled(false);
+			if (mTimer != null){
+				mTimer.cancel();
+			}
 			// cau binh thuong
 			if (mCurrentQues != 14){
 				mBtnHelpRelease.setEnabled(false);
@@ -244,7 +250,9 @@ public class LocalMode extends Activity implements OnClickListener {
 		case R.id.local_mode_btn_help_x2:
 			mBtnHelpX2.setEnabled(false);
 			mScoreLevels[mCurrentQues] = mScoreLevels[mCurrentQues] * 2;
-
+			break;
+		case R.id.local_mode_btn_help_change_question:
+			mBtnHelpChangeQuestion.setEnabled(false);
 			break;
 		case R.id.local_mode_rb_answer_a:
 
@@ -261,12 +269,12 @@ public class LocalMode extends Activity implements OnClickListener {
 
 		case R.id.local_mode_btn_summit:
 			if (mTimer != null) {
+				mTimer.cancel();
 				// disable answer
 				int count = mRgAnswer.getChildCount();
 				for (int i = 0; i < count; i++) {
 					mRgAnswer.getChildAt(i).setEnabled(false);
 				}
-				mTimer.cancel();
 
 				// check answer
 				int answer = mRgAnswer.indexOfChild(findViewById(mRgAnswer
@@ -300,23 +308,24 @@ public class LocalMode extends Activity implements OnClickListener {
 		if (result == null){
 			return;
 		}
-
-		// score
-		if (type != 1){
+		if (type == 0){
 			mScore = mScore + mScoreLevels[mCurrentQues];
 		}
+		else{
+			mScore = mScore * 3 / 4;
+		}
 		// hien thi score
-		mTvScore.setText(String.valueOf(mScore));
+		mTvScore.setText("Score: " + String.valueOf(mScore));
 
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
 		builder.setTitle("Result");
 		if (type == 0){
-			builder.setMessage(result + " is TRUE answer. Your score is: " + mScore
+			builder.setMessage(result + " is TRUE answer. \nYour score is: " + mScore
 					+ "\nReady for next question?");
 		}
 		else if (type == 1){
-			builder.setMessage("You have choose help release. "+ result + " is TRUE answer. Your score is: " + mScore
+			builder.setMessage("You have choose help release. \n"+ result + " is TRUE answer. \nYour score is: " + mScore
 					+ "\nReady for next question?");
 		}
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
