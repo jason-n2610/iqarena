@@ -2,8 +2,8 @@
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_vf_main"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:background="@drawable/bg_app_main">
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_app_main" >
 
 <!--     <ImageView -->
 <!--         android:id="@+id/main_iv_welcome" -->
@@ -12,94 +12,102 @@
 <!--         android:src="@drawable/bg_app_startup" -->
 <!--         android:visibility="gone" /> -->
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/main_ll_main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="2"
-            android:orientation="vertical" >
-        </LinearLayout>
+        <Button
+            android:id="@+id/main_btn_singler_player_off"
+            android:layout_width="112dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/single_off"
+            android:textColor="#ffffffff"
+            android:text="Local Mode" />
 
-        <ViewFlipper
-            android:id="@+id/main_vf_btn"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
+        <Button
+            android:id="@+id/main_btn_single_player_on"
+            android:layout_width="112dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/single_on"
+            android:textColor="#ffffffff"
+            android:text="Single Player"  />
 
-            <LinearLayout
-                android:id="@+id/main_ll_main"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" >
+        <Button
+            android:id="@+id/main_btn_multi_player"
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/main_btn_singler_player_off"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/multi_player"
+            android:textColor="#ffffffff"
+            android:text="Multi Player"  />
 
-                <Button
-                    android:id="@+id/main_btn_local_mode"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Local mode" />
+        <Button
+            android:id="@+id/main_btn_help"
+            android:layout_width="64dp"
+            android:layout_height="68dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/help" />
 
-                <Button
-                    android:id="@+id/main_btn_network_mode"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Network mode" />
+        <Button
+            android:id="@+id/main_btn_about"
+            android:layout_width="64dp"
+            android:layout_height="68dp"
+            android:layout_alignBaseline="@+id/main_btn_help"
+            android:layout_alignBottom="@+id/main_btn_help"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/about" />
 
-                <Button
-                    android:id="@+id/main_btn_option"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Option" />
+        <Button
+            android:id="@+id/main_btn_option"
+            android:layout_width="64dp"
+            android:layout_height="68dp"
+            android:layout_alignBaseline="@+id/main_btn_about"
+            android:layout_alignBottom="@+id/main_btn_about"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/sound_on" />
 
-                <Button
-                    android:id="@+id/main_btn_help"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Help" />
+        <Button
+            android:id="@+id/main_ib_upload_question"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_btn_help"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/upload" 
+            android:text="Upload Question"
+            android:textColor="#ffffffff"/>
 
-                <Button
-                    android:id="@+id/main_btn_about"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="About" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/main_ll_network_mode"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" >
-
-                <Button
-                    android:id="@+id/main_btn_single_player"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Single Player" />
-
-                <Button
-                    android:id="@+id/main_btn_multi_player"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Multi Player" />
-
-                <Button
-                    android:id="@+id/main_btn_network_back"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Back" />
-            </LinearLayout>
-        </ViewFlipper>
-    </LinearLayout>
+        <Button
+            android:id="@+id/main_ib_download_question"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/main_ib_upload_question"
+            android:background="@drawable/button_style1"
+            android:drawableTop="@drawable/download" 
+            android:text="Download Question"
+            android:textColor="#ffffffff"/>
+    </RelativeLayout>
 
 </ViewFlipper>

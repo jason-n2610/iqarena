@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
  
     }
     
-    public boolean insertData(String quesName, 
+    public boolean insertQuestion(String quesName, 
     		int quesType, String answerA, String answerB, 
     		String answerC,String answerD, String answer, String desAnswer){
     	boolean result = false;
@@ -153,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	return result;
     }
     
-    public boolean insertData(ArrayList<QuestionLite> questions){
+    public boolean insertQuestion(ArrayList<QuestionLite> questions){
     	boolean result = false;
     	if (myDataBase != null){
     		String query1 = "INSERT INTO questions(question_name, question_type, " +
@@ -205,7 +205,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	}
     }
     
-    public QuestionLite getData(int type){
+    public QuestionLite getQuestion(int type){
     	QuestionLite question= null;
     	if (myDataBase != null){
 			String query = 
@@ -243,12 +243,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	return question;
     }
     
-    public ArrayList<QuestionLite> getData(){
+    public ArrayList<QuestionLite> getQuestions(){
 		ArrayList<QuestionLite> alQuestion = null;
 		if (myDataBase != null){
 			alQuestion = new ArrayList<QuestionLite>();
 			for (int i=0; i<15; i++){
-				QuestionLite question = getData(i+1);
+				QuestionLite question = getQuestion(i+1);
 				if (question != null){
 					alQuestion.add(question);
 				}

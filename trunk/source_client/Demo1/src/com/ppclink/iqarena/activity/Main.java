@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -39,41 +40,34 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 
 	DatabaseHelper mDataHelper;
 	String tag = "Main";
-	LinearLayout llMain, llNetworkMode;
 	RequestServer mRequestServer;
 	ProgressDialog mProgressDialog;
-	ViewFlipper vfLayoutButton, vfLayoutMain;
+	ViewFlipper vfLayoutMain;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		llMain = (LinearLayout) findViewById(R.id.main_ll_main);
-		llNetworkMode = (LinearLayout) findViewById(R.id.main_ll_network_mode);
-
-		Button btnLocalMode = (Button) findViewById(R.id.main_btn_local_mode);
-		Button btnNetworkMode = (Button) findViewById(R.id.main_btn_network_mode);
-		Button btnSinglePlayer = (Button) findViewById(R.id.main_btn_single_player);
+		Button btnSingleOn = (Button) findViewById(R.id.main_btn_single_player_on);
+		Button btnSingleOff = (Button) findViewById(R.id.main_btn_singler_player_off);
 		Button btnMultiPlayer = (Button) findViewById(R.id.main_btn_multi_player);
 		Button btnHelp = (Button) findViewById(R.id.main_btn_help);
 		Button btnAbout = (Button) findViewById(R.id.main_btn_about);
 		Button btnOption = (Button) findViewById(R.id.main_btn_option);
-		Button btnNetworkBack = (Button) findViewById(R.id.main_btn_network_back);
-		vfLayoutButton = (ViewFlipper) findViewById(R.id.main_vf_btn);
+		Button ibUploadQues = (Button) findViewById(R.id.main_ib_upload_question);
+		Button ibDownloadQues = (Button) findViewById(R.id.main_ib_download_question);
 		vfLayoutMain = (ViewFlipper) findViewById(R.id.main_vf_main);
-
-		llMain.setVisibility(View.VISIBLE);
-		llNetworkMode.setVisibility(View.GONE);
 
 		btnAbout.setOnClickListener(this);
 		btnHelp.setOnClickListener(this);
-		btnLocalMode.setOnClickListener(this);
+		btnSingleOn.setOnClickListener(this);
 		btnOption.setOnClickListener(this);
-		btnNetworkMode.setOnClickListener(this);
-		btnSinglePlayer.setOnClickListener(this);
+		btnSingleOff.setOnClickListener(this);
 		btnMultiPlayer.setOnClickListener(this);
-		btnNetworkBack.setOnClickListener(this);
+		btnMultiPlayer.setOnClickListener(this);
+		ibUploadQues.setOnClickListener(this);
+		ibDownloadQues.setOnClickListener(this);
 		
 		vfLayoutMain.setInAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.incoming));
@@ -97,17 +91,13 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.main_btn_local_mode:
+		case R.id.main_btn_singler_player_off:
 			Intent i = new Intent(this, LocalMode.class);
 			startActivity(i);
-
 			break;
-		case R.id.main_btn_network_mode:
-			vfLayoutButton.setInAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.push_up_in));
-			vfLayoutButton.setOutAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.push_up_out));
-			vfLayoutButton.showNext();
+		case R.id.main_ib_download_question:
+			break;
+		case R.id.main_ib_upload_question:
 			break;
 		case R.id.main_btn_option:
 			break;
@@ -115,7 +105,7 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 			break;
 		case R.id.main_btn_about:
 			break;
-		case R.id.main_btn_single_player:
+		case R.id.main_btn_single_player_on:
 			break;
 		case R.id.main_btn_multi_player:
 			// kiem tra network
@@ -136,13 +126,6 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 					startActivity(intent);
 				}
 			}
-			break;
-		case R.id.main_btn_network_back:
-			vfLayoutButton.setInAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.push_down_in));
-			vfLayoutButton.setOutAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.push_down_out));
-			vfLayoutButton.showPrevious();
 			break;
 		}
 	}
