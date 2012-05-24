@@ -6,44 +6,6 @@
     android:background="@drawable/bg_app_sky_night"
     android:orientation="vertical" >
     
-    
-
-    <LinearLayout
-        android:id="@+id/play_game_layout_question"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="true"
-        android:orientation="vertical"
-        android:visibility="visible" >
-        <TextView 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Rankings"
-            android:textColor="#ffffffff"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginTop="5dp"
-            android:gravity="center"/>
-        
-        <LinearLayout 
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/bg_form1"
-            android:layout_margin="5dp">
-
-            <ListView
-                android:id="@+id/listView1"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" 
-                android:layout_margin="5dp">
-            </ListView>
-            
-        </LinearLayout>
-    </LinearLayout>
-    
-    
-
     <LinearLayout
         android:id="@+id/local_mode_ll_question"
         android:layout_width="match_parent"
@@ -68,21 +30,21 @@
                     android:id="@+id/local_mode_tv_question_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Question #"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Question #"
                     android:textColor="#ffffffff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                
+
                 <TextView
                     android:id="@+id/local_mode_tv_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
                     android:text="Score: 0"
                     android:textColor="#ffffffff"
                     android:textSize="18sp"
@@ -197,14 +159,15 @@
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
-        
-        <LinearLayout 
-            android:layout_weight="1"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/bg_form1"
-            android:padding="5dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="5dp" >
+
             <Button
                 android:id="@+id/local_mode_btn_summit"
                 android:layout_width="wrap_content"
@@ -214,53 +177,145 @@
                 android:textColor="#ffffffff"
                 android:textStyle="bold" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <RadioGroup
-                android:id="@+id/local_mode_rg_answer"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
-                <RadioButton
-                    android:id="@+id/local_mode_rb_answer_a"
+                <RadioGroup
+                    android:id="@+id/local_mode_rg_answer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/grid_selector"
-                    android:paddingLeft="40dp"
-                    android:text="a" />
+                    android:layout_height="wrap_content" >
 
-                <RadioButton
-                    android:id="@+id/local_mode_rb_answer_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/grid_selector"
-                    android:paddingLeft="40dp"
-                    android:text="b" />
+                    <RadioButton
+                        android:id="@+id/local_mode_rb_answer_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
+                        android:text="a" />
 
-                <RadioButton
-                    android:id="@+id/local_mode_rb_answer_c"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/grid_selector"
-                    android:paddingLeft="40dp"
-                    android:text="c" />
+                    <RadioButton
+                        android:id="@+id/local_mode_rb_answer_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
+                        android:text="b" />
 
-                <RadioButton
-                    android:id="@+id/local_mode_rb_answer_d"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/grid_selector"
-                    android:paddingLeft="40dp"
-                    android:text="d" />
-            </RadioGroup>
-        </ScrollView>
+                    <RadioButton
+                        android:id="@+id/local_mode_rb_answer_c"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
+                        android:text="c" />
+
+                    <RadioButton
+                        android:id="@+id/local_mode_rb_answer_d"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grid_selector"
+                        android:paddingLeft="40dp"
+                        android:text="d" />
+                </RadioGroup>
+            </ScrollView>
         </LinearLayout>
     </LinearLayout>
     
     
     
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    <LinearLayout
+        android:id="@+id/play_game_layout_question"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="true"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Rankings"
+            android:textColor="#ffffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_form1"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/local_main_rl_rank_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/tropy_score" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/imageView1"
+                    android:src="@drawable/user" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="30dp"
+                    android:src="@drawable/chart" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/horizal"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/local_main_rl_rank_title"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white" />
+
+            <ListView
+                android:id="@+id/local_mode_lv_rank"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/horizal"
+                android:focusable="false"
+                android:clickable="false"
+                android:focusableInTouchMode="false"
+                android:layout_margin="5dp" >
+            </ListView>
+        </RelativeLayout>
+    </LinearLayout>
+
 
 </ViewFlipper>

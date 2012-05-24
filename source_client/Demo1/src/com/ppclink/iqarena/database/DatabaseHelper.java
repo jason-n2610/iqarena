@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.ppclink.iqarena.object.Award;
+import com.ppclink.iqarena.object.Rank;
 import com.ppclink.iqarena.object.QuestionLite;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
@@ -137,7 +137,98 @@ public class DatabaseHelper extends SQLiteOpenHelper{
  
     }
     
-    public boolean insertQuestion(String quesName, 
+    public QuestionLite getQuestion(int type){    	
+		QuestionLite question= null;
+		if (myDataBase != null){
+			String query = 
+						"SELECT _id, question_name, " +
+						"question_type, answer_a, answer_b, answer_c, " +
+						"answer_d, answer, describle_answer " +
+						"FROM questions " +
+						"WHERE question_type="+type+" "+
+						"ORDER BY RANDOM() " +
+						"LIMIT 1 ";
+			Cursor c = myDataBase.rawQuery(query, null);
+			if (c != null) {
+				if (c.moveToFirst()) {
+					do {
+						int quesId = c.getInt(c.getColumnIndex("_id"));
+						String quesName = c.getString(c.
+								getColumnIndex("question_name"));
+						int quesType = c.getInt(c.getColumnIndex("question_type"));
+						String answerA = c.getString(c.getColumnIndex("answer_a"));
+						String answerB = c.getString(c.getColumnIndex("answer_b"));
+						String answerC = c.getString(c.getColumnIndex("answer_c"));
+						String answerD = c.getString(c.getColumnIndex("answer_d"));
+						int answer = c.getInt(c.getColumnIndex("answer"));
+						String desAnswer = c.getString(c.
+								getColumnIndex("describle_answer"));
+						question = new QuestionLite(quesId, 
+								quesName, quesType, answerA, answerB, answerC, 
+								answerD, answer, desAnswer);
+						
+					} while (c.moveToNext());
+				}
+			}
+			c.close();
+		}
+		return question;
+	}
+    
+    public ArrayList<QuestionLite> getQuestion2(){   
+    	ArrayList<QuestionLite> questions = null;
+		if (myDataBase != null){
+			questions = new ArrayList<QuestionLite>();
+			String query = 
+						"SELECT _id, question_name, " +
+						"question_type, answer_a, answer_b, answer_c, " +
+						"answer_d, answer, describle_answer " +
+						"FROM questions " ;
+			Cursor c = myDataBase.rawQuery(query, null);
+			if (c != null) {
+				if (c.moveToFirst()) {
+					do {
+						QuestionLite question= null;
+						int quesId = c.getInt(c.getColumnIndex("_id"));
+						String quesName = c.getString(c.
+								getColumnIndex("question_name"));
+						int quesType = c.getInt(c.getColumnIndex("question_type"));
+						String answerA = c.getString(c.getColumnIndex("answer_a"));
+						String answerB = c.getString(c.getColumnIndex("answer_b"));
+						String answerC = c.getString(c.getColumnIndex("answer_c"));
+						String answerD = c.getString(c.getColumnIndex("answer_d"));
+						int answer = c.getInt(c.getColumnIndex("answer"));
+						String desAnswer = c.getString(c.
+								getColumnIndex("describle_answer"));
+						question = new QuestionLite(quesId, 
+								quesName, quesType, answerA, answerB, answerC, 
+								answerD, answer, desAnswer);
+						questions.add(question);
+						
+					} while (c.moveToNext());
+				}
+			}
+			c.close();
+		}
+		return questions;
+	}
+
+	public ArrayList<QuestionLite> getQuestions(){
+		ArrayList<QuestionLite> alQuestion = null;
+		if (myDataBase != null){
+			alQuestion = new ArrayList<QuestionLite>();
+			for (int i=0; i<15; i++){
+				QuestionLite question = getQuestion(i+1);
+				if (question != null){
+					alQuestion.add(question);
+				}
+			}
+		}
+		return alQuestion;
+	}
+
+	
+	public boolean insertQuestion(String quesName, 
     		int quesType, String answerA, String answerB, 
     		String answerC,String answerD, String answer, String desAnswer){
     	boolean result = false;
@@ -172,12 +263,20 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	return result;
     }
     
-    public ArrayList<Award> getAwards(){
-    	ArrayList<Award> awards = null;
+    public ArrayList<Rank> getAwards(){    	
+    	ArrayList<Rank> awards = null;
     	if (myDataBase != null){
-    		awards = new ArrayList<Award>();
-    		String query = "SELECT _id, name, score" +
-    				"FROM awards";
+			try{
+				openDataBase();
+			}
+			catch (SQLException e) {
+				Log.e(tag, e.getMessage());
+			}
+    		awards = new ArrayList<Rank>();
+    		String query = "SELECT _id, name, score " +
+    				"FROM awards "+
+    				"ORDER BY score DESC " +
+    				"LIMIT 20 ";
     		Cursor c = myDataBase.rawQuery(query, null);
 			if (c != null) {
 				if (c.moveToFirst()) {
@@ -186,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 						String name = c.getString(c.
 								getColumnIndex("name"));
 						int score = c.getInt(c.getColumnIndex("score"));
-						Award award = new Award(_id, name, score);
+						Rank award = new Rank(_id, name, score);
 						awards.add(award);
 						
 					} while (c.moveToNext());
@@ -194,69 +293,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			}
 			c.close();
     	}
+    	close();
     	return awards;
     }
     
     public void insertAward(String name, int score){
     	if (myDataBase != null){
+			try{
+				openDataBase();
+			}
+			catch (SQLException e) {
+				Log.e(tag, e.getMessage());
+			}
 			String query = "INSERT INTO " + "awards(name, score) " + "VALUES ('"
 					+ name + "', " + score + "); ";
 			myDataBase.execSQL(query);
     	}
+    	close();
     }
     
-    public QuestionLite getQuestion(int type){
-    	QuestionLite question= null;
-    	if (myDataBase != null){
-			String query = 
-						"SELECT _id, question_name, " +
-						"question_type, answer_a, answer_b, answer_c, " +
-						"answer_d, answer, describle_answer " +
-						"FROM questions " +
-						"WHERE question_type="+type+" "+
-						"ORDER BY RANDOM() " +
-						"LIMIT 1 ";
-			Cursor c = myDataBase.rawQuery(query, null);
-			if (c != null) {
-				if (c.moveToFirst()) {
-					do {
-						int quesId = c.getInt(c.getColumnIndex("_id"));
-						String quesName = c.getString(c.
-								getColumnIndex("question_name"));
-						int quesType = c.getInt(c.getColumnIndex("question_type"));
-						String answerA = c.getString(c.getColumnIndex("answer_a"));
-						String answerB = c.getString(c.getColumnIndex("answer_b"));
-						String answerC = c.getString(c.getColumnIndex("answer_c"));
-						String answerD = c.getString(c.getColumnIndex("answer_d"));
-						int answer = c.getInt(c.getColumnIndex("answer"));
-						String desAnswer = c.getString(c.
-								getColumnIndex("describle_answer"));
-						question = new QuestionLite(quesId, 
-								quesName, quesType, answerA, answerB, answerC, 
-								answerD, answer, desAnswer);
-						
-					} while (c.moveToNext());
-				}
-			}
-			c.close();
-		}
-    	return question;
-    }
-    
-    public ArrayList<QuestionLite> getQuestions(){
-		ArrayList<QuestionLite> alQuestion = null;
-		if (myDataBase != null){
-			alQuestion = new ArrayList<QuestionLite>();
-			for (int i=0; i<15; i++){
-				QuestionLite question = getQuestion(i+1);
-				if (question != null){
-					alQuestion.add(question);
-				}
-			}
-		}
-    	return alQuestion;
-    }
- 
     @Override
 	public synchronized void close() {
  

@@ -1,11 +1,14 @@
 package com.ppclink.iqarena.activity;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,6 +16,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -35,6 +42,7 @@ import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.QuestionLite;
 import com.ppclink.iqarena.ultil.Config;
 import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.SoundManager;
 
 public class Main extends Activity implements OnClickListener, IRequestServer {
 
@@ -43,9 +51,10 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	RequestServer mRequestServer;
 	ProgressDialog mProgressDialog;
 	ViewFlipper vfLayoutMain;
-
+	
+	MediaPlayer player;
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
@@ -69,23 +78,57 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		ibUploadQues.setOnClickListener(this);
 		ibDownloadQues.setOnClickListener(this);
 		
+		// Set the hardware buttons to control the music
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
 		vfLayoutMain.setInAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.incoming));
 		vfLayoutMain.setOutAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.outgoing));
 
-		new CountDownTimer(3000, 1000) {
+//		new CountDownTimer(3000, 1000) {
+//
+//			@Override
+//			public void onTick(long millisUntilFinished) {
+//
+//			}
+//
+//			@Override
+//			public void onFinish() {
+//				vfLayoutMain.showNext();
+//			}
+//		}.start();
+	}
 
-			@Override
-			public void onTick(long millisUntilFinished) {
+	@Override
+	protected void onResume() {
+		super.onResume();
+//		if (player == null){
+//			player = MediaPlayer.create(this, R.raw.main_theme2);
+//			player.setLooping(true);
+//			try {
+//				player.prepare();
+//			} catch (IllegalStateException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			player.start();
+//		}
+//		else{
+//			player.start();
+//		}
+	}
 
-			}
-
-			@Override
-			public void onFinish() {
-				vfLayoutMain.showNext();
-			}
-		}.start();
+	@Override
+	protected void onPause() {
+		super.onPause();
+//		if (player != null){
+//			if (player.isPlaying()){
+//				player.pause();
+//				player.stop();
+//			}
+//		}
 	}
 
 	@Override
@@ -106,6 +149,8 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		case R.id.main_btn_about:
 			break;
 		case R.id.main_btn_single_player_on:
+			Intent iSingle = new Intent(this, SinglePlayer.class);
+			startActivity(iSingle);
 			break;
 		case R.id.main_btn_multi_player:
 			// kiem tra network

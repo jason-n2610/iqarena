@@ -20,7 +20,8 @@
         // lay ra 1 question dua vao type va field
         public static function getQuestionByTypeAndField($question_type_id, $question_field_id)
         {
-            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
+            mysql_query("set names utf8;");
+            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer
                         FROM    questions
                         WHERE   question_type_id='{$question_type_id}'
                                 AND question_field_id='{$question_field_id}'
