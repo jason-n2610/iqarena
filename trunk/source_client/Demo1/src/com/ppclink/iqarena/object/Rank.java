@@ -1,9 +1,9 @@
 package com.ppclink.iqarena.object;
 
-public class Award {
+public class Rank {
 	String name;
 	int id, score;
-	public Award(int id, String name, int score){
+	public Rank(int id, String name, int score){
 		this.name = name;
 		this.id = id;
 		this.score = score;

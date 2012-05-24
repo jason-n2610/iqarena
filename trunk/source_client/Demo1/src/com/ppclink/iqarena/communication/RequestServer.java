@@ -51,7 +51,8 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_REGISTER, 
 		REQUEST_REMOVE_ROOM,
 		REQUEST_MEMBER_READY, 
-		REQUEST_HELP_5050
+		REQUEST_HELP_5050,
+		REQUEST_GET_QUESTION_BY_TYPE
 	}
 
 	public RequestServer(IRequestServer delegate) {
@@ -216,6 +217,13 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 						Config.REQUEST_HELP_5050));
 				nameValuePairs.add(new BasicNameValuePair("question_id", params[0]));				
 				break;
+				
+			case REQUEST_GET_QUESTION_BY_TYPE:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_GET_QUESTION_BY_TYPE));
+				nameValuePairs.add(new BasicNameValuePair("level", params[0]));				
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
@@ -310,6 +318,11 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 	public void getQuestion(String strRoomId) {
 		this.requestType = REQUEST_TYPE.REQUEST_GET_QUESTION;
 		this.execute(strRoomId);
+	}
+	
+	public void getQuestionByType(int level){
+		this.requestType = REQUEST_TYPE.REQUEST_GET_QUESTION_BY_TYPE;
+		this.execute(String.valueOf(level));
 	}
 
 	public REQUEST_TYPE getRequestType() {

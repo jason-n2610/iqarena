@@ -80,5 +80,8 @@
     {
         include ($path . '/modules/controls/help_5050.php');
     }
+    else if ($_POST['message'] == "get_question_by_type"){
+        include ($path . '/modules/controls/get_question_by_type.php');
+    }
 
 ?>

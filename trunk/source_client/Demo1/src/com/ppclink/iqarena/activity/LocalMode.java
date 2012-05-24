@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.SQLException;
 import android.graphics.Color;
@@ -17,9 +19,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -29,6 +36,7 @@ import android.widget.ViewFlipper;
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.database.DatabaseHelper;
 import com.ppclink.iqarena.object.QuestionLite;
+import com.ppclink.iqarena.object.Rank;
 
 public class LocalMode extends Activity implements OnClickListener {
 
@@ -38,10 +46,12 @@ public class LocalMode extends Activity implements OnClickListener {
 	private ViewFlipper mVfMain;
 	Button mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnSummit, mBtnHelpChangeQuestion;
 	AlertDialog mDialog;
+	
+	ListView mLvRanks;
 
 	private final static int TIME_PER_QUESTION = 30000;
 
-	private static int mScore = 0;
+	private int mScore = 0;
 
 	private CountDownTimer mTimer;
 
@@ -83,6 +93,8 @@ public class LocalMode extends Activity implements OnClickListener {
 		mRbD = (RadioButton) findViewById(R.id.local_mode_rb_answer_d);
 
 		mBtnSummit = (Button) findViewById(R.id.local_mode_btn_summit);
+		
+		mLvRanks = (ListView) findViewById(R.id.local_mode_lv_rank);
 
 		// event listener
 		mBtnHelpX2.setOnClickListener(this);
@@ -94,6 +106,8 @@ public class LocalMode extends Activity implements OnClickListener {
 		mRbD.setOnClickListener(this);
 		mBtnSummit.setOnClickListener(this);
 		mBtnHelpChangeQuestion.setOnClickListener(this);
+		
+		mBtnHelpChangeQuestion.setText("? ? ?");
 
 		// connect database and get data
 		if (mDataHelper == null) {
@@ -170,6 +184,7 @@ public class LocalMode extends Activity implements OnClickListener {
 
 								@Override
 								public void onFinish() {
+									mTimer.cancel();
 									showDialogTimeLimit();
 								}
 							};
@@ -181,6 +196,14 @@ public class LocalMode extends Activity implements OnClickListener {
 
 		// init UI
 		initUISuportMultiScreen();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (mTimer != null){
+			mTimer.cancel();
+		}
 	}
 
 	private void initUISuportMultiScreen() {
@@ -203,16 +226,20 @@ public class LocalMode extends Activity implements OnClickListener {
 			mBtnHelpRelease.setTextSize(20);
 			mBtnHelpX2.setTextSize(20);
 			mBtnSummit.setTextSize(20);
-
-			mBtnHelp5050.setWidth(160);
-			mBtnHelpRelease.setWidth(160);
-			mBtnHelpX2.setWidth(160);
+			mBtnHelpChangeQuestion.setTextSize(20);
+			
+			mBtnHelp5050.getLayoutParams().width = 160;
+			mBtnHelpChangeQuestion.getLayoutParams().width = 160;
+			mBtnHelpRelease.getLayoutParams().width = 160;
+			mBtnHelpX2.getLayoutParams().width = 160;
+			
 			mBtnSummit.setWidth(160);
 
 			mBtnHelp5050.setHeight(60);
 			mBtnHelpRelease.setHeight(60);
 			mBtnHelpX2.setHeight(60);
 			mBtnSummit.setHeight(60);
+			mBtnHelpChangeQuestion.setHeight(60);
 		}
 	}
 
@@ -253,6 +280,28 @@ public class LocalMode extends Activity implements OnClickListener {
 			break;
 		case R.id.local_mode_btn_help_change_question:
 			mBtnHelpChangeQuestion.setEnabled(false);
+			// lay ve cau hoi
+			QuestionLite question = null;
+			try {
+				mDataHelper.openDataBase();
+				question = mDataHelper.getQuestion(mCurrentQues+1);
+				mDataHelper.close();
+			} catch (SQLException e) {
+				Log.e(tag, e.getMessage());
+			}
+			if (question == null){
+				return;
+			}
+			mTvQuestionTitle.setText("Question "
+					+ String.valueOf(mCurrentQues + 1));
+			mTvQuestion.setText(question.getQuesName());
+			mRbA.setText(question.getAnswerA());
+			mRbB.setText(question.getAnswerB());
+			mRbC.setText(question.getAnswerC());
+			mRbD.setText(question.getAnswerD());
+			
+			mQuestions.get(mCurrentQues).setAnswer(question.getAnswer());
+			
 			break;
 		case R.id.local_mode_rb_answer_a:
 
@@ -279,6 +328,7 @@ public class LocalMode extends Activity implements OnClickListener {
 				// check answer
 				int answer = mRgAnswer.indexOfChild(findViewById(mRgAnswer
 						.getCheckedRadioButtonId())) + 1;
+				// tra loi dung
 				if (answer == mQuestions.get(mCurrentQues).getAnswer()) {
 					if (mCurrentQues != 14){
 						// hien thi dialog tra loi dung
@@ -378,6 +428,7 @@ public class LocalMode extends Activity implements OnClickListener {
 
 					@Override
 					public void onFinish() {
+						mTimer.cancel();
 						showDialogTimeLimit();
 					}
 				};
@@ -394,6 +445,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mBtnHelpRelease.setEnabled(false);
 		mBtnHelpX2.setEnabled(false);
 		mBtnSummit.setEnabled(false);
+		mBtnHelpChangeQuestion.setEnabled(false);
 		
 		String result = getAnswer();
 		if (result == null){
@@ -410,6 +462,9 @@ public class LocalMode extends Activity implements OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 				// hien thi ket qua
+				mVfMain.showNext();
+				showDialogInsertRank();
+				
 			}
 		});
 		dialog = builder.create();
@@ -434,7 +489,8 @@ public class LocalMode extends Activity implements OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 				// hien thi ket qua
-				
+				mVfMain.showNext();
+				showDialogInsertRank();
 			}
 		});
 		dialog = builder.create();
@@ -452,6 +508,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mBtnHelpRelease.setEnabled(false);
 		mBtnHelpX2.setEnabled(false);
 		mBtnSummit.setEnabled(false);
+		mBtnHelpChangeQuestion.setEnabled(false);
 
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
@@ -464,8 +521,62 @@ public class LocalMode extends Activity implements OnClickListener {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// hien thi ket qua
+						mVfMain.showNext();		
+						showDialogInsertRank();
 					}
 				});
+		dialog = builder.create();
+		dialog.show();
+	}
+	
+	private void showDialogInsertRank(){
+
+		final EditText etUsername = new EditText(this);
+		etUsername.setText("user");
+		AlertDialog dialog = null;
+		Builder builder = new Builder(this);
+		builder.setTitle("Confirm");
+		builder.setView(etUsername);
+		builder.setMessage("Username: ");
+		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// them rank
+				String name = etUsername.getText().toString();
+				if (name != null){
+					mDataHelper.insertAward(name, mScore);
+				}
+				
+				// do du lieu vao listview
+				ArrayList<Rank> ranks = mDataHelper.getAwards();
+				if (ranks != null){
+					if (ranks.size() != 0){
+						RankAdapter adapter = new RankAdapter(
+								LocalMode.this, ranks);
+						mLvRanks.setAdapter(adapter);
+					}
+				}
+			}
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// khong them rank
+				// do du lieu vao listview
+				ArrayList<Rank> ranks = mDataHelper.getAwards();
+				if (ranks != null){
+					if (ranks.size() != 0){
+						RankAdapter adapter = new RankAdapter(
+								LocalMode.this, ranks);
+						mLvRanks.setAdapter(adapter);
+					}
+				}
+			}
+		});
 		dialog = builder.create();
 		dialog.show();
 	}
@@ -561,6 +672,49 @@ public class LocalMode extends Activity implements OnClickListener {
 			Log.e(tag, e.getMessage());
 		}
 		return questions;
+	}
+	
+	private class RankAdapter extends ArrayAdapter<Rank>{
+		Context context;
+		ArrayList<Rank> ranks;
+
+		public RankAdapter(Context context, ArrayList<Rank> objects) {
+			super(context, 1, objects);
+			this.context = context;
+			this.ranks = objects;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			RankHolder holder;
+			if (convertView == null){
+				convertView = LayoutInflater.from(context).inflate(
+						R.layout.list_rank_item, null);
+				holder = new RankHolder();
+				holder.tvRank = (TextView) convertView.findViewById(
+						R.id.list_tv_rank);
+				holder.tvUsername = (TextView) convertView.findViewById(
+						R.id.list_tv_username);
+				holder.tvScore = (TextView) convertView.findViewById(
+						R.id.list_tv_score);
+				convertView .setTag(holder);
+			}
+			else{
+				holder = (RankHolder) convertView.getTag();
+			}
+			Rank rank = ranks.get(position);
+			holder.tvRank.setText(String.valueOf(position+1));
+			holder.tvUsername.setText(rank.getName());
+			holder.tvScore.setText(String.valueOf(rank.getScore()));			
+			return convertView;
+		}
+		
+		
+		
+	}
+	
+	private static class RankHolder{
+		TextView tvRank, tvUsername, tvScore;
 	}
 
 }
