@@ -93,15 +93,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.Friend"
-            android:configChanges="orientation|keyboardHidden" >
-            <intent-filter>
-                <action android:name="android.intent.action.FriendActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activity.CreateNewRoom"
             android:label="Create new room"
             android:configChanges="orientation|keyboardHidden" >
