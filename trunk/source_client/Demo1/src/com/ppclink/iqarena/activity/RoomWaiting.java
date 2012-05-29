@@ -27,13 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.CheckServer;
-import com.ppclink.iqarena.communication.RequestServer;
-import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
+import com.ppclink.iqarena.connection.CheckServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
+import com.ppclink.iqarena.connection.ConnectionManager.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.MemberScore;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 /**
  * @author Administrator
@@ -53,7 +53,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	private CheckServer mCheck;
 	// list members in room
 	private ListView mLvMembers;
-	private RequestServer mRequest;
+	private ConnectionManager mRequest;
 
 	// room id
 	String mRoomID;
@@ -98,7 +98,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	
 		// init ui
 		initUI(isOwner);
-		mRequest = new RequestServer(this);
+		mRequest = new ConnectionManager(this);
 		mRequest.getMembersInRoom(mRoomID);
 	
 		mAlMembers = new ArrayList<MemberScore>();
@@ -150,12 +150,12 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (isOwner) {
-				mRequest = new RequestServer(this);
+				mRequest = new ConnectionManager(this);
 				mRequest.removeRoom(mRoomID);
 			} else {
-				mRequest = new RequestServer(this);
+				mRequest = new ConnectionManager(this);
 				mRequest.exitRoom(mRoomID,
-						String.valueOf(FilterResponse.userInfo.getUserId()));
+						String.valueOf(AnalysisData.userInfo.getUserId()));
 			}
 		}
 		return true;
@@ -172,7 +172,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 			mBtnPlay.setEnabled(false);
 			mBtnExit.setEnabled(false);
 			
-			mRequest = new RequestServer(this);
+			mRequest = new ConnectionManager(this);
 			mRequest.playGame(mRoomID);
 			break;
 	
@@ -184,10 +184,10 @@ public class RoomWaiting extends Activity implements OnClickListener,
 			// isBackPress = false;
 	
 			if (isOwner) {
-				mRequest = new RequestServer(this);
+				mRequest = new ConnectionManager(this);
 				mRequest.removeRoom(mRoomID);
 			} else {
-				mRequest = new RequestServer(this);
+				mRequest = new ConnectionManager(this);
 				mRequest.exitRoom(String.valueOf(mMemberId), mRoomID);
 			}
 			if (mCheck != null) {
@@ -281,7 +281,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 
 		// tin hieu co su thay doi nguoi choi trong phong
 		else {
-			mRequest = new RequestServer(this);
+			mRequest = new ConnectionManager(this);
 			mRequest.getMembersInRoom(mRoomID);
 		}
 	}
@@ -314,9 +314,9 @@ public class RoomWaiting extends Activity implements OnClickListener,
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
-				FilterResponse.filter(sResult);
-				if (FilterResponse.value) {
-					ArrayList<MemberScore> alMembers = FilterResponse.mListMemberInRoom;
+				AnalysisData.analyze(sResult);
+				if (AnalysisData.value) {
+					ArrayList<MemberScore> alMembers = AnalysisData.mListMemberInRoom;
 					if (alMembers != null) {
 						int size = alMembers.size();
 						// co room
@@ -427,7 +427,7 @@ public class RoomWaiting extends Activity implements OnClickListener,
 				@Override
 				public void onClick(View arg0) {
 					setProgressBarIndeterminateVisibility(true);
-					mRequest = new RequestServer(RoomWaiting.this);
+					mRequest = new ConnectionManager(RoomWaiting.this);
 					mRequest.removeMemberInRoom(member.getStrMemberId(), mRoomID);
 				}
 			});

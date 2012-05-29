@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 /**
  * @author Administrator
@@ -30,8 +30,8 @@ public class UserInfo extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mTvUserInfo.setText("Xin chào: " + FilterResponse.userInfo.getUsername()
+		mTvUserInfo.setText("Xin chào: " + AnalysisData.userInfo.getUsername()
 				+ "\n" + "Điểm hiện tại của bạn: "
-				+ (int) FilterResponse.userInfo.getScoreLevel());
+				+ (int) AnalysisData.userInfo.getScoreLevel());
 	}
 }

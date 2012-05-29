@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Utils;
 
 public class Login extends Activity implements View.OnClickListener,
@@ -28,7 +28,7 @@ public class Login extends Activity implements View.OnClickListener,
 	Button btnLogin;
 	CheckBox ckRemember;
 	EditText etUsername, etPassword;
-	RequestServer requestServer;
+	ConnectionManager requestServer;
 	TextView tvLoginResult;
 
 	/** Called when the activity is first created. */
@@ -75,7 +75,7 @@ public class Login extends Activity implements View.OnClickListener,
 				btnLogin.setEnabled(true);
 				return;
 			}
-			requestServer = new RequestServer(this);
+			requestServer = new ConnectionManager(this);
 			getParent().setProgressBarIndeterminateVisibility(true);
 			btnLogin.setEnabled(false);
 			requestServer.login(strUsername, strPassword);
@@ -96,14 +96,14 @@ public class Login extends Activity implements View.OnClickListener,
 				if (sResult.contains("{")) {
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
-					boolean isSuccess = FilterResponse.filter(sResult);
-					message = FilterResponse.message;
+					boolean isSuccess = AnalysisData.analyze(sResult);
+					message = AnalysisData.message;
 					if (isSuccess) {
-						if (FilterResponse.value) {
+						if (AnalysisData.value) {
 							// dung tai khoan
 							// chuyen sang activity main menu
 							// demo
-							if (FilterResponse.userInfo != null) {
+							if (AnalysisData.userInfo != null) {
 								if (ckRemember.isChecked()) {
 									String username = etUsername.getText()
 											.toString();

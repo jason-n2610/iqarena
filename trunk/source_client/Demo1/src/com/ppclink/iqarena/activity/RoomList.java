@@ -24,13 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.CheckServer;
-import com.ppclink.iqarena.communication.RequestServer;
-import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
+import com.ppclink.iqarena.connection.CheckServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
+import com.ppclink.iqarena.connection.ConnectionManager.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.Room;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 /**
  * @author Administrator
@@ -46,7 +46,7 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 	CheckServer mCheckServer = null;
 
 	ListView mListViewRoom;
-	RequestServer mRequestServer = null;
+	ConnectionManager mRequestServer = null;
 	String mRoomName;
 	String mRoomOwnerName;
 	int mRoomTimePerQuestion;
@@ -83,9 +83,9 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 				roomID = String.valueOf(room.getRoomId());
 				mRoomOwnerName = room.getOwnerName();
 				mRoomTimePerQuestion = room.getTimePerQuestion();
-				mRequestServer = new RequestServer(RoomList.this);
+				mRequestServer = new ConnectionManager(RoomList.this);
 				mRequestServer.joinRoom(String.valueOf(room.getRoomId()),
-						String.valueOf(FilterResponse.userInfo.getUserId()));
+						String.valueOf(AnalysisData.userInfo.getUserId()));
 			}
 		});
 	}
@@ -119,7 +119,7 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 				mCheckServer.checkChangeRoom();
 			}
 		}
-		mRequestServer = new RequestServer(this);
+		mRequestServer = new ConnectionManager(this);
 		mRequestServer.getListRoom();
 		getParent().setProgressBarIndeterminateVisibility(true);
 	}
@@ -140,7 +140,7 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 	@Override
 	public void onCheckServerComplete(String result) {
 		getParent().setProgressBarIndeterminateVisibility(true);
-		mRequestServer = new RequestServer(this);
+		mRequestServer = new ConnectionManager(this);
 		mRequestServer.getListRoom();
 	}
 
@@ -153,19 +153,19 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
-				FilterResponse.filter(sResult);
-				if (FilterResponse.value) {
+				AnalysisData.analyze(sResult);
+				if (AnalysisData.value) {
 					Intent intent = new Intent(getApplicationContext(),
 							RoomWaiting.class);
 					intent.putExtra("owner", false);
 					intent.putExtra("room_id", roomID);
 					intent.putExtra("room_name", mRoomName);
 					intent.putExtra("owner_name", mRoomOwnerName);
-					intent.putExtra("member_id", FilterResponse.memberId);
+					intent.putExtra("member_id", AnalysisData.memberId);
 					intent.putExtra("time_per_question", mRoomTimePerQuestion);
 					startActivity(intent);
 				} else {
-					Toast.makeText(this, FilterResponse.message, 500).show();
+					Toast.makeText(this, AnalysisData.message, 500).show();
 				}
 			}
 			else{
@@ -179,9 +179,9 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 			if (sResult.contains("{") && len > 0) {
 				int start = sResult.indexOf("{");
 				sResult = sResult.substring(start, len);
-				FilterResponse.filter(sResult);
-				if (FilterResponse.value) {
-					ArrayList<Room> alRoomTmp = FilterResponse.mListRoom;
+				AnalysisData.analyze(sResult);
+				if (AnalysisData.value) {
+					ArrayList<Room> alRoomTmp = AnalysisData.mListRoom;
 					if (alRoomTmp != null) {
 						int size = alRoomTmp.size();
 						// co room

@@ -1,4 +1,4 @@
-package com.ppclink.iqarena.communication;
+package com.ppclink.iqarena.connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import android.util.Log;
 
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Utils;
 
 /**
@@ -34,7 +34,7 @@ import com.ppclink.iqarena.ultil.Utils;
  * 
  */
 
-public class RequestServer extends AsyncTask<String, Integer, String> {
+public class ConnectionManager extends AsyncTask<String, Integer, String> {
 
 	public enum REQUEST_TYPE {
 		REQUEST_ANSWER_QUESTION, 
@@ -55,7 +55,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 		REQUEST_GET_QUESTION_BY_TYPE
 	}
 
-	public RequestServer(IRequestServer delegate) {
+	public ConnectionManager(IRequestServer delegate) {
 		this.delegate = delegate;
 	}
 
@@ -107,7 +107,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("room_name",
 						params[0]));
 				nameValuePairs.add(new BasicNameValuePair("owner_id", String
-						.valueOf(FilterResponse.userInfo.getUserId())));
+						.valueOf(AnalysisData.userInfo.getUserId())));
 				nameValuePairs.add(new BasicNameValuePair("max_member",
 						params[1]));
 				nameValuePairs.add(new BasicNameValuePair("bet_score",
@@ -178,7 +178,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("member_id",
 						params[0]));
 				nameValuePairs.add(new BasicNameValuePair("user_id",
-						String.valueOf(FilterResponse.userInfo.getUserId())));
+						String.valueOf(AnalysisData.userInfo.getUserId())));
 				nameValuePairs.add(new BasicNameValuePair("room_id",
 						params[1]));
 				nameValuePairs.add(new BasicNameValuePair("question_id",
@@ -200,7 +200,7 @@ public class RequestServer extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("answer", 
 						params[3]));
 				nameValuePairs.add(new BasicNameValuePair("user_id",
-						String.valueOf(FilterResponse.userInfo.getUserId())));
+						String.valueOf(AnalysisData.userInfo.getUserId())));
 				break;
 				
 			case REQUEST_MEMBER_READY:

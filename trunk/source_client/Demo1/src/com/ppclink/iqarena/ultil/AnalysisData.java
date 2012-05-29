@@ -21,7 +21,7 @@ import com.ppclink.iqarena.object.User;
  * 
  */
 
-public class FilterResponse {
+public class AnalysisData {
 
 	public static String message = null;
 	public static ArrayList<MemberScore> mListMemberInRoom = 
@@ -39,7 +39,7 @@ public class FilterResponse {
 
 	public static boolean value = false;
 
-	public static boolean filter(String input) {
+	public static boolean analyze(String input) {
 		boolean result = false;
 		try {
 			JSONObject jObject = new JSONObject(input);
@@ -273,7 +273,7 @@ public class FilterResponse {
 					// update score cho user khi nguoi choi ket thuc tro choi
 					if (jObject.has("score")){
 						updateScore = jObject.getInt("score");
-						FilterResponse.userInfo.setScoreLevel(updateScore);
+						AnalysisData.userInfo.setScoreLevel(updateScore);
 					}
 				}
 			}

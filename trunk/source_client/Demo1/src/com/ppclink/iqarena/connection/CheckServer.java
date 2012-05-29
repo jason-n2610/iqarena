@@ -1,4 +1,4 @@
-package com.ppclink.iqarena.communication;
+package com.ppclink.iqarena.connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -17,9 +17,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.delegate.IRequestServer;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 /**
  * @author hoangnh
@@ -43,7 +43,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 			String strTimePerQuestion = spTimePerQuestion.getSelectedItem()
 					.toString();
 			if (strRoomName.length() > 0) {
-				RequestServer requestServer = new RequestServer(this);
+				ConnectionManager requestServer = new ConnectionManager(this);
 				requestServer.createNewRoom(strRoomName, strMaxMember,
 						strBetScore, strTimePerQuestion);
 				btnCreate.setEnabled(false);
@@ -136,12 +136,12 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 					isResult = true;
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
-					boolean isSuccess = FilterResponse.filter(sResult);
-					strMessage = FilterResponse.message;
-					String roomId = String.valueOf(FilterResponse.roomId);
+					boolean isSuccess = AnalysisData.analyze(sResult);
+					strMessage = AnalysisData.message;
+					String roomId = String.valueOf(AnalysisData.roomId);
 					if (isSuccess) {
 						// neu create thanh cong
-						if (FilterResponse.value) {
+						if (AnalysisData.value) {
 							Intent intent = new Intent(getApplicationContext(),
 									RoomWaiting.class);
 							intent.putExtra("owner", true);
@@ -149,8 +149,8 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 							intent.putExtra("room_name", etRoomName.getText()
 									.toString().trim());
 							intent.putExtra("owner_name",
-									FilterResponse.userInfo.getUsername());
-							intent.putExtra("member_id", FilterResponse.memberId);
+									AnalysisData.userInfo.getUsername());
+							intent.putExtra("member_id", AnalysisData.memberId);
 							intent.putExtra("time_per_question", Integer
 									.valueOf(spTimePerQuestion
 											.getSelectedItem().toString()));
@@ -179,7 +179,7 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long id) {
 		int betScore = (pos+5)*100;
-		if (betScore > (int)FilterResponse.userInfo.getScoreLevel()){
+		if (betScore > (int)AnalysisData.userInfo.getScoreLevel()){
 			btnCreate.setEnabled(false);
 			tvResult.setVisibility(View.VISIBLE);
 			tvResult.setText("Không đủ điểm để tham gia cược");
