@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +29,7 @@ import android.os.CountDownTimer;
  */
 public class Welcome extends Activity implements IRequestServer {
 
-	RequestServer mRequestServer;
+	ConnectionManager mRequestServer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class Welcome extends Activity implements IRequestServer {
 		// lay ve thong tin cua user
 		ArrayList<String> alAccount = getConfigFile();
 		if (alAccount != null) {
-			mRequestServer = new RequestServer(this);
+			mRequestServer = new ConnectionManager(this);
 			mRequestServer.login(alAccount.get(0), alAccount.get(1));
 		}
 		else{
@@ -63,9 +63,9 @@ public class Welcome extends Activity implements IRequestServer {
 	@Override
 	public void onRequestComplete(String sResult) {
 		try {
-			FilterResponse.filter(sResult);
+			AnalysisData.analyze(sResult);
 			// truong hop login thanh cong
-			if (FilterResponse.value) {
+			if (AnalysisData.value) {
 				Intent intent = new Intent(getApplicationContext(),
 						TabHostMain.class);
 				startActivity(intent);

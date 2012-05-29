@@ -39,10 +39,7 @@ public class TabHostMain extends TabActivity {
 		intent = new Intent().setClass(this, UserInfo.class);
 		setupTab("User info", intent);
 	
-		intent = new Intent().setClass(this, Friend.class);
-		setupTab("Friends", intent);
-	
-		mTabHost.setCurrentTab(1);
+		mTabHost.setCurrentTab(0);
 	}
 
 	@Override

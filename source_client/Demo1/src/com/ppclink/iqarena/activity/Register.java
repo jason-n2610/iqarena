@@ -14,10 +14,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Utils;
 
 public class Register extends Activity implements View.OnClickListener,
@@ -25,7 +25,7 @@ public class Register extends Activity implements View.OnClickListener,
 
 	Button btnRegister;
 	EditText etUsername, etPassword, etRePassword, etEmail;
-	RequestServer requestServer;
+	ConnectionManager requestServer;
 	String strUsername, strPassword, strRePassword, strEmail;
 	ScrollView svView;
 	TextView tvNotice;
@@ -124,7 +124,7 @@ public class Register extends Activity implements View.OnClickListener,
 			tvNotice.setVisibility(View.GONE);
 			getParent().setProgressBarIndeterminateVisibility(true);
 			btnRegister.setEnabled(false);
-			requestServer = new RequestServer(this);
+			requestServer = new ConnectionManager(this);
 			requestServer.register(strUsername, strPassword, strEmail);
 		}
 	}
@@ -141,14 +141,14 @@ public class Register extends Activity implements View.OnClickListener,
 				if (sResult.contains("{")) {
 					int start = sResult.indexOf("{");
 					sResult = sResult.substring(start, length);
-					boolean isSuccess = FilterResponse.filter(sResult);
-					message = FilterResponse.message;
+					boolean isSuccess = AnalysisData.analyze(sResult);
+					message = AnalysisData.message;
 					if (isSuccess) {
-						if (FilterResponse.value) {
+						if (AnalysisData.value) {
 							// dung tai khoan
 							// chuyen sang activity main menu
 							// demo
-							if (FilterResponse.userInfo != null) {
+							if (AnalysisData.userInfo != null) {
 								Intent intent = new Intent(
 										getApplicationContext(),
 										TabHostMain.class);

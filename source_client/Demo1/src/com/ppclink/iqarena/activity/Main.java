@@ -36,19 +36,19 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.RequestServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.database.DatabaseHelper;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.QuestionLite;
 import com.ppclink.iqarena.ultil.Config;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.SoundManager;
 
 public class Main extends Activity implements OnClickListener, IRequestServer {
 
 	DatabaseHelper mDataHelper;
 	String tag = "Main";
-	RequestServer mRequestServer;
+	ConnectionManager mRequestServer;
 	ProgressDialog mProgressDialog;
 	ViewFlipper vfLayoutMain;
 	
@@ -161,7 +161,7 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 				// kiem tra xem nguoi dung co da dang nhap lan truoc chua
 				ArrayList<String> alAccount = getConfigFile();
 				if (alAccount != null) {
-					mRequestServer = new RequestServer(this);
+					mRequestServer = new ConnectionManager(this);
 					mRequestServer.login(alAccount.get(0), alAccount.get(1));
 					mProgressDialog = ProgressDialog.show(this, "Info",
 							"Connecting...");
@@ -180,9 +180,9 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		if (mProgressDialog != null) {
 			mProgressDialog.dismiss();
 		}
-		FilterResponse.filter(sResult);
+		AnalysisData.analyze(sResult);
 		// truong hop login thanh cong
-		if (FilterResponse.value) {
+		if (AnalysisData.value) {
 			Intent intent = new Intent(getApplicationContext(),
 					TabHostMain.class);
 			startActivity(intent);

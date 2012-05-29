@@ -34,15 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.CheckServer;
-import com.ppclink.iqarena.communication.CheckServer.REQUEST_CHECK_TYPE;
-import com.ppclink.iqarena.communication.RequestServer;
-import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
+import com.ppclink.iqarena.connection.CheckServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
+import com.ppclink.iqarena.connection.CheckServer.REQUEST_CHECK_TYPE;
+import com.ppclink.iqarena.connection.ConnectionManager.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.MemberScore;
 import com.ppclink.iqarena.object.Question;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Rotate3dAnimation;
 
 /**
@@ -82,7 +82,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 	CheckBox mCkReady;
 	private ViewGroup mContainer;
 
-	RequestServer mRequestServer = null;
+	ConnectionManager mRequestServer = null;
 	CheckServer mCheckServer = null;
 
 	@Override
@@ -143,7 +143,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		setProgressBarIndeterminateVisibility(true);
 
 		// request cau hoi
-		mRequestServer = new RequestServer(this);
+		mRequestServer = new ConnectionManager(this);
 		mRequestServer.getQuestion(mStrRoomId);
 
 		mAdapterAnswer = new AnswerAdapter(this, mAlAnswer);
@@ -191,7 +191,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 			mCurQuestion++;
 			mTvQuestionTitle.setText("Question " + mCurQuestion);
-			Question question = FilterResponse.question;
+			Question question = AnalysisData.question;
 			if (question == null) {
 				return;
 			}
@@ -235,7 +235,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 						mCheckServer = new CheckServer(RoomPlay.this);
 						mCheckServer.checkOthersAnswer(mStrRoomId);
 
-						mRequestServer = new RequestServer(RoomPlay.this);
+						mRequestServer = new ConnectionManager(RoomPlay.this);
 						mRequestServer.answerQuestion(
 								String.valueOf(mMemberId), mStrRoomId,
 								mStrQuestionId, "0");
@@ -292,7 +292,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			mCheckServer = new CheckServer(this);
 			mCheckServer.checkOthersAnswer(mStrRoomId);
 
-			mRequestServer = new RequestServer(this);
+			mRequestServer = new ConnectionManager(this);
 			mRequestServer.answerQuestion(String.valueOf(mMemberId),
 					mStrRoomId, mStrQuestionId, mStrAnswer);
 
@@ -307,7 +307,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				if (!mRequestServer.isCancelled()) {
 					mRequestServer.cancel(true);
 				}
-				mRequestServer = new RequestServer(this);
+				mRequestServer = new ConnectionManager(this);
 				mRequestServer.readyForGame(String.valueOf(mMemberId),
 						mStrRoomId);
 				// check others is ready
@@ -354,7 +354,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				if (!mRequestServer.isCancelled()) {
 					mRequestServer.cancel(true);
 				}
-				mRequestServer = new RequestServer(this);
+				mRequestServer = new ConnectionManager(this);
 				mRequestServer.help5050(mStrQuestionId);
 				isHelp = true;
 			} else {
@@ -399,10 +399,10 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION) {
 			if (sResult != null) {
 				try {
-					FilterResponse.filter(sResult);
+					AnalysisData.analyze(sResult);
 					// co cau hoi tra ve
-					if (FilterResponse.value) {
-						Question question = FilterResponse.question;
+					if (AnalysisData.value) {
+						Question question = AnalysisData.question;
 						mStrQuestionId = question.getmStrId();
 						mTvQuestion.setText(question.getmStrContent());
 						mRbA.setText(question.getmStrAnswerA());
@@ -433,7 +433,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 											RoomPlay.this);
 									mCheckServer.checkOthersAnswer(mStrRoomId);
 
-									mRequestServer = new RequestServer(
+									mRequestServer = new ConnectionManager(
 											RoomPlay.this);
 									mRequestServer.answerQuestion(
 											String.valueOf(mMemberId),
@@ -485,11 +485,11 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			mTvAnswerTitle.setText("Members answer");
 			if (sResult != null || sResult != "null") {
 				try {
-					FilterResponse.filter(sResult);
-					if (FilterResponse.value) {
+					AnalysisData.analyze(sResult);
+					if (AnalysisData.value) {
 						mCkReady.setEnabled(false);
 						// lay ve cau tra loi dung
-						mStrTrueAnswer = new String(FilterResponse.mTrueAnswer);
+						mStrTrueAnswer = new String(AnalysisData.mTrueAnswer);
 						if (mStrTrueAnswer.equals("1")) {
 							mStrTrueAnswer = "A";
 						} else if (mStrTrueAnswer.equals("2")) {
@@ -502,7 +502,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 						// hien thi danh sach nguoi choi trong room va phan tra
 						// loi cua moi nguoi
-						ArrayList<MemberScore> temp = FilterResponse.
+						ArrayList<MemberScore> temp = AnalysisData.
 								mListMembersScore;
 						if (temp != null) {
 							mAlAnswer.clear();
@@ -518,14 +518,14 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 						// so sanh xem cau tra loi cua nguoi choi dung hay ko,
 						// neu dung thi hien thi
 						// cau hoi tiep da dc lay ve
-						if (mStrAnswer.equals(FilterResponse.mTrueAnswer)) {
+						if (mStrAnswer.equals(AnalysisData.mTrueAnswer)) {
 							// reset lai cau tra loi
 							mStrAnswer = "0";
 							mTvAnswerResult.setText("True Answer: "
 									+ mStrTrueAnswer + "\nYou are true!");
 							mCkReady.setEnabled(true);
 							// truong hop cuoc choi con tiep tuc
-							if (FilterResponse.question != null) {
+							if (AnalysisData.question != null) {
 								mTvAnswerInfo.setText("Next question in:");
 								// hien thi dong ho dem nguoc de cho cau tiep
 								// theo
@@ -545,7 +545,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 											if (!mRequestServer.isCancelled()) {
 												mRequestServer.cancel(true);
 											}
-											mRequestServer = new RequestServer(
+											mRequestServer = new ConnectionManager(
 													RoomPlay.this);
 											mRequestServer.readyForGame(
 													String.valueOf(mMemberId),
@@ -572,7 +572,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 								Toast.makeText(
 										this,
 										"New score: "
-												+ FilterResponse.updateScore,
+												+ AnalysisData.updateScore,
 										400).show();
 
 							}
@@ -588,7 +588,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 							Toast.makeText(
 									this,
 									"New score: "
-											+ FilterResponse.userInfo
+											+ AnalysisData.userInfo
 													.getScoreLevel(), 400)
 									.show();
 						}
@@ -606,11 +606,11 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			// truong hop request help (support only 5050)
 			if (sResult != null || sResult != "null") {
 				try {
-					FilterResponse.filter(sResult);
-					if (FilterResponse.value) {
+					AnalysisData.analyze(sResult);
+					if (AnalysisData.value) {
 						int itemDisable1, itemDisable2;
-						itemDisable1 = FilterResponse.help_5050_remove1;
-						itemDisable2 = FilterResponse.help_5050_remove2;
+						itemDisable1 = AnalysisData.help_5050_remove1;
+						itemDisable2 = AnalysisData.help_5050_remove2;
 						if (itemDisable1 != 0 && itemDisable2 != 0){
 							Log.i("2", "item: "+itemDisable1+ " "+itemDisable2);
 							mRgAnswer.getChildAt(itemDisable1-1).setEnabled(false);
@@ -641,7 +641,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			if (!mRequestServer.isCancelled()) {
 				mRequestServer.cancel(true);
 			}
-			mRequestServer = new RequestServer(this);
+			mRequestServer = new ConnectionManager(this);
 			mRequestServer.getMembersAnswer(mStrRoomId,
 					String.valueOf(mMemberId), mStrQuestionId, mStrAnswer);
 		} else if (mCheckServer.getRequestType() == 

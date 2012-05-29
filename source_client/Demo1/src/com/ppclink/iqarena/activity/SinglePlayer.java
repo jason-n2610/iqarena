@@ -1,13 +1,13 @@
 package com.ppclink.iqarena.activity;
 
 import com.ppclink.iqarena.R;
-import com.ppclink.iqarena.communication.CheckServer;
-import com.ppclink.iqarena.communication.RequestServer;
-import com.ppclink.iqarena.communication.RequestServer.REQUEST_TYPE;
+import com.ppclink.iqarena.connection.CheckServer;
+import com.ppclink.iqarena.connection.ConnectionManager;
+import com.ppclink.iqarena.connection.ConnectionManager.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.Question;
 import com.ppclink.iqarena.object.QuestionLite;
-import com.ppclink.iqarena.ultil.FilterResponse;
+import com.ppclink.iqarena.ultil.AnalysisData;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -51,7 +51,7 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	
 	private String tag = "SinglePlayer";
 	
-	RequestServer mRequest;
+	ConnectionManager mRequest;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		initUISuportMultiScreen();
 		
 		if (mRequest == null){
-			mRequest = new RequestServer(this);
+			mRequest = new ConnectionManager(this);
 			mRequest.getQuestionByType(mCurrentQues+1);
 		}
 	}
@@ -157,7 +157,7 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 					mRequest.cancel(true);	
 				}
 			}
-			mRequest = new RequestServer(this);
+			mRequest = new ConnectionManager(this);
 			break;
 
 		default:
@@ -171,10 +171,10 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION_BY_TYPE) {
 			if (sResult != null) {
 				try {
-					FilterResponse.filter(sResult);
+					AnalysisData.analyze(sResult);
 					// co cau hoi tra ve
-					if (FilterResponse.value) {
-						Question question = FilterResponse.question;
+					if (AnalysisData.value) {
+						Question question = AnalysisData.question;
 						mQuestionId = question.getmStrId();
 						mTvQuestion.setText(question.getmStrContent());
 						mRbA.setText(question.getmStrAnswerA());
