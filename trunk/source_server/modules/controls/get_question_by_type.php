@@ -24,13 +24,13 @@
             $output = null;
             while ($row = mysql_fetch_assoc($question))
                 $output[] = $row;
-            echo '{"type":"get_question", "value":"true", "message":"get success!", "question":';
+            echo '{"type":"get_question_by_type", "value":"true", "message":"get success!", "question":';
             echo json_encode($output);
             echo '}';
         }
         else
         {
-            echo '{"type":"get_question", "value":"false", "message":"get failed!"}';
+            echo '{"type":"get_question_by_type", "value":"false", "message":"get failed!"}';
         }
 
         MySQL::close();

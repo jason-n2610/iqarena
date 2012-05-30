@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS levels;
 DROP TABLE IF EXISTS member_answers;
 DROP TABLE IF EXISTS structure_of_questions;
 DROP TABLE IF EXISTS question_reviews;
+DROP TABLE IF EXISTS awards;
 
 CREATE TABLE users (
     user_id int unsigned not null auto_increment,
@@ -176,4 +177,12 @@ CREATE TABLE question_reviews (
     answer tinyint not null,
     describle_answer nvarchar(500),
     PRIMARY KEY (question_review_id)
+);
+
+CREATE TABLE awards (
+	award_id int unsigned not null auto_increment,
+	user_name varchar(50) not null,
+	score float not null,
+	date_record datetime,
+	PRIMARY KEY (award_id)
 );

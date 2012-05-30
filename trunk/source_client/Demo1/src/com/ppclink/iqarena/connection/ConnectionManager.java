@@ -52,7 +52,9 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 		REQUEST_REMOVE_ROOM,
 		REQUEST_MEMBER_READY, 
 		REQUEST_HELP_5050,
-		REQUEST_GET_QUESTION_BY_TYPE
+		REQUEST_GET_QUESTION_BY_TYPE,
+		REQUEST_GET_TOP_RECORD,
+		REQUEST_SUBMIT_RECORD
 	}
 
 	public ConnectionManager(IRequestServer delegate) {
@@ -224,6 +226,19 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 						Config.REQUEST_GET_QUESTION_BY_TYPE));
 				nameValuePairs.add(new BasicNameValuePair("level", params[0]));				
 				break;
+			case REQUEST_GET_TOP_RECORD:
+				nameValuePairs = new ArrayList<NameValuePair>(1);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_GET_TOP_RECORD));
+				break;
+			case REQUEST_SUBMIT_RECORD:
+				nameValuePairs = new ArrayList<NameValuePair>(3);
+				nameValuePairs.add(new BasicNameValuePair("message",
+						Config.REQUEST_SUBMIT_RECORD));
+				nameValuePairs.add(new BasicNameValuePair("user_name", params[0]));	
+				nameValuePairs.add(new BasicNameValuePair("score", params[1]));	
+				break;
+				
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
@@ -370,8 +385,21 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 		this.requestType = REQUEST_TYPE.REQUEST_HELP_5050;
 		this.execute(question_id);
 	}
+	
+	public void getTopRecord(){
+		this.requestType = REQUEST_TYPE.REQUEST_GET_TOP_RECORD;
+		this.execute();
+	}
 
+	public void submitRecord(String user_name, float score){
+		this.requestType = REQUEST_TYPE.REQUEST_SUBMIT_RECORD;
+		this.execute(user_name, String.valueOf(score));
+				
+	}
+	
 	public void setRequestType(REQUEST_TYPE requestType) {
 		this.requestType = requestType;
 	}
+	
+	
 }

@@ -1,5 +1,8 @@
 package com.ppclink.iqarena.activity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.connection.CheckServer;
 import com.ppclink.iqarena.connection.ConnectionManager;
@@ -7,19 +10,29 @@ import com.ppclink.iqarena.connection.ConnectionManager.REQUEST_TYPE;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.Question;
 import com.ppclink.iqarena.object.QuestionLite;
+import com.ppclink.iqarena.object.Rank;
 import com.ppclink.iqarena.ultil.AnalysisData;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.database.SQLException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -36,22 +49,29 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	Button mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnSummit,
 			mBtnHelpChangeQuestion;
 	AlertDialog mDialog;
+	ProgressDialog mProgressDialog;
 
 	ListView mLvRanks;
 
 	private final static int TIME_PER_QUESTION = 30000;
 
 	private int mScore = 0;
+	
+	// mang 15 phan tu tuong ung so diem cho moi cau
+	private int[] mScoreLevels = { 10, 10, 10, 10, 20, 50, 100, 200, 500, 1000,
+			2000, 3000, 5000, 8000, 10000 };
 
 	private CountDownTimer mTimer;
 
 	private int mCurrentQues = 0;
 	
-	String mQuestionId = null;
-	
 	private String tag = "SinglePlayer";
 	
 	ConnectionManager mRequest;
+	
+	QuestionLite mQuestion;
+	
+	boolean isGetOtherQuestion = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +115,17 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		mBtnHelpChangeQuestion.setOnClickListener(this);
 
 		mBtnHelpChangeQuestion.setText("? ? ?");
-
+		mVfMain.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.dialog_enter));
+		mVfMain.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.dialog_exit));
+		
 		initUISuportMultiScreen();
 		
 		if (mRequest == null){
 			mRequest = new ConnectionManager(this);
 			mRequest.getQuestionByType(mCurrentQues+1);
 		}
+
+		mProgressDialog = ProgressDialog.show(this, "Connection", "Waiting...");
 	}
 
 	@Override
@@ -152,12 +176,77 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.local_mode_btn_summit:
-			if (mRequest != null){
-				if (!mRequest.isCancelled()){
-					mRequest.cancel(true);	
+			if (mTimer != null) {
+				mTimer.cancel();
+				// disable answer
+				int count = mRgAnswer.getChildCount();
+				for (int i = 0; i < count; i++) {
+					mRgAnswer.getChildAt(i).setEnabled(false);
+				}
+
+				// check answer
+				int answer = mRgAnswer.indexOfChild(findViewById(mRgAnswer
+						.getCheckedRadioButtonId())) + 1;
+				// tra loi dung
+				if (answer == mQuestion.getAnswer()) {
+					if (mCurrentQues != 14){
+						// hien thi dialog tra loi dung
+						showDialogTrueAnswer(0);
+					}
+					else{
+						// victory
+						showDialogVictory();
+					}
+				} else {
+					// hien thi dialog tra loi sai
+					showDialogFalseAnswer();
 				}
 			}
+			break;
+		case R.id.local_mode_btn_help_50_50:
+			mBtnHelp5050.setEnabled(false);
+			int trueAnswer = mQuestion.getAnswer() - 1;
+			ArrayList<Integer> sample = new ArrayList<Integer>(4);
+			sample.add(1);
+			sample.add(2);
+			sample.add(3);
+			sample.add(0);
+			sample.remove(new Integer(trueAnswer));
+			Collections.shuffle(sample);
+			mRgAnswer.getChildAt(sample.get(0)).setEnabled(false);
+			mRgAnswer.getChildAt(sample.get(1)).setEnabled(false);
+			break;
+		case R.id.local_mode_btn_help_release:
+			mBtnHelpRelease.setEnabled(false);
+			if (mTimer != null){
+				mTimer.cancel();
+			}
+			// cau binh thuong
+			if (mCurrentQues != 14){
+				mBtnHelpRelease.setEnabled(false);
+				showDialogTrueAnswer(1);
+			}
+			else{
+				// cau thu 15
+				Toast.makeText(this, "Do not use for question 15", 800).show();
+			}
+			break;
+		case R.id.local_mode_btn_help_x2:
+			mBtnHelpX2.setEnabled(false);
+			mScoreLevels[mCurrentQues] = mScoreLevels[mCurrentQues] * 2;
+			break;
+		case R.id.local_mode_btn_help_change_question:
+			mBtnHelpChangeQuestion.setEnabled(false);
+			mProgressDialog = ProgressDialog.show(this, "Connection", "Waiting...");
+			// lay ve cau hoi
+			if (mRequest != null){
+				if (!mRequest.isCancelled()){
+					mRequest.cancel(true);
+				}
+			}			
+			isGetOtherQuestion = true;
 			mRequest = new ConnectionManager(this);
+			mRequest.getQuestionByType(mCurrentQues+1);
 			break;
 
 		default:
@@ -169,47 +258,61 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	public void onRequestComplete(String sResult) {
 		// request lay ve cau hoi hoan tat
 		if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION_BY_TYPE) {
+			if (mProgressDialog != null){
+				mProgressDialog.dismiss();
+			}
 			if (sResult != null) {
 				try {
-					AnalysisData.analyze(sResult);
-					// co cau hoi tra ve
-					if (AnalysisData.value) {
-						Question question = AnalysisData.question;
-						mQuestionId = question.getmStrId();
-						mTvQuestion.setText(question.getmStrContent());
-						mRbA.setText(question.getmStrAnswerA());
-						mRbB.setText(question.getmStrAnswerB());
-						mRbC.setText(question.getmStrAnswerC());
-						mRbD.setText(question.getmStrAnswerD());
-						mTimer = new CountDownTimer(TIME_PER_QUESTION, 1000) {
-
-							@Override
-							public void onFinish() {
-								showDialogTimeLimit();
+					if (sResult.contains("{")){		
+						AnalysisData.analyze(sResult);				
+						// co cau hoi tra ve
+						if (AnalysisData.value) {
+							mQuestion = AnalysisData.questionLite;
+							mTvQuestion.setText(mQuestion.getQuesName());
+							mRbA.setText(mQuestion.getAnswerA());
+							mRbB.setText(mQuestion.getAnswerB());
+							mRbC.setText(mQuestion.getAnswerC());
+							mRbD.setText(mQuestion.getAnswerD());
+							if (!isGetOtherQuestion){	// kiem tra xem co phai 
+								// nguoi choi thay cau hoi khac khong
+								// neu ko thi khong dem nguoc lai thoi gian
+								mTimer = new CountDownTimer(TIME_PER_QUESTION, 1000) {
+									
+									@Override
+									public void onFinish() {
+										showDialogTimeLimit();
+									}
+		
+									@Override
+									public void onTick(long millisUntilFinished) {
+										int time = (int) millisUntilFinished / 1000;
+										if (time > 20) {
+											mTvQuestionTimer.setTextColor(Color.GREEN);
+										} else if (time > 10) {
+											mTvQuestionTimer.setTextColor(Color.YELLOW);
+										} else {
+											mTvQuestionTimer.setTextColor(Color.RED);
+										}
+										mTvQuestionTimer.setText(String
+												.valueOf(millisUntilFinished / 1000));
+									}
+								};
+								mTimer.start();
 							}
-
-							@Override
-							public void onTick(long millisUntilFinished) {
-								int time = (int) millisUntilFinished / 1000;
-								if (time > 20) {
-									mTvQuestionTimer.setTextColor(Color.GREEN);
-								} else if (time > 10) {
-									mTvQuestionTimer.setTextColor(Color.YELLOW);
-								} else {
-									mTvQuestionTimer.setTextColor(Color.RED);
-								}
-								mTvQuestionTimer.setText(String
-										.valueOf(millisUntilFinished / 1000));
+							else{
+								isGetOtherQuestion = !isGetOtherQuestion;
 							}
-						};
-						mTimer.start();
-
+	
+						}
+						// truong hop ko lay dc cau hoi, dua ra thong bao
+						else {
+							Toast.makeText(this,
+									"sorry, do not create question, please try again",
+									500).show();
+						}
 					}
-					// truong hop ko lay dc cau hoi, dua ra thong bao
-					else {
-						Toast.makeText(this,
-								"sorry, do not create question, please try again",
-								500).show();
+					else{
+						Toast.makeText(this, sResult, 500).show();
 					}
 				} catch (Exception e) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -219,6 +322,48 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 				}
 			}
 		}
+		else if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_GET_TOP_RECORD){
+			if (mProgressDialog != null){
+				mProgressDialog.dismiss();
+			}
+			if (sResult != null){
+				if (sResult.contains("{")){
+					AnalysisData.analyze(sResult);
+					if (AnalysisData.value){
+						if (AnalysisData.mRanks != null){
+							RankAdapter adapter = new RankAdapter(this, AnalysisData.mRanks);
+							mLvRanks.setAdapter(adapter);
+						}
+					}
+				}
+				else{
+					Toast.makeText(this, sResult, 1000).show();
+				}
+			}
+		}
+		else if (mRequest.getRequestType() == REQUEST_TYPE.REQUEST_SUBMIT_RECORD){
+			if (sResult != null){
+				if (sResult.contains("{")){
+					AnalysisData.analyze(sResult);
+					if (!AnalysisData.value){
+						Toast.makeText(this, AnalysisData.message, 1000).show();
+					}
+					else{
+						int rankID = AnalysisData.mRankId;
+						Log.e(tag, " "+rankID);
+					}
+				}
+				else
+					Toast.makeText(this, sResult, 1000).show();
+			}
+			if (mRequest != null){
+				if (!mRequest.isCancelled()){
+					mRequest.cancel(true);
+				}
+			}
+			mRequest = new ConnectionManager(this);
+			mRequest.getTopRecord();
+		}
 	}
 	
 
@@ -227,8 +372,12 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		// type 0 la cho truong hop tra loi dung
 		// type 1 cho truong hop help release
 		// lay ve ket qua dung
+		if (mTimer != null){
+			mTimer.cancel();
+		}
+		
 		if (type == 0){
-//			mScore = mScore + mScoreLevels[mCurrentQues];
+			mScore = mScore + mScoreLevels[mCurrentQues];
 		}
 		else{
 			mScore = mScore * 3 / 4;
@@ -240,11 +389,13 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		Builder builder = new Builder(this);
 		builder.setTitle("Result");
 		if (type == 0){
-			builder.setMessage( " is TRUE answer. \nYour score is: " + mScore
+			builder.setMessage(getAnswer() + " is TRUE answer. \nYour score is: " 
+					+ mScore
 					+ "\nReady for next question?");
 		}
 		else if (type == 1){
-			builder.setMessage("You have choose help release. \n" + " is TRUE answer. \nYour score is: " + mScore
+			builder.setMessage("You have choose help release. \n" + getAnswer() +
+					" is TRUE answer. \nYour score is: " + mScore
 					+ "\nReady for next question?");
 		}
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -259,7 +410,18 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 				}
 				mRgAnswer.clearCheck();
 
-				mCurrentQues++;				
+				mCurrentQues++;	
+				
+				// request lay cau hoi tiep
+				if (mRequest != null){
+					if (!mRequest.isCancelled()){
+						mRequest.cancel(true);
+					}
+					mRequest = new ConnectionManager(SinglePlayer.this);
+					mRequest.getQuestionByType(mCurrentQues+1);
+					mProgressDialog = ProgressDialog.show(
+							SinglePlayer.this, "Connection", "Waiting...");
+				}
 			}
 		});
 		dialog = builder.create();
@@ -267,6 +429,9 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	}
 
 	private void showDialogFalseAnswer() {
+		if (mTimer != null){
+			mTimer.cancel();
+		}
 		mBtnHelp5050.setEnabled(false);
 		mBtnHelpRelease.setEnabled(false);
 		mBtnHelpX2.setEnabled(false);
@@ -277,15 +442,14 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		AlertDialog dialog = null;
 		Builder builder = new Builder(this);
 		builder.setTitle("Result");
-		builder.setMessage("You are FALSE. True answer is: ");
+		builder.setMessage("You are FALSE. \nTrue answer is: " + getAnswer());
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 				// hien thi ket qua
-				mVfMain.showNext();
-				
+				showDialogInsertRank();				
 			}
 		});
 		dialog = builder.create();
@@ -293,6 +457,9 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	}
 
 	private void showDialogVictory(){
+		if (mTimer != null){
+			mTimer.cancel();
+		}
 		
 		// lay ve ket qua dung
 
@@ -305,8 +472,7 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				// hien thi ket qua
-				mVfMain.showNext();
+				showDialogInsertRank();
 			}
 		});
 		dialog = builder.create();
@@ -316,6 +482,9 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 	
 	
 	private void showDialogTimeLimit() {
+		if (mTimer != null){
+			mTimer.cancel();
+		}
 		int count = mRgAnswer.getChildCount();
 		for (int i = 0; i < count; i++) {
 			mRgAnswer.getChildAt(i).setEnabled(false);
@@ -337,13 +506,131 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						// hien thi ket qua
-						mVfMain.showNext();		
+						showDialogInsertRank();		
 					}
 				});
 		dialog = builder.create();
 		dialog.show();
 	}
 	
+	private void showDialogInsertRank(){
+
+		final EditText etUsername = new EditText(this);
+		etUsername.setText("user");
+		AlertDialog dialog = null;
+		Builder builder = new Builder(this);
+		builder.setTitle("Confirm");
+		builder.setView(etUsername);
+		builder.setMessage("Username: ");
+		builder.setPositiveButton("Summit", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// them rank
+				String name = etUsername.getText().toString();
+				if (name != null){
+					if (mRequest != null){
+						if (!mRequest.isCancelled()){
+							mRequest.cancel(true);
+						}
+					}
+					mRequest = new ConnectionManager(SinglePlayer.this);
+					mRequest.submitRecord(name, mScore);
+					mVfMain.showNext();
+				}
+			}
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// khong them rank
+				mVfMain.showNext();
+				mRequest = new ConnectionManager(SinglePlayer.this);
+				mRequest.getTopRecord();
+				mProgressDialog = ProgressDialog.show(
+						SinglePlayer.this, "Connection", "Waiting...");
+			}
+		});
+		dialog = builder.create();
+		dialog.show();
+	}
+	
+	
+	private String getAnswer(){
+		String result = null;
+		int answer = mQuestion.getAnswer();
+		switch (answer) {
+		case 1:
+			result = "A";
+			break;
+		case 2:
+			result = "B";
+			break;
+		case 3:
+			result = "C";
+			break;
+		case 4:
+			result = "D";
+			break;
+
+		default:
+			result = null;
+			break;
+		}
+		return result;
+	}
+	
+
+	private class RankAdapter extends ArrayAdapter<Rank>{
+		Context context;
+		ArrayList<Rank> ranks;
+
+		public RankAdapter(Context context, ArrayList<Rank> objects) {
+			super(context, 1, objects);
+			this.context = context;
+			this.ranks = objects;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			RankHolder holder;
+			if (convertView == null){
+				convertView = LayoutInflater.from(context).inflate(
+						R.layout.list_rank_item, null);
+				holder = new RankHolder();
+				holder.tvRank = (TextView) convertView.findViewById(
+						R.id.list_tv_rank);
+				holder.tvUsername = (TextView) convertView.findViewById(
+						R.id.list_tv_username);
+				holder.tvScore = (TextView) convertView.findViewById(
+						R.id.list_tv_score);
+				convertView .setTag(holder);
+			}
+			else{
+				holder = (RankHolder) convertView.getTag();
+			}
+			Rank rank = ranks.get(position);
+			holder.tvRank.setText(String.valueOf(position+1));
+			holder.tvUsername.setText(rank.getName());
+			holder.tvScore.setText(String.valueOf(rank.getScore()));		
+			
+			// highlight current insert
+			if (rank.getId() == AnalysisData.mRankId){
+				convertView.setBackgroundDrawable(getResources().
+						getDrawable(R.drawable.focused_application_background));
+			}
+			else{
+				convertView.setBackgroundColor(android.R.color.transparent);
+			}
+			return convertView;
+		}		
+	}
+	
+	private static class RankHolder{
+		TextView tvRank, tvUsername, tvScore;
+	}
 
 }

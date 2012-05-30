@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.ppclink.iqarena.object.MemberScore;
 import com.ppclink.iqarena.object.Question;
+import com.ppclink.iqarena.object.QuestionLite;
+import com.ppclink.iqarena.object.Rank;
 import com.ppclink.iqarena.object.Room;
 import com.ppclink.iqarena.object.User;
 
@@ -31,11 +33,14 @@ public class AnalysisData {
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static String mTrueAnswer = null;
 	public static Question question = null;
+	public static QuestionLite questionLite = null;
 	public static int roomId = 0, memberId = 0;
 	private static final String TAG = "JSONDATA";
 	public static User userInfo = null;
 	public static float updateScore = 0;
 	public static int help_5050_remove1=0, help_5050_remove2=0; 
+	public static ArrayList<Rank> mRanks = new ArrayList<Rank>();
+	public static int mRankId = 0;
 
 	public static boolean value = false;
 
@@ -285,6 +290,62 @@ public class AnalysisData {
 				if (value) {
 					help_5050_remove1 = jObject.getInt("remove1");
 					help_5050_remove2 = jObject.getInt("remove2");
+				}
+			}
+			
+			// request get question by type
+			else if (typeMessage.equals(Config.REQUEST_GET_QUESTION_BY_TYPE)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value) {
+					String strId = null, strQuestion = null, 
+							strA = null, strB = null, strC = null, strD = null;
+					int answer = 0;
+					String jQuestion = jObject.getString("question");
+					JSONArray jArray = new JSONArray(jQuestion);
+					int length = jArray.length();
+					for (int i = 0; i < length; i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+						strId = json_data.getString("question_id");
+						strQuestion = json_data.getString("question_name");
+						strA = json_data.getString("answer_a");
+						strB = json_data.getString("answer_b");
+						strC = json_data.getString("answer_c");
+						strD = json_data.getString("answer_d");
+						answer = json_data.getInt("answer");
+					}
+					questionLite = new QuestionLite(Integer.valueOf(strId), strQuestion, 1, strA, strB,
+							strC, strD, answer, "");
+				}
+			}
+			else if (typeMessage.equals(Config.REQUEST_GET_TOP_RECORD)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value) {
+					String jMembers = jObject.getString("awards");
+					JSONArray jArray = new JSONArray(jMembers);
+					int length = jArray.length();
+					mRanks.clear();
+					for (int i = 0; i < length; i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+						int award_id = json_data.getInt("award_id");
+						String user_name = json_data.getString("user_name");
+						int score = json_data.getInt("score");
+						String date_record = json_data.getString("date_record");
+
+						Rank rank = new Rank(award_id, user_name, score, date_record);
+
+						mRanks.add(rank);
+					}
+				} else {
+					mListMemberInRoom.clear();
+				}
+			}
+			else if (typeMessage.equals(Config.REQUEST_SUBMIT_RECORD)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+				if (value){
+					mRankId = jObject.getInt("award_id");
 				}
 			}
 

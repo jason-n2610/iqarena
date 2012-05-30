@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,8 @@ public class LocalMode extends Activity implements OnClickListener {
 	AlertDialog mDialog;
 	
 	ListView mLvRanks;
+	
+	private int mLastRank;
 
 	private final static int TIME_PER_QUESTION = 30000;
 
@@ -108,6 +111,7 @@ public class LocalMode extends Activity implements OnClickListener {
 		mBtnHelpChangeQuestion.setOnClickListener(this);
 		
 		mBtnHelpChangeQuestion.setText("? ? ?");
+		mVfMain.setAnimation(AnimationUtils.loadAnimation(this, R.anim.toast_enter));
 
 		// connect database and get data
 		if (mDataHelper == null) {
@@ -302,18 +306,6 @@ public class LocalMode extends Activity implements OnClickListener {
 			
 			mQuestions.get(mCurrentQues).setAnswer(question.getAnswer());
 			
-			break;
-		case R.id.local_mode_rb_answer_a:
-
-			break;
-		case R.id.local_mode_rb_answer_b:
-
-			break;
-		case R.id.local_mode_rb_answer_c:
-
-			break;
-		case R.id.local_mode_rb_answer_d:
-
 			break;
 
 		case R.id.local_mode_btn_summit:
@@ -552,7 +544,15 @@ public class LocalMode extends Activity implements OnClickListener {
 				// do du lieu vao listview
 				ArrayList<Rank> ranks = mDataHelper.getAwards();
 				if (ranks != null){
-					if (ranks.size() != 0){
+					int size = ranks.size();
+					if (size != 0){
+						mLastRank = ranks.get(0).getId();
+						for (int i=0; i<size; i++){
+							int id = ranks.get(i).getId();
+							if (mLastRank < id){
+								mLastRank = id;
+							}
+						}
 						RankAdapter adapter = new RankAdapter(
 								LocalMode.this, ranks);
 						mLvRanks.setAdapter(adapter);
@@ -705,12 +705,18 @@ public class LocalMode extends Activity implements OnClickListener {
 			Rank rank = ranks.get(position);
 			holder.tvRank.setText(String.valueOf(position+1));
 			holder.tvUsername.setText(rank.getName());
-			holder.tvScore.setText(String.valueOf(rank.getScore()));			
+			holder.tvScore.setText(String.valueOf(rank.getScore()));		
+			
+			// highlight current insert
+			if (rank.getId() == mLastRank){
+				convertView.setBackgroundDrawable(getResources().
+						getDrawable(R.drawable.focused_application_background));
+			}
+			else{
+				convertView.setBackgroundColor(android.R.color.transparent);
+			}
 			return convertView;
-		}
-		
-		
-		
+		}		
 	}
 	
 	private static class RankHolder{
