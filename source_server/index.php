@@ -83,5 +83,11 @@
     else if ($_POST['message'] == "get_question_by_type"){
         include ($path . '/modules/controls/get_question_by_type.php');
     }
+    else if ($_POST['message'] == "get_top_record"){
+        include ($path . '/modules/controls/get_top_record.php');
+    }
+    else if ($_POST['message'] == "submit_record"){
+        include ($path . '/modules/controls/submit_record.php');
+    }
 
 ?>

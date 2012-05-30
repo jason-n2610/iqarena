@@ -16,6 +16,7 @@ public class QuestionLite {
 		this.answer = answer;
 		this.desAnswer = desAnswer;
 	}
+	
 	public String getQuesName() {
 		return quesName;
 	}

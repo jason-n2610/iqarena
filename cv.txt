@@ -3,3 +3,5 @@ Bán avatar và các vật dụng khác
 
 hoàn thiện lớp sqlitehelper
 bat dau test va xay dung offline dau truong kien thuc
+
+bao cao: Xay dung cach nhap cau hoi vao he thong
