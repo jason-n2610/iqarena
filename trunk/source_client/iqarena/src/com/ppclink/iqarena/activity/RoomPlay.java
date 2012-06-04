@@ -7,7 +7,11 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -163,6 +167,8 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				mCheckServer.cancel(true);
 			}
 		}
+		Intent t = new Intent(this, TabHostMain.class);
+		startActivity(t);
 	}
 
 	void showLayout() {
@@ -208,6 +214,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 				mRgAnswer.getChildAt(i).setEnabled(true);
 				mRgAnswer.getChildAt(i).setSelected(false);
 			}
+			mRgAnswer.clearCheck();
 
 			// gan answer is false
 			mIsAnswer = false;
@@ -327,7 +334,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			} else {
 				Toast.makeText(
 						this,
-						"Bạn không được sử dùng 2 quyền trợ giúp cho 1 câu hỏi",
+						"Báº¡n khÃ´ng Ä‘Æ°á»£c sá»­ dÃ¹ng 2 quyá»�n trá»£ giÃºp cho 1 cÃ¢u há»�i",
 						500).show();
 			}
 			break;
@@ -340,7 +347,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			} else {
 				Toast.makeText(
 						this,
-						"Bạn không được sử dùng 2 quyền trợ giúp cho 1 câu hỏi",
+						"Báº¡n khÃ´ng Ä‘Æ°á»£c sá»­ dÃ¹ng 2 quyá»�n trá»£ giÃºp cho 1 cÃ¢u há»�i",
 						500).show();
 			}
 			break;
@@ -360,7 +367,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			} else {
 				Toast.makeText(
 						this,
-						"Bạn không được sử dùng 2 quyền trợ giúp cho 1 câu hỏi",
+						"Báº¡n khÃ´ng Ä‘Æ°á»£c sá»­ dÃ¹ng 2 quyá»�n trá»£ giÃºp cho 1 cÃ¢u há»�i",
 						500).show();
 			}
 
@@ -537,10 +544,6 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 											if (!mCheckServer.isCancelled()) {
 												mCheckServer.cancel(true);
 											}
-											mCheckServer = new CheckServer(
-													RoomPlay.this);
-											mCheckServer
-													.checkRoomReady(mStrRoomId);
 
 											if (!mRequestServer.isCancelled()) {
 												mRequestServer.cancel(true);
@@ -550,6 +553,10 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 											mRequestServer.readyForGame(
 													String.valueOf(mMemberId),
 													mStrRoomId);
+											mCheckServer = new CheckServer(
+													RoomPlay.this);
+											mCheckServer
+													.checkRoomReady(mStrRoomId);
 										}
 									}
 
@@ -577,20 +584,56 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 							}
 						}
-						// truong hop nguoi choi tra loi sai, quay tro lai
-						// roomlist
+						// truong hop nguoi choi tra loi sai, kiem tra xem
+						// tro choi co tiep tuc ko
+						// neu tro choi tiep tuc dua ra thong bao hoi nguoi choi
+						// co muon xem cac nguoi choi khac thi dau ko
+						// neu ko thi ket thuc tro choi
 						else {
-							mTvAnswerInfo.setText("Press back button to exit!");
-							mTvAnswerTimer.setVisibility(View.GONE);
-							mTvAnswerResult.setText("True Answer: "
-									+ mStrTrueAnswer + ".\nYou are false!");
-							// thong bao diem moi cua user
-							Toast.makeText(
-									this,
-									"New score: "
-											+ AnalysisData.userInfo
-													.getScoreLevel(), 400)
-									.show();
+							// kiem tra xem tro choi con tiep tuc ko
+							int count = 0; // dem so nguoi choi tra loi dung
+							int size = mAlAnswer.size();
+							for (int i=0; i<size; i++){
+								MemberScore member = mAlAnswer.get(i);
+								if (member.getStrQuestionAnswer().equals(AnalysisData.mTrueAnswer)){
+									count++;
+								}
+							}
+							if (count > 1){
+								// hien thi dialog hoi nguoi choi
+								AlertDialog.Builder builder = new Builder(this);
+								builder.setTitle("Info");
+								builder.setMessage("Bạn có muốn xem tiếp trận đấu không?");
+								builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										dialog.dismiss();
+									}
+									
+								});
+								builder.setNegativeButton("No", new OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.dismiss();
+									}
+								});
+							}
+							else{
+								mTvAnswerInfo.setText("Press back button to exit!");
+								mTvAnswerTimer.setVisibility(View.GONE);
+								mTvAnswerResult.setText("True Answer: "
+										+ mStrTrueAnswer + ".\nYou are false!");
+								// thong bao diem moi cua user
+								Toast.makeText(
+										this,
+										"New score: "
+												+ AnalysisData.userInfo
+														.getScoreLevel(), 400)
+										.show();
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -632,6 +675,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			Toast.makeText(this, result, 500).show();
 			return;
 		}
+		// check lay ve members trong room
 		if (result.contains("get")) {
 			if (mCheckServer != null) {
 				if (!mCheckServer.isCancelled()) {

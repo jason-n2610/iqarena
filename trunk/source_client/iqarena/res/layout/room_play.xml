@@ -35,7 +35,7 @@
                     android:textStyle="bold"
                     android:text="Question #"
                     android:textColor="#ffffffff"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,7 +94,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:background="@drawable/bg_form1"
                     android:padding="10dp" >
 

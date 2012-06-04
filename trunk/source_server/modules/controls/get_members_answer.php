@@ -77,11 +77,11 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
                 unlink($strPathQuestionFile);
             }
 
-            // xoa file get list
-            $pathGetAnswer = $path . '/' . $_POST['room_id'] . '_get_list_answer.txt';
-            if (file_exists($pathGetAnswer)){
-                unlink($pathGetAnswer);
-            }
+            //// xoa file get list
+//            $pathGetAnswer = $path . '/' . $_POST['room_id'] . '_get_list_answer.txt';
+//            if (file_exists($pathGetAnswer)){
+//                unlink($pathGetAnswer);
+//            }
 
             // cập nhật điểm mới cho user
             $updateScore;
@@ -136,11 +136,6 @@ if (isset($_POST['room_id']) && isset($_POST['question_id']) && isset($_POST['an
         // xoa member
             //RoomMembers::removeMemberInRoom($_POST['member_id']);
 
-            // xoa file get list
-            $pathGetAnswer = $path . '/' . $_POST['room_id'] . '_get_list_answer.txt';
-            if (file_exists($pathGetAnswer)){
-                unlink($pathGetAnswer);
-            }
         }
         else{
             // truong hop nguoi choi tra loi sai va cuoc choi van tiep tuc

@@ -1,37 +1,32 @@
 package com.ppclink.iqarena.activity;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteException;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -39,10 +34,8 @@ import com.ppclink.iqarena.R;
 import com.ppclink.iqarena.connection.ConnectionManager;
 import com.ppclink.iqarena.database.DatabaseHelper;
 import com.ppclink.iqarena.delegate.IRequestServer;
-import com.ppclink.iqarena.object.QuestionLite;
-import com.ppclink.iqarena.ultil.Config;
 import com.ppclink.iqarena.ultil.AnalysisData;
-import com.ppclink.iqarena.ultil.SoundManager;
+import com.ppclink.iqarena.ultil.Config;
 
 public class Main extends Activity implements OnClickListener, IRequestServer {
 
@@ -51,6 +44,10 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	ConnectionManager mRequestServer;
 	ProgressDialog mProgressDialog;
 	ViewFlipper vfLayoutMain;
+	PopupWindow mPopup;
+	View mPopupView;
+	boolean isSoundOn = true;
+	Button btnOption;
 	
 	MediaPlayer player;
 	@Override
@@ -63,7 +60,7 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		Button btnMultiPlayer = (Button) findViewById(R.id.main_btn_multi_player);
 		Button btnHelp = (Button) findViewById(R.id.main_btn_help);
 		Button btnAbout = (Button) findViewById(R.id.main_btn_about);
-		Button btnOption = (Button) findViewById(R.id.main_btn_option);
+		btnOption = (Button) findViewById(R.id.main_btn_option);
 		Button ibUploadQues = (Button) findViewById(R.id.main_ib_upload_question);
 		Button ibDownloadQues = (Button) findViewById(R.id.main_ib_download_question);
 		vfLayoutMain = (ViewFlipper) findViewById(R.id.main_vf_main);
@@ -103,32 +100,27 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		if (player == null){
-//			player = MediaPlayer.create(this, R.raw.main_theme2);
-//			player.setLooping(true);
-//			try {
-//				player.prepare();
-//			} catch (IllegalStateException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			player.start();
-//		}
-//		else{
-//			player.start();
-//		}
+		player = MediaPlayer.create(this, R.raw.main_theme2);
+		player.setLooping(true);
+		try {
+			player.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		player.start();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-//		if (player != null){
-//			if (player.isPlaying()){
-//				player.pause();
-//				player.stop();
-//			}
-//		}
+		if (player != null){
+			if (player.isPlaying()){
+				player.pause();
+				player.stop();
+			}
+		}
 	}
 
 	@Override
@@ -143,10 +135,42 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		case R.id.main_ib_upload_question:
 			break;
 		case R.id.main_btn_option:
+			if (isSoundOn){
+				if (player != null){
+					if (player.isPlaying()){
+						player.pause();
+					}
+				}
+				btnOption.setCompoundDrawablesWithIntrinsicBounds(null, 
+						getResources().getDrawable(R.drawable.sound_off), null, null);
+			}
+			else{
+				if (player != null){
+					player.start();
+				}
+				btnOption.setCompoundDrawablesWithIntrinsicBounds(null, 
+						getResources().getDrawable(R.drawable.sound_on), null, null);
+			}
+			isSoundOn = !isSoundOn;
 			break;
 		case R.id.main_btn_help:
 			break;
 		case R.id.main_btn_about:
+			if (mPopup == null){
+				LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.about, null);
+				mPopup = new PopupWindow(this);
+				mPopup.setWidth(320);
+				mPopup.setHeight(320);
+				mPopup.setOutsideTouchable(true);
+				mPopup.setFocusable(true);
+				mPopup.setBackgroundDrawable(new BitmapDrawable());
+				mPopup.setContentView(layout);
+				mPopup.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
+			}
+			else{
+				mPopup.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
+			}
 			break;
 		case R.id.main_btn_single_player_on:
 			Intent iSingle = new Intent(this, SinglePlayer.class);

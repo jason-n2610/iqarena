@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.SQLException;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -68,6 +68,8 @@ public class LocalMode extends Activity implements OnClickListener {
 			2000, 3000, 5000, 8000, 10000 };
 
 	DatabaseHelper mDataHelper;
+	
+	MediaPlayer player;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +202,27 @@ public class LocalMode extends Activity implements OnClickListener {
 
 		// init UI
 		initUISuportMultiScreen();
+		
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (player == null){
+			player = MediaPlayer.create(this, R.raw.play_theme1);
+			player.setLooping(true);
+			try {
+				player.prepare();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			player.start();
+		}
+		else{
+			player.start();
+		}
 	}
 
 	@Override
@@ -207,6 +230,12 @@ public class LocalMode extends Activity implements OnClickListener {
 		super.onPause();
 		if (mTimer != null){
 			mTimer.cancel();
+		}
+		if (player != null){
+			if (player.isPlaying()){
+				player.pause();
+				player.stop();
+			}
 		}
 	}
 
