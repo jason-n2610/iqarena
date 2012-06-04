@@ -79,6 +79,24 @@
             return $result;
         }
 
+        public static function checkAdminLogin($username, $password){
+            $query = "  SELECT
+                            user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money,
+                            status
+                        FROM
+                            users
+                        WHERE
+                            username = '{$username}' && password = '{$password}' && power_user = 1 ";
+            $result = @mysql_query($query) or die('checkUserLogin: ' . mysql_error());
+            return $result;
+        }
+
         // them moi 1 user
         public static function addUser($username, $password, $email, $score_level, $power_user,
             $money)

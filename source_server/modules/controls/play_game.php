@@ -23,7 +23,7 @@
         Room::changeRoomToPlaying($_POST['room_id']);
         // xoa file 'roomid'.txt chua cac room_members
         unlink($path . '/' . $_POST['room_id'] . '.txt');
-        
+
 
          // thay doi file check_change_room.txt -> thong bao cho cac thanh vien khac
         $filename = $path . '/check_change_room.txt';
@@ -43,14 +43,13 @@
         $fd = fopen($filename, "w") or die("Can't open" . $filename);
         $fout = fwrite($fd, $fstring);
         fclose($fd);
-
-        $result = Question::getQuestionIds();
-        while($row = mysql_fetch_array($result, MYSQL_NUM))
-        {
-            $aQuestionIds[] = $row[0];
+        for ($i=0; $i<15; $i++){
+            $result = Question::getQuestionByType($i+1);
+            while($row = mysql_fetch_array($result, MYSQL_NUM))
+            {
+                $aQuestionIds[] = $row[0];
+            }
         }
-        // tao ngau nhien cau hoi
-        shuffle($aQuestionIds);
         MySQL::close();
 
         // noi dung file, dong dau tien la index cau hoi hien tai cua room, cac dong sau la cau id cau hoi
