@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.8, created on 2012-06-04 13:06:10
+<?php /* Smarty version Smarty-3.1.8, created on 2012-06-05 04:26:46
          compiled from "D:/xampp/htdocs/iqarena/source_server/admin/templates\login.html" */ ?>
 <?php /*%%SmartyHeaderCode:87614fcc853f0d1b89-20184642%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'd2f24aa4e3d92db6f2ac3ae28df37025deeac9b3' => 
     array (
       0 => 'D:/xampp/htdocs/iqarena/source_server/admin/templates\\login.html',
-      1 => 1338807883,
+      1 => 1338863202,
       2 => 'file',
     ),
   ),
@@ -64,7 +64,7 @@ $(document).pngFix( );
         <form action="login.php" method="post">
 
     		<table border="0" cellpadding="0" cellspacing="0">
-            <tr><td><font color="red"><?php echo $_smarty_tpl->tpl_vars['message']->value;?>
+            <tr><td colspan="2"><font color="red"><?php echo $_smarty_tpl->tpl_vars['message']->value;?>
 </font></td></tr>
     		<tr>
     			<th>Username</th>
