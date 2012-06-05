@@ -6,13 +6,23 @@
         public static function getAllQuestions()
         {
             mysql_query("set names utf8;");
-            $query = "  SELECT  q.question_id, q.question_type_id, q.question_name, q.answer_a,
-                                q.answer_b, q.answer_c, q.answer_d, q.answer,
-                                q.describle_answer,
-                                q.question_field_id, qt.question_type_name
-                        FROM    questions AS q, question_types AS qt
-                        WHERE   q.question_type_id = qt.question_type_id";
+            $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
+                                answer_b, answer_c, answer_d, answer,
+                                describle_answer, question_field_id
+                        FROM    questions";
             $result = @mysql_query($query) or die('getAllQuestions() ' .
+                mysql_error());
+            return $result;
+        }
+
+        public static function getQuestionByLimit($offset, $count){
+            mysql_query("set names utf8;");
+            $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
+                                answer_b, answer_c, answer_d, answer, question_field_id,
+                                describle_answer
+                        FROM    questions
+                        LIMIT   {$offset}, {$count};";
+            $result = @mysql_query($query) or die('getQuestionByLimit() ' .
                 mysql_error());
             return $result;
         }
@@ -73,7 +83,7 @@
         public static function getQuestionById($question_id)
         {
             mysql_query("set names utf8;");
-            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer
+            $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer, question_type_id, describle_answer
                         FROM    questions
                         WHERE   question_id = '{$question_id}'";
             $result = @mysql_query($query) or die('getQuestionById() ' . mysql_error());
@@ -118,11 +128,22 @@
         // them 1 cau hoi
         public static function addQuestion($type_id, $field_id, $question, $a, $b, $c, $d, $answer, $des)
         {
+            mysql_query("set names utf8;");
             $query = "  INSERT INTO questions(question_type_id, question_field_id, question_name,
                                     answer_a, answer_b, answer_c, answer_d, answer, describle_answer
                         VALUES  ('{$type_id}', '{$field_id}', '{$question}', '{$a}', '{$b}', '{$c}',
                                     '{$d}', '{$answer}', '{$des}'";
             $result = mysql_query($query);
+            return $result;
+        }
+
+
+        public static function updateQuestion($question_id, $question_name, $question_type_id, $answer_a, $answer_b, $answer_c, $answer_d, $answer, $decrible_answer){
+            mysql_query("set names utf8;");
+            $query = "  UPDATE  questions
+                        SET     question_name='{$question_name}', question_type_id='{$question_type_id}', answer_a='{$answer_a}', answer_b='{$answer_b}', answer_c='{$answer_c}', answer_d='{$answer_d}', answer='{$answer}', describle_answer='{$decrible_answer}'
+                        WHERE   question_id='{$question_id}'";
+            $result = mysql_query($query) or die('updateQuestion() ' . mysql_error());;
             return $result;
         }
     }

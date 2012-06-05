@@ -1,4 +1,5 @@
 <?php
+
     $path = getcwd();
     if ($_POST['message'] == "login")
     {
@@ -95,7 +96,6 @@
         $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         $extra = 'admin/\\index.php';
         header("Location: http://$host$uri/$extra");
-        exit;
     }
 
 ?>
