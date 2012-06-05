@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Internet Dreams</title>
+<title>IQArena Question</title>
 <link rel="stylesheet" href="../../templates/css/screen.css" type="text/css" media="screen" title="default" />
 <!--[if IE]>
 <link rel="stylesheet" media="all" type="text/css" href="../../templates/css/pro_dropline_ie.css" />
@@ -142,7 +142,7 @@ $(document).pngFix( );
 			<div class="nav-divider">&nbsp;</div>
 			<div class="showhide-account"><img src="../../templates/images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
 			<div class="nav-divider">&nbsp;</div>
-			<a href="" id="logout"><img src="../../templates/images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
+			<a href="?sub=logout" id="logout"><img src="../../templates/images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
 			<div class="clear">&nbsp;</div>
 
 			<!--  start account-content -->
@@ -245,6 +245,12 @@ $(document).pngFix( );
             <!-- start id-form -->
             <form action="?&sub=edit&question_id={$row['question_id']}" method="post" name="frmQuestion" id="frmQuestion">
     		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
+            
+            <tr>
+    			<th valign="top"></th>
+    			<td><font color="red">{if isset($message)}{$message}{/if}</font></td>
+    			<td></td>
+    		</tr>
     		<tr>
     			<th valign="top">Question: </th>
     			<td><textarea name="question_name"  rows="" cols="" class="form-textarea">{$row['question_name']}</textarea></td>
