@@ -94,7 +94,7 @@
         /* Redirect to a different page in the current directory that was requested */
         $host  = $_SERVER['HTTP_HOST'];
         $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-        $extra = 'admin/\\index.php';
+        $extra = 'admin/index.php';
         header("Location: http://$host$uri/$extra");
     }
 

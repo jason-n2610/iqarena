@@ -136,6 +136,16 @@
             $result = mysql_query($query);
             return $result;
         }
+        
+        // them 1 cau hoi
+        public static function insertQuestion($question, $type_id, $a, $b, $c, $d, $answer, $des)
+        {
+            mysql_query("set names utf8;");
+            $query = "  INSERT INTO questions( question_name, question_type_id, answer_a, answer_b, answer_c, answer_d, answer, describle_answer)
+                        VALUES  ('{$question}', '{$type_id}', '{$a}', '{$b}', '{$c}', '{$d}', '{$answer}', '{$des}')";
+            $result = mysql_query($query);
+            return $result;
+        }
 
 
         public static function updateQuestion($question_id, $question_name, $question_type_id, $answer_a, $answer_b, $answer_c, $answer_d, $answer, $decrible_answer){
@@ -144,6 +154,12 @@
                         SET     question_name='{$question_name}', question_type_id='{$question_type_id}', answer_a='{$answer_a}', answer_b='{$answer_b}', answer_c='{$answer_c}', answer_d='{$answer_d}', answer='{$answer}', describle_answer='{$decrible_answer}'
                         WHERE   question_id='{$question_id}'";
             $result = mysql_query($query) or die('updateQuestion() ' . mysql_error());;
+            return $result;
+        }
+        
+        public static function deleteQuestion($question_id){
+            $query = "  DELETE FROM questions WHERE question_id = '{$question_id}'";
+            $result = mysql_query($query) or die('deleteQuestion() ' . mysql_error());;
             return $result;
         }
     }

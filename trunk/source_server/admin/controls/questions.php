@@ -28,6 +28,10 @@
         case 'delete' :
             $objQuestionManger->delete ();
             break;
+        case 'logout':
+            session_destroy();
+            header('Location: login.php');
+            break;
         default :
             $objQuestionManger->get ();
             break;
@@ -45,6 +49,12 @@
 
             // Xac dinh trang hien tai yeu cau begin
             if (!isset($_GET['page'])){
+                if ($_SESSION['current_page'] > $total_page){
+                    $_SESSION['current_page'] = $total_page;
+                }
+                else if ($_SESSION['current_page'] < 1){
+                    $_SESSION['current_page'] = 1;
+                }
                 $current_page = $_SESSION['current_page'];
             }
             else{
@@ -69,6 +79,10 @@
                 $data_return[] = $row;
             }
 
+            if (isset($_GET['perform'])){
+                $perform = true;
+            }
+            $smarty->assign('result', $perform);
             $smarty->assign('page', $total_page);   // tong so trang
             $smarty->assign('current_page', $_SESSION['current_page']); // trang hien tai
             $smarty->assign('question_data', $data_return); // du lieu
@@ -79,7 +93,7 @@
             global $smarty;
 
             // kiem tra co submit hay reset ko
-            if (isset($_POST['btnSubmit'])){
+            if (isset($_POST['btnEdit'])){
                 $question_id = $_GET['question_id'];
                 $question_name = $_POST['question_name'];
                 $question_type_id = $_POST['question_type_id'];
@@ -91,8 +105,10 @@
                 $describle_answer = $_POST['describle_answer'];
                 $result = Question::updateQuestion($question_id, $question_name, $question_type_id, $answer_a, $answer_b, $answer_c, $answer_d, $answer, $describle_answer);
                 if ($result){
-                    $smarty->assign('result', $result);
-                    $this->get();
+                    header ( "Location: questions.php?sub=get&perform=true" );
+                }
+                else{
+                    
                 }
             }
             else if (isset($_POST['btnEditReset'])){
@@ -133,11 +149,9 @@
                 $answer_d = $_POST['answer_d'];
                 $answer = $_POST['answer'];
                 $describle_answer = $_POST['describle_answer'];
-                $result = Question::addQuestion( $question_type_id, 0, $question_name, $answer_a, $answer_b, $answer_c, $answer_d, $answer, $describle_answer);
+                $result = Question::insertQuestion( $question_name, $question_type_id, $answer_a, $answer_b, $answer_c, $answer_d, $answer, $describle_answer);
                 if ($result){
-                    $smarty->assign('result', $result);
-                    $_SESSION['current_page'] = 64;
-                    $this->get();
+                    header ( "Location: questions.php?sub=get&perform=true" );
                 }
                 else{
                     $smarty->assign('message', mysql_error());
@@ -146,6 +160,15 @@
             }
             else{
             $smarty->display('add_question.html');
+            }
+        }
+        
+        public function delete(){
+            if (isset($_GET['question_id'])){
+                $result = Question::deleteQuestion($_GET['question_id']);
+                if ($result){
+                    header ( "Location: questions.php?sub=get&perform=true" );
+                }
             }
         }
 	}
