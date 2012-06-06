@@ -15,45 +15,27 @@ import android.content.SharedPreferences.Editor;
 
 public class SessionStore {
 
-	private static boolean isSaved;
-	private static final String KEY = "user_account";
-	private static final String PASSWORD = "password";
+	private static boolean volume;
+	private static final String KEY = "config";
 
 	private static final String STORE_SESSION = "store_session";
 
-	private static String strPassword;
-	private static String strUsername;
-	private static final String USERNAME = "username";
-
-	public static String getPassword() {
-		return strPassword;
-	}
-
-	public static boolean getSaved() {
-		return isSaved;
-	}
-
-	public static String getUsername() {
-		return strUsername;
+	public static boolean getVolume() {
+		return volume;
 	}
 
 	public static void restoreSession(Context context) {
 		SharedPreferences savedSession = context.getSharedPreferences(KEY,
 				Context.MODE_PRIVATE);
 
-		isSaved = savedSession.getBoolean(STORE_SESSION, false);
-		strUsername = savedSession.getString(USERNAME, "username");
-		strPassword = savedSession.getString(PASSWORD, "password");
+		volume = savedSession.getBoolean(STORE_SESSION, true);
 
 	}
-
-	public static boolean saveSession(Context context, boolean save,
-			String username, String password) {
+	
+	public static boolean controlVolume(Context context, boolean control){
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
 				.edit();
-		editor.putBoolean(STORE_SESSION, save);
-		editor.putString(USERNAME, username);
-		editor.putString(PASSWORD, password);
+		editor.putBoolean(STORE_SESSION, control);
 
 		return editor.commit();
 	}

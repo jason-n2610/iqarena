@@ -18,22 +18,12 @@
         $password = stripcslashes($password);
         $password = mysql_real_escape_string($password);
         if ($username == '' || $password == '') {
-            $message = "Yor must enter full information";
+            $message = "You must enter full information";
         }
         else{
             MySQL::connect();
-            $result = User::checkAdminLogin($username, $password);
+            $result = User::checkAdminLogin($username, md5($password));
             if (mysql_num_rows($result) != 0){
-
-                if (isset($_POST['rememberme'])) {
-				/* Set cookie to last 1 year */
-				setcookie('username', $_POST['username'], time()+60*60*24*365, '/account', 'http://localhost/iqarena/source_server/admin/index.php');
-				setcookie('password', ($_POST['password']), time()+60*60*24*365, '/account', 'http://localhost/iqarena/source_server/admin/index.php');
-				} else {
-					/* Cookie expires when browser closes */
-					setcookie('username', $_POST['username'], false, '/account', 'http://localhost/iqarena/source_server/admin/index.php');
-					setcookie('password', ($_POST['password']), false, '/account', 'http://localhost/iqarena/source_server/admin/index.php');
-				}
 				$_SESSION['username'] = $username;
                 header('Location: questions.php');
             }

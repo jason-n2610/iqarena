@@ -34,35 +34,6 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 	TextView tvResult;
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_create:
-			String strRoomName = etRoomName.getText().toString().trim();
-			String strMaxMember = spMaxNumber.getSelectedItem().toString();
-			String strBetScore = spBetScore.getSelectedItem().toString();
-			String strTimePerQuestion = spTimePerQuestion.getSelectedItem()
-					.toString();
-			if (strRoomName.length() > 0) {
-				ConnectionManager requestServer = new ConnectionManager(this);
-				requestServer.createNewRoom(strRoomName, strMaxMember,
-						strBetScore, strTimePerQuestion);
-				btnCreate.setEnabled(false);
-				setProgressBarIndeterminateVisibility(true);
-			} else {
-				tvResult.setVisibility(View.VISIBLE);
-				tvResult.setText("Tên room không hợp lệ!");
-			}
-			break;
-
-		case R.id.btn_cancel:
-			onBackPressed();
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -119,6 +90,35 @@ public class CreateNewRoom extends Activity implements OnClickListener,
 		spMaxNumber.setSelection(3);
 		
 		spBetScore.setOnItemSelectedListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_create:
+			String strRoomName = etRoomName.getText().toString().trim();
+			String strMaxMember = spMaxNumber.getSelectedItem().toString();
+			String strBetScore = spBetScore.getSelectedItem().toString();
+			String strTimePerQuestion = spTimePerQuestion.getSelectedItem()
+					.toString();
+			if (strRoomName.length() > 0) {
+				ConnectionManager requestServer = new ConnectionManager(this);
+				requestServer.createNewRoom(strRoomName, strMaxMember,
+						strBetScore, strTimePerQuestion);
+				btnCreate.setEnabled(false);
+				setProgressBarIndeterminateVisibility(true);
+			} else {
+				tvResult.setVisibility(View.VISIBLE);
+				tvResult.setText("Tên room không hợp lệ!");
+			}
+			break;
+	
+		case R.id.btn_cancel:
+			onBackPressed();
+			break;
+		default:
+			break;
+		}
 	}
 
 	// interface IRequestServer

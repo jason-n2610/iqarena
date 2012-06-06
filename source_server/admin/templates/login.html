@@ -25,7 +25,7 @@ $(document).pngFix( );
 
 	<!-- start logo -->
 	<div id="logo-login">
-		<a href="index.html"><img src="../templates/images/shared/logo.png" width="156" height="40" alt="" /></a>
+		<a href="login.php"><img src="../templates/images/shared/logo.png" width="156" height="40" alt="" /></a>
 	</div>
 	<!-- end logo -->
 
@@ -42,15 +42,11 @@ $(document).pngFix( );
             <tr><td colspan="2"><font color="red">{$message}</font></td></tr>
     		<tr>
     			<th>Username</th>
-    			<td><input type="text" name="txtUsername" placeholder="username"  class="login-inp" /></td>
+    			<td><input type="text" maxlength="50" name="txtUsername" placeholder="username"  class="login-inp" /></td>
     		</tr>
     		<tr>
     			<th>Password</th>
-    			<td><input type="password" name="txtPassword" placeholder="password"  onfocus="this.value=''" class="login-inp" /></td>
-    		</tr>
-    		<tr>
-    			<th></th>
-    			<td valign="top"><input type="checkbox" name="rememberme" class="checkbox-size" id="login-check" /><label for="login-check">Remember me</label></td>
+    			<td><input type="password" maxlength="20" name="txtPassword" placeholder="password"  onfocus="this.value=''" class="login-inp" /></td>
     		</tr>
     		<tr>
     			<th></th>

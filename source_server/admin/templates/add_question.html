@@ -100,27 +100,6 @@ $(document).pngFix( );
 	</div>
 	<!-- end logo -->
 
-	<!--  start top-search -->
-	<div id="top-search">
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-		<td><input type="text" value="Search" onblur="if (this.value=='') { this.value='Search'; }" onfocus="if (this.value=='Search') { this.value=''; }" class="top-search-inp" /></td>
-		<td>
-
-		<select  class="styledselect">
-			<option value="">All</option>
-			<option value="">Questions</option>
-			<option value="">Users</option>
-		</select>
-
-		</td>
-		<td>
-		<input type="image" src="../templates/images/shared/top_search_btn.gif"  />
-		</td>
-		</tr>
-		</table>
-	</div>
- 	<!--  end top-search -->
  	<div class="clear"></div>
 
 </div>
@@ -148,23 +127,10 @@ $(document).pngFix( );
 			<!--  start account-content -->
 			<div class="account-content">
 			<div class="account-drop-inner">
-				<a href="" id="acc-settings">Settings</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-details">Personal details </a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-project">Project details</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-inbox">Inbox</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-stats">Statistics</a>
+				<a href="account.php" id="acc-settings">Change password</a>
 			</div>
 			</div>
 			<!--  end account-content -->
-
 		</div>
 		<!-- end nav-right -->
 
@@ -179,6 +145,7 @@ $(document).pngFix( );
 			<ul class="sub">
 				<li><a href="?sub=get">View all Questions</a></li>
 				<li class="sub_show"><a href="">Add Question</a></li>
+				<li><a href="?sub=review">Review Question</a></li>
 			</ul>
 		</div>
 		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -187,7 +154,7 @@ $(document).pngFix( );
 
 		<div class="nav-divider">&nbsp;</div>
 
-		<ul class="select"><li><a href="#nogo"><b>User</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="users.php"><b>User</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
 		<div class="select_sub">
 			<ul class="sub">
@@ -219,7 +186,7 @@ $(document).pngFix( );
 <div id="content">
 
 
-<div id="page-heading"><h1>ADD QUESTION</h1></div>
+<div id="page-heading"><h1>Add Question</h1></div>
 
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
@@ -250,7 +217,7 @@ $(document).pngFix( );
 		</tr>
 		<tr>
 			<th valign="top">Question: </th>
-			<td><textarea name="question_name"  rows="" cols="" class="form-textarea"></textarea></td>
+			<td><textarea name="question_name" maxlength="200"  rows="" cols="" class="form-textarea"></textarea></td>
 			<td></td>
 		</tr>
 		<tr>
@@ -279,22 +246,22 @@ $(document).pngFix( );
 
 		<tr>
 			<th valign="top">Answer A: </th>
-			<td><textarea name="answer_a" rows="" cols="" class="form-textarea"></textarea></td>
+			<td><textarea name="answer_a" maxlength="100" rows="" cols="" class="form-textarea"></textarea></td>
 			<td></td>
 		</tr>
 		<tr>
 			<th valign="top">Answer B: </th>
-			<td><textarea name="answer_b" rows="" cols="" class="form-textarea"></textarea></td>
+			<td><textarea name="answer_b" maxlength="100" rows="" cols="" class="form-textarea"></textarea></td>
 			<td></td>
 		</tr>
 		<tr>
 			<th valign="top">Answer C: </th>
-			<td><textarea name="answer_c" rows="" cols="" class="form-textarea"></textarea></td>
+			<td><textarea name="answer_c" maxlength="100" rows="" cols="" class="form-textarea"></textarea></td>
 			<td></td>
 		</tr>
 		<tr>
 			<th valign="top">Answer D: </th>
-			<td><textarea name="answer_d" rows="" cols="" class="form-textarea"></textarea></td>
+			<td><textarea name="answer_d" maxlength="100" rows="" cols="" class="form-textarea"></textarea></td>
 			<td></td>
 		</tr>
 
@@ -312,7 +279,7 @@ $(document).pngFix( );
 		</tr>
 	<tr>
 		<th valign="top">Description:</th>
-		<td><textarea name="describle_answer" rows="" cols="" class="form-textarea"></textarea></td>
+		<td><textarea name="describle_answer" maxlength="200" rows="" cols="" class="form-textarea"></textarea></td>
 		<td></td>
 	</tr>
 	<tr>

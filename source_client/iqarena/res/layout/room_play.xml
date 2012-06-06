@@ -89,44 +89,63 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1.5"
                     android:background="@drawable/bg_form1"
-                    android:padding="10dp" >
+                    android:padding="5dp" >
 
                     <Button
                         android:id="@+id/room_play_btn_help_x2"
-                        android:layout_width="65dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/button_style1"
                         android:text="x2"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff" />
+                        android:textColor="#ffffffff"
+                        android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/room_play_btn_help_release"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="65dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/room_play_btn_help_x2"
                         android:background="@drawable/button_style1"
                         android:text="-25%"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff"/>
+                        android:visibility="gone"
+                        android:textColor="#ffffffff"
+                        android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/room_play_btn_help_50_50"
-                        android:layout_width="65dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/room_play_btn_help_release"
                         android:background="@drawable/button_style1"
                         android:text="50:50"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff" />
-                </LinearLayout>
+                        android:textColor="#ffffffff"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/room_play_btn_help_change_question"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/room_play_btn_help_50_50"
+                        android:background="@drawable/button_style1"
+                        android:text="---"
+                        android:visibility="gone"
+                        android:textColor="#ffffffff"
+                        android:textStyle="bold" />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
 

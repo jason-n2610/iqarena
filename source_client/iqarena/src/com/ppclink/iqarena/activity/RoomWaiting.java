@@ -76,9 +76,9 @@ public class RoomWaiting extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// hide statusbar
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		getWindow().setTitle("Room Waiting");
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		getWindow().setTitle("Room Waiting");
 		
 		// Nhan ve du lieu la owner hay member
 		Bundle extras = getIntent().getExtras();

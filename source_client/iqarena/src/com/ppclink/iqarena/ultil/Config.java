@@ -4,7 +4,7 @@ package com.ppclink.iqarena.ultil;
 public class Config {
 //	public static final String REQUEST_SERVER_ADDR = "http://10.0.2.2/iqarena/source_server/index.php";
 //	public static final String REQUEST_SERVER_ADDR = "http://hoangnh29.byethost12.com";
-	public static final String REQUEST_SERVER_ADDR = "http://10.0.0.153/iqarena/source_server/index.php";
+	public static final String REQUEST_SERVER_ADDR = "http://10.0.0.173/iqarena/source_server/index.php";
 		
 	public static final String FILE_CONFIG_NAME = "config.dat";
 	
@@ -30,4 +30,5 @@ public class Config {
 	public static final String REQUEST_HELP_5050 = "help_5050";
 	public static final String REQUEST_GET_QUESTION_BY_TYPE = "get_question_by_type";
 	public static final String REQUEST_SUBMIT_RECORD = "submit_record";
+	public static final String REQUEST_UPLOAD_QUESTION = "upload_question";
 }

@@ -23,8 +23,8 @@ public class TabHostMain extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.tab_host_menu);
 		LinearLayout llMain = (LinearLayout) findViewById(R.id.tab_host_ll_main);
 		llMain.setBackgroundResource(R.drawable.bg_app_sky_night);
@@ -53,7 +53,6 @@ public class TabHostMain extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, Menu.NONE, "Sign out");
-		menu.add(0, 1, Menu.NONE, "Exit");
 		return super.onCreateOptionsMenu(menu);
 	}
 

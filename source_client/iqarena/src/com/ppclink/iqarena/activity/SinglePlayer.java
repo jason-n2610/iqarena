@@ -126,6 +126,8 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 		}
 
 		mProgressDialog = ProgressDialog.show(this, "Connection", "Waiting...");
+		mTvQuestionTitle.setText("Question "
+				+ String.valueOf(mCurrentQues + 1));
 	}
 
 	@Override
@@ -421,6 +423,8 @@ public class SinglePlayer extends Activity implements OnClickListener, IRequestS
 					mRequest.getQuestionByType(mCurrentQues+1);
 					mProgressDialog = ProgressDialog.show(
 							SinglePlayer.this, "Connection", "Waiting...");
+					mTvQuestionTitle.setText("Question "
+									+ String.valueOf(mCurrentQues + 1));
 				}
 			}
 		});

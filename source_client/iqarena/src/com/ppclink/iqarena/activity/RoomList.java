@@ -59,8 +59,8 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.room_list);
 
 		mListViewRoom = (ListView) findViewById(R.id.room_list_view);
@@ -122,6 +122,23 @@ public class RoomList extends Activity implements IRequestServer, ICheckServer,
 		mRequestServer = new ConnectionManager(this);
 		mRequestServer.getListRoom();
 		getParent().setProgressBarIndeterminateVisibility(true);
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		if (mRequestServer != null) {
+			if (!mRequestServer.isCancelled()) {
+				mRequestServer.cancel(true);
+			}
+		}
+		if (mCheckServer != null) {
+			if (!mCheckServer.isCancelled()) {
+				mCheckServer.cancel(true);
+			}
+		}
+		Intent t = new Intent(this, Main.class);
+		startActivity(t);
 	}
 
 	@Override
