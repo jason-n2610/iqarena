@@ -46,6 +46,7 @@ import com.ppclink.iqarena.delegate.ICheckServer;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.object.MemberScore;
 import com.ppclink.iqarena.object.Question;
+import com.ppclink.iqarena.object.QuestionLite;
 import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Rotate3dAnimation;
 
@@ -73,7 +74,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 	private CountDownTimer mTimer;
 
-	Button mBtnSummit, mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050;
+	Button mBtnSummit, mBtnHelpX2, mBtnHelpRelease, mBtnHelp5050, mBtnHelpChangeQuestion;
 	// layout cho question va answer
 	LinearLayout mLlQuestion;
 	RelativeLayout mRlAnswer;
@@ -88,13 +89,14 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 	ConnectionManager mRequestServer = null;
 	CheckServer mCheckServer = null;
+	boolean isChangeQuestion = false, isHelpX2 = false, isHelpRelease = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.room_play);
 		Bundle extra = getIntent().getExtras();
 		mStrRoomId = extra.getString("room_id");
@@ -118,6 +120,8 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		mBtnHelpX2 = (Button) findViewById(R.id.room_play_btn_help_x2);
 		mBtnHelpRelease = (Button) findViewById(R.id.room_play_btn_help_release);
 		mBtnHelp5050 = (Button) findViewById(R.id.room_play_btn_help_50_50);
+		mBtnHelpChangeQuestion = (Button) findViewById(R.id.room_play_btn_help_change_question);
+		mBtnHelpChangeQuestion.setText("???");
 
 		// answer
 		mRlAnswer = (RelativeLayout) findViewById(R.id.play_game_layout_answer);
@@ -138,6 +142,7 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 		mBtnHelpX2.setOnClickListener(this);
 		mBtnHelpRelease.setOnClickListener(this);
 		mBtnHelp5050.setOnClickListener(this);
+		mBtnHelpChangeQuestion.setOnClickListener(this);
 
 		// visibility
 		mLlQuestion.setVisibility(View.VISIBLE);
@@ -299,9 +304,17 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 			mCheckServer = new CheckServer(this);
 			mCheckServer.checkOthersAnswer(mStrRoomId);
 
-			mRequestServer = new ConnectionManager(this);
-			mRequestServer.answerQuestion(String.valueOf(mMemberId),
-					mStrRoomId, mStrQuestionId, mStrAnswer);
+			if (isHelpX2){	// su dung quyen tro giup x2 so diem
+				mRequestServer = new ConnectionManager(this);
+				mRequestServer.answerQuestion(String.valueOf(mMemberId),
+						mStrRoomId, mStrQuestionId, mStrAnswer, "helpx2");
+				isHelpX2 = !isHelpX2;
+			}
+			else{
+				mRequestServer = new ConnectionManager(this);
+				mRequestServer.answerQuestion(String.valueOf(mMemberId),
+						mStrRoomId, mStrQuestionId, mStrAnswer);
+			}
 
 			mTimer.cancel();
 			showLayout();
@@ -328,6 +341,8 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 		// help x2 score
 		case R.id.room_play_btn_help_x2:
+			isHelpX2 = true;
+			mBtnHelpX2.setEnabled(false);
 			if (!isHelp) {
 				mBtnHelpX2.setEnabled(false);
 				isHelp = true;
@@ -341,6 +356,34 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 		// help answer question subtract %score
 		case R.id.room_play_btn_help_release:
+			mBtnHelpRelease.setEnabled(false);
+			
+			// set answer is true
+			mIsAnswer = true;
+			// disable selected
+			mBtnSummit.setEnabled(false);
+
+			// lay ve index cua user da chon
+			if (mRequestServer != null) {
+				if (!mRequestServer.isCancelled()) {
+					mRequestServer.cancel(true);
+				}
+			}
+			// check others answer
+			if (mCheckServer != null) {
+				if (!mCheckServer.isCancelled()) {
+					mCheckServer.cancel(true);
+				}
+			}
+			mCheckServer = new CheckServer(this);
+			mCheckServer.checkOthersAnswer(mStrRoomId);
+
+			mRequestServer = new ConnectionManager(this);
+			mRequestServer.answerQuestion(String.valueOf(mMemberId),
+					mStrRoomId, mStrQuestionId, mStrAnswer, "release");
+
+			mTimer.cancel();
+			showLayout();
 			if (!isHelp) {
 				mBtnHelpRelease.setEnabled(false);
 				isHelp = true;
@@ -350,6 +393,18 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 						"Báº¡n khÃ´ng Ä‘Æ°á»£c sá»­ dÃ¹ng 2 quyá»�n trá»£ giÃºp cho 1 cÃ¢u há»�i",
 						500).show();
 			}
+			break;
+			
+		case R.id.room_play_btn_help_change_question:
+			mBtnHelpChangeQuestion.setEnabled(false);
+			isChangeQuestion = true;
+			if (mRequestServer != null){
+				if (!mRequestServer.isCancelled()){
+					mRequestServer.cancel(true);
+				}
+			}
+			mRequestServer = new ConnectionManager(this);
+			mRequestServer.getQuestionByType(mCurQuestion+1);
 			break;
 
 		// help 50:50
@@ -401,9 +456,33 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 	@Override
 	public void onRequestComplete(String sResult) {			
 		setProgressBarIndeterminateVisibility(false);
+		
+		// request help change question
+		if (mRequestServer.getRequestType() == 
+				REQUEST_TYPE.REQUEST_GET_QUESTION_BY_TYPE){
+			if (sResult != null) {
+				try {
+					AnalysisData.analyze(sResult);
+					// co cau hoi tra ve
+					if (AnalysisData.value) {
+						QuestionLite question = AnalysisData.questionLite;
+						mTvQuestion.setText(question.getQuesName());
+						mRbA.setText(question.getAnswerA());
+						mRbB.setText(question.getAnswerB());
+						mRbC.setText(question.getAnswerC());
+						mRbD.setText(question.getAnswerD());
+					}
+				} catch (Exception e) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("Error");
+					builder.setMessage(sResult);
+					builder.create().show();
+				}
+			}
+		}
 
 		// request lay ve cau hoi hoan tat
-		if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION) {
+		else if (mRequestServer.getRequestType() == REQUEST_TYPE.REQUEST_GET_QUESTION) {
 			if (sResult != null) {
 				try {
 					AnalysisData.analyze(sResult);
@@ -496,7 +575,15 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 					if (AnalysisData.value) {
 						mCkReady.setEnabled(false);
 						// lay ve cau tra loi dung
-						mStrTrueAnswer = new String(AnalysisData.mTrueAnswer);
+						if (isChangeQuestion){
+							mStrTrueAnswer = String.valueOf(
+									AnalysisData.questionLite.getAnswer());
+							isChangeQuestion = !isChangeQuestion;
+							AnalysisData.mTrueAnswer = new String(mStrTrueAnswer);
+						}
+						else{
+							mStrTrueAnswer = new String(AnalysisData.mTrueAnswer);
+						}
 						if (mStrTrueAnswer.equals("1")) {
 							mStrTrueAnswer = "A";
 						} else if (mStrTrueAnswer.equals("2")) {

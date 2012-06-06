@@ -9,7 +9,8 @@
             $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
                                 answer_b, answer_c, answer_d, answer,
                                 describle_answer, question_field_id
-                        FROM    questions";
+                        FROM    questions
+                        WHERE   status = 0";
             $result = @mysql_query($query) or die('getAllQuestions() ' .
                 mysql_error());
             return $result;
@@ -21,6 +22,7 @@
                                 answer_b, answer_c, answer_d, answer, question_field_id,
                                 describle_answer
                         FROM    questions
+                        WHERE   status = 0
                         LIMIT   {$offset}, {$count};";
             $result = @mysql_query($query) or die('getQuestionByLimit() ' .
                 mysql_error());
@@ -34,7 +36,7 @@
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer
                         FROM    questions
                         WHERE   question_type_id='{$question_type_id}'
-                                AND question_field_id='{$question_field_id}'
+                                AND question_field_id='{$question_field_id}' AND status = 0
                         ORDER   BY RAND()
                         LIMIT   1";
             $result = @mysql_query($query) or die('getQuestionByTypeAndField() ' .
@@ -49,7 +51,7 @@
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
                         FROM    questions
                         WHERE   question_type_id='{$question_type_id}'
-                                AND question_field_id='{$question_field_id}'";
+                                AND question_field_id='{$question_field_id}' AND status = 0";
             $result = @mysql_query($query) or die('getQuestionByTypeAndField() ' .
                 mysql_error());
             return $result;
@@ -61,6 +63,7 @@
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
                         FROM    questions
+                        WHERE   status = 0
                         ORDER   BY RAND()
                         LIMIT   1";
             $result = @mysql_query($query) or die('getQuestionByTypeAndField() ' .
@@ -96,7 +99,7 @@
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id
                         FROM    questions
-                        WHERE   question_type_id = '{$question_type_id}'";
+                        WHERE   question_type_id = '{$question_type_id}' AND status = 0";
             $result = @mysql_query($query) or die('getQuestionsByType() ' . mysql_error());
             return $result;
         }
@@ -106,6 +109,7 @@
         {
             $query = "  SELECT  question_id
                         FROM    questions
+                        WHERE   status = 0
                         ORDER By RAND()
                         LIMIT   15 ";
             $result = @mysql_query($query) or die('getQuestionIds() ' . mysql_error());
@@ -116,7 +120,7 @@
         public static function getQuestionByType($type){
             $query = "  SELECT  question_id
                         FROM    questions
-                        WHERE   question_type_id = '{$type}'
+                        WHERE   question_type_id = '{$type} AND status = 0'
                         ORDER BY RAND()
                         LIMIT 1";
             $result = @mysql_query($query) or die('getQuestionIds() ' . mysql_error());
@@ -136,14 +140,14 @@
             $result = mysql_query($query);
             return $result;
         }
-        
+
         // them 1 cau hoi
         public static function insertQuestion($question, $type_id, $a, $b, $c, $d, $answer, $des)
         {
             mysql_query("set names utf8;");
             $query = "  INSERT INTO questions( question_name, question_type_id, answer_a, answer_b, answer_c, answer_d, answer, describle_answer)
                         VALUES  ('{$question}', '{$type_id}', '{$a}', '{$b}', '{$c}', '{$d}', '{$answer}', '{$des}')";
-            $result = mysql_query($query);
+            $result = mysql_query($query) or die(''.mysql_error());
             return $result;
         }
 
@@ -156,10 +160,44 @@
             $result = mysql_query($query) or die('updateQuestion() ' . mysql_error());;
             return $result;
         }
-        
+
         public static function deleteQuestion($question_id){
             $query = "  DELETE FROM questions WHERE question_id = '{$question_id}'";
             $result = mysql_query($query) or die('deleteQuestion() ' . mysql_error());;
+            return $result;
+        }
+
+        public static function doneReviewQuestion($question_id){
+            $query = "  UPDATE questions SET status=0 WHERE question_id = '{$question_id}'";
+            $result = mysql_query($query) or die('deleteQuestion() ' . mysql_error());;
+            return $result;
+        }
+
+        public static function insertReviewQuestion($question, $level, $a, $b, $c, $d, $answer, $describle){
+            $query = "  INSERT INTO questions( question_name, question_type_id, answer_a, answer_b, answer_c, answer_d, answer, describle_answer, status)
+                        VALUES  ('{$question}', '{$level}', '{$a}', '{$b}', '{$c}', '{$d}', '{$answer}', '{$describle}', 1)";
+            $result = mysql_query($query) or die('insertReviewQuestion() ' . mysql_error());;
+            return $result;
+        }
+
+        public static function getQuestionReview(){
+            $query = "  SELECT question_id, question_name, question_type_id, answer_a, answer_b, answer_c, answer_d, answer, describle_answer
+                        FROM questions
+                        WHERE status = 1";
+            $result = mysql_query($query) or die('getQuestionReview() ' . mysql_error());;
+            return $result;
+        }
+
+        public static function getQuestionReviewByLimit($offset, $count){
+            mysql_query("set names utf8;");
+            $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
+                                answer_b, answer_c, answer_d, answer, question_field_id,
+                                describle_answer
+                        FROM    questions
+                        WHERE   status = 1
+                        LIMIT   {$offset}, {$count};";
+            $result = @mysql_query($query) or die('getQuestionByLimit() ' .
+                mysql_error());
             return $result;
         }
     }

@@ -90,6 +90,9 @@
     else if ($_POST['message'] == "submit_record"){
         include ($path . '/modules/controls/submit_record.php');
     }
+    else if ($_POST['message'] == "upload_question"){
+        include ($path.'/modules/controls/upload_question.php');;
+    }
     else{
         /* Redirect to a different page in the current directory that was requested */
         $host  = $_SERVER['HTTP_HOST'];

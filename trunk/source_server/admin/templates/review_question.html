@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>IQArena Question</title>
-<link rel="stylesheet" href="../templates/css/screen.css" type="text/css" media="screen" title="default" />
+<link rel="stylesheet" href="../templates/css/screen.css" type="text/css" media="all" title="default" />
 <!--[if IE]>
 <link rel="stylesheet" media="all" type="text/css" href="../templates/css/pro_dropline_ie.css" />
 <![endif]-->
@@ -125,11 +125,10 @@ $(document).pngFix( );
 			<!--  start account-content -->
 			<div class="account-content">
 			<div class="account-drop-inner">
-				<a href="account.php" id="acc-settings">Change password</a>
+				<a href="" id="acc-settings">Change password</a>
 			</div>
 			</div>
 			<!--  end account-content -->
-
 		</div>
 		<!-- end nav-right -->
 
@@ -142,9 +141,9 @@ $(document).pngFix( );
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
 		<div class="select_sub show">
 			<ul class="sub">
-				<li class="sub_show"><a href="">View All Questions</a></li>
+				<li><a href="?sub=get">View All Questions</a></li>
 				<li><a href="?sub=add">Add Question</a></li>
-				<li><a href="?sub=review">Review Question</a></li>
+				<li class="sub_show"><a href="?sub=review">Review Question</a></li>
 			</ul>
 		</div>
 		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -188,7 +187,7 @@ $(document).pngFix( );
 
 	<!--  start page-heading -->
 	<div id="page-heading">
-		<h1>Question Details</h1>
+		<h1>Question Reviews</h1>
 	</div>
 	<!-- end page-heading -->
 
@@ -222,7 +221,7 @@ $(document).pngFix( );
 				<!--  end message-green -->
                 {/if}
 
-				<!--  start table ..................................................................................... -->
+				<!--  start product-table ..................................................................................... -->
 				<form id="mainform" action="?sub=deleteall" method="post">
 				<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 				<tr>
@@ -252,6 +251,8 @@ $(document).pngFix( );
     					<td>
     					<a href="?sub=edit&question_id={$row['question_id']}" title="Edit" class="icon-1 info-tooltip"></a>
     					<a href="?sub=delete&question_id={$row['question_id']}" title="Delete" class="icon-2 info-tooltip" {literal}onclick="return confirm('Are you sure you want to delete?')"{/literal}></a>
+
+					    <a href="?sub=done&question_id={$row['question_id']}" title="Done" class="icon-5 info-tooltip"></a>
     					</td>
     				</tr>
                 {/foreach}
@@ -263,16 +264,17 @@ $(document).pngFix( );
 			<!--  start actions-box ............................................... -->
 			<input class="form-delete"  type="submit" name="btnDeleteAll" value="delete"/>
 			<!-- end actions-box........... -->
+
             </form>
 			<!--  start paging..................................................... -->
 			<table border="0" cellpadding="0" cellspacing="0" id="paging-table">
 			<tr>
 			<td>
-				<a href="?sub=get&page=1" class="page-far-left"></a>
-				<a href="?sub=get&page={if $current_page<2}1{else}{$current_page-1}{/if}" class="page-left"></a>
+				<a href="?sub=review&page=1" class="page-far-left"></a>
+				<a href="?sub=review&page={if $current_page<2}1{else}{$current_page-1}{/if}" class="page-left"></a>
 				<div id="page-info">Page <strong>{$current_page}</strong> / {$page}</div>
-				<a href="?sub=get&page={$current_page+1}" class="page-right"></a>
-				<a href="?sub=get&page={$page}" class="page-far-right"></a>
+				<a href="?sub=review&page={$current_page+1}" class="page-right"></a>
+				<a href="?sub=review&page={$page}" class="page-far-right"></a>
 			</td>
 			<td>
 			<form name="myform" id="myform" method="get" action="?sub=get">

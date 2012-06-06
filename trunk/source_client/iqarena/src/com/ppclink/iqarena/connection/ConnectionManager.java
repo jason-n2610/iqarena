@@ -54,7 +54,8 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 		REQUEST_HELP_5050,
 		REQUEST_GET_QUESTION_BY_TYPE,
 		REQUEST_GET_TOP_RECORD,
-		REQUEST_SUBMIT_RECORD
+		REQUEST_SUBMIT_RECORD,
+		REQUEST_UPLOAD_QUESTION
 	}
 
 	public ConnectionManager(IRequestServer delegate) {
@@ -174,7 +175,7 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 				break;
 	
 			case REQUEST_ANSWER_QUESTION:
-				nameValuePairs = new ArrayList<NameValuePair>(6);
+				nameValuePairs = new ArrayList<NameValuePair>();
 				nameValuePairs.add(new BasicNameValuePair("message",
 						Config.REQUEST_ANSWER_QUESTION));
 				nameValuePairs.add(new BasicNameValuePair("member_id",
@@ -187,6 +188,10 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 						params[2]));
 				nameValuePairs.add(new BasicNameValuePair("question_answer",
 						params[3]));
+				if (params.length > 4){
+					nameValuePairs.add(new BasicNameValuePair("help",
+							params[4]));
+				}
 				break;
 	
 			case REQUEST_GET_MEMBERS_ANSWER:
@@ -238,7 +243,18 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("user_name", params[0]));	
 				nameValuePairs.add(new BasicNameValuePair("score", params[1]));	
 				break;
-				
+			case REQUEST_UPLOAD_QUESTION:
+				nameValuePairs = new ArrayList<NameValuePair>(9);
+				nameValuePairs.add(new BasicNameValuePair("message", Config.REQUEST_UPLOAD_QUESTION));
+				nameValuePairs.add(new BasicNameValuePair("question_name", params[0]));
+				nameValuePairs.add(new BasicNameValuePair("question_type_id", params[1]));	
+				nameValuePairs.add(new BasicNameValuePair("answer_a", params[2]));
+				nameValuePairs.add(new BasicNameValuePair("answer_b", params[3]));
+				nameValuePairs.add(new BasicNameValuePair("answer_c", params[4]));
+				nameValuePairs.add(new BasicNameValuePair("answer_d", params[5]));
+				nameValuePairs.add(new BasicNameValuePair("answer", params[6]));
+				nameValuePairs.add(new BasicNameValuePair("describle_answer", params[7]));
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
@@ -286,9 +302,17 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 	}
 
 	// answer question
-	public void answerQuestion(String strMemberId, String strRoomId, String strQuesId, String strAnswer) {
+	public void answerQuestion(String strMemberId, String strRoomId, 
+			String strQuesId, String strAnswer) {
 		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
 		this.execute(strMemberId, strRoomId, strQuesId, strAnswer);
+	}
+	
+	// answer question with help x2 score
+	public void answerQuestion(String strMemberId, String strRoomId, 
+			String strQuesId, String strAnswer, String help) {
+		this.requestType = REQUEST_TYPE.REQUEST_ANSWER_QUESTION;
+		this.execute(strMemberId, strRoomId, strQuesId, strAnswer, help);
 	}
 
 	// create new room
@@ -399,6 +423,12 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 	
 	public void setRequestType(REQUEST_TYPE requestType) {
 		this.requestType = requestType;
+	}
+	
+	public void uploadQuestion(String question, String level, String a, String b,
+			String c, String d, String answer, String describle){
+		this.requestType = REQUEST_TYPE.REQUEST_UPLOAD_QUESTION;
+		this.execute(question, level, a, b, c, d, answer, describle);
 	}
 	
 	

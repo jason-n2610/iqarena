@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>IQArena Question</title>
+<title>IQArena User</title>
 <link rel="stylesheet" href="../templates/css/screen.css" type="text/css" media="screen" title="default" />
 <!--[if IE]>
 <link rel="stylesheet" media="all" type="text/css" href="../templates/css/pro_dropline_ie.css" />
@@ -138,9 +138,9 @@ $(document).pngFix( );
 		<div class="nav">
 		<div class="table">
 
-		<ul class="current"><li><a href="?sub=get"><b>Question</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="questions.php?sub=get"><b>Question</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
-		<div class="select_sub show">
+		<div class="select_sub">
 			<ul class="sub">
 				<li class="sub_show"><a href="">View All Questions</a></li>
 				<li><a href="?sub=add">Add Question</a></li>
@@ -153,12 +153,13 @@ $(document).pngFix( );
 
 		<div class="nav-divider">&nbsp;</div>
 
-		<ul class="select"><li><a href="users.php"><b>User</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="current"><li><a href="users.php"><b>User</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
-		<div class="select_sub">
+		<div class="select_sub show">
 			<ul class="sub">
-				<li><a href="#nogo">View all Users</a></li>
-				<li><a href="#nogo">Add User</a></li>
+				<li class="sub_show"><a href="?sub=get">View all Users</a></li>
+				<li><a href="?sub=add">Add User</a></li>
+                <li><a href="?sub=admin">Admin</a></li>
 			</ul>
 		</div>
 		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -188,7 +189,7 @@ $(document).pngFix( );
 
 	<!--  start page-heading -->
 	<div id="page-heading">
-		<h1>Question Details</h1>
+		<h1>User details</h1>
 	</div>
 	<!-- end page-heading -->
 
@@ -222,36 +223,30 @@ $(document).pngFix( );
 				<!--  end message-green -->
                 {/if}
 
-				<!--  start table ..................................................................................... -->
+				<!--  start product-table ..................................................................................... -->
 				<form id="mainform" action="?sub=deleteall" method="post">
 				<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 				<tr>
 					<th class="table-header-check"><a id="toggle-all" ></a> </th>
-					<th class="table-header-repeat line-left minwidth-1"><a href="">Question</a></th>
-                    <th class="table-header-repeat line-left"><a href="">Level</a></th>
-					<th class="table-header-repeat line-left"><a href="">A</a></th>
-					<th class="table-header-repeat line-left"><a href="">B</a></th>
-					<th class="table-header-repeat line-left"><a href="">C</a></th>
-					<th class="table-header-repeat line-left"><a href="">D</a></th>
-					<th class="table-header-repeat line-left"><a href="">Answer</a></th>
-					<th class="table-header-repeat line-left"><a href="">Describle</a></th>
+					<th class="table-header-repeat line-left minwidth-1"><a href="">UserName</a></th>
+                    <th class="table-header-repeat line-left"><a href="">Score</a></th>
+					<th class="table-header-repeat line-left"><a href="">Email</a></th>
+					<th class="table-header-repeat line-left"><a href="">Register Date</a></th>
+					<th class="table-header-repeat line-left"><a href="">Money</a></th>
 					<th class="table-header-repeat line-left"><a href="">Options</a></th>
 				</tr>
 
-                {foreach from=$question_data item=row}
+                {foreach from=$user_data item=row}
     				<tr>
-    					<td><input  name="need_delete[{$row['question_id']}]" id="checkbox[{$row['question_id']}]" value="{$row['question_id']}"  type="checkbox"/></td>
-    					<td>{$row['question_name']}</td>
-                        <td>{$row['question_type_id']}</td>
-    					<td>{$row['answer_a']}</td>
-    					<td>{$row['answer_b']}</td>
-    					<td>{$row['answer_c']}</td>
-    					<td>{$row['answer_d']}</td>
-    					<td>{$row['answer']}</td>
-    					<td>{$row['describle_answer']}</td>
+    					<td><input  name="need_delete[{$row['user_id']}]" id="checkbox[{$row['user_id']}]" value="{$row['user_id']}"  type="checkbox"/></td>
+    					<td>{$row['username']}</td>
+                        <td>{$row['score_level']}</td>
+    					<td>{$row['email']}</td>
+    					<td>{$row['registed_date']}</td>
+    					<td>{$row['money']}</td>
     					<td>
-    					<a href="?sub=edit&question_id={$row['question_id']}" title="Edit" class="icon-1 info-tooltip"></a>
-    					<a href="?sub=delete&question_id={$row['question_id']}" title="Delete" class="icon-2 info-tooltip" {literal}onclick="return confirm('Are you sure you want to delete?')"{/literal}></a>
+    					<a href="?sub=edit&user_id={$row['user_id']}" title="Edit" class="icon-1 info-tooltip"></a>
+    					<a href="?sub=delete&user_id={$row['user_id']}" title="Delete" class="icon-2 info-tooltip" {literal}onclick="return confirm('Are you sure you want to delete?')"{/literal}></a>
     					</td>
     				</tr>
                 {/foreach}

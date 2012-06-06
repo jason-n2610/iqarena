@@ -27,5 +27,9 @@
     <string name="new_room_spinner_max_member">Choose a number</string>
     <string name="new_room_spinner_bet_score">Choose a score</string>
     <string name="new_room_spinner_time_per_question">Choose a time</string>
+    
+    <string name="upload_question_level">Choose a level</string>
+    <string name="upload_question_answer">Choose a answer</string>
+    
 
 </resources>

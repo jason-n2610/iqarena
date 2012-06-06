@@ -39,6 +39,7 @@
         <activity
             android:name=".activity.TabHostLogin"
             android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="Log in, Sign up" >
            	<intent-filter>
                 <action android:name="android.intent.action.TabHostLoginActivity" />
@@ -48,6 +49,7 @@
         </activity>
         <activity
             android:name=".activity.Login"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
            	<intent-filter>
                 <action android:name="android.intent.action.LoginActivity" />
@@ -57,6 +59,7 @@
         </activity>
         <activity
             android:name=".activity.Register"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.RegisterActivity" />
@@ -67,6 +70,7 @@
         <activity
             android:name=".activity.TabHostMain"
             android:label="Main"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.TabHostMenuActivity" />
@@ -76,6 +80,7 @@
         </activity>
         <activity
             android:name=".activity.RoomList"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.RoomActivity" />
@@ -85,6 +90,7 @@
         </activity>
         <activity
             android:name=".activity.UserInfo"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.UserInfoActivity" />
@@ -95,6 +101,7 @@
         <activity
             android:name=".activity.CreateNewRoom"
             android:label="Create new room"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.CreateNewRoomActivity" />
@@ -105,6 +112,7 @@
         <activity
             android:name=".activity.RoomWaiting"
             android:label="Room waiting..."
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.RoomWaitingActivity" />
@@ -115,6 +123,7 @@
         <activity
             android:name=".activity.RoomPlay"
             android:label="Playing game"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.GamePlayActivity" />
@@ -125,6 +134,7 @@
         <activity
             android:name=".activity.LocalMode"
             android:label="Local Mode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.LocalMode" />
@@ -135,9 +145,21 @@
         <activity
             android:name=".activity.SinglePlayer"
             android:label="Local Mode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.SinglePlayer" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.UploadQuestion"
+            android:label="Upload Question"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.upload_question" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

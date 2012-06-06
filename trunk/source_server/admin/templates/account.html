@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>IQArena Question</title>
+<title>IQArena Account</title>
 <link rel="stylesheet" href="../templates/css/screen.css" type="text/css" media="screen" title="default" />
 <!--[if IE]>
-<link rel="stylesheet" media="all" type="text/css" href="../templates/css/pro_dropline_ie.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../../templates/css/pro_dropline_ie.css" />
 <![endif]-->
 
 <!--  jquery core -->
@@ -24,6 +24,7 @@ $(function(){
 	return false;
 	});
 });
+
 </script>
 
 
@@ -141,12 +142,11 @@ $(document).pngFix( );
 		<div class="nav">
 		<div class="table">
 
-		<ul class="current"><li><a href="?sub=get"><b>Question</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="questions.php?sub=get"><b>Question</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
-		<div class="select_sub show">
+		<div class="select_sub">
 			<ul class="sub">
 				<li><a href="?sub=get">View all Questions</a></li>
-				<li class="sub_show"><a href="">Edit Question</a></li>
 				<li><a href="?sub=add">Add Question</a></li>
 				<li><a href="?sub=review">Review Question</a></li>
 			</ul>
@@ -159,10 +159,25 @@ $(document).pngFix( );
 
 		<ul class="select"><li><a href="users.php"><b>User</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		<!--[if lte IE 6]><table><tr><td><![endif]-->
-		<div class="select_sub">
+		<div class="select_sub show">
 			<ul class="sub">
-				<li><a href="#nogo">View all Users</a></li>
-				<li><a href="#nogo">Add User</a></li>
+				<li><a href="?sub=get">View all Users</a></li>
+				<li><a href="">Edit User</a></li>
+                <li><a href="?sub=add">Add User</a></li>
+                <li><a href="?sub=admin">Admin</a></li>
+			</ul>
+		</div>
+		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
+		</li>
+		</ul>
+
+		<div class="nav-divider">&nbsp;</div>
+
+		<ul class="current"><li><a href="account.php"><b>Admin</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<!--[if lte IE 6]><table><tr><td><![endif]-->
+		<div class="select_sub show">
+			<ul class="sub">
+				<li class="sub_show"><a href="">Change password</a></li>
 			</ul>
 		</div>
 		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -189,7 +204,7 @@ $(document).pngFix( );
 <div id="content">
 
 
-<div id="page-heading"><h1>Edit Question</h1></div>
+<div id="page-heading"><h1>Change Password</h1></div>
 
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
@@ -205,88 +220,51 @@ $(document).pngFix( );
 	<td>
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
-
+    {if isset($message) }
+    <!--  start message-green -->
+	<div id="message-green">
+	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="green-left">{$message}</td>
+		<td class="green-right"><a class="close-green"><img src="../templates/images/table/icon_close_green.gif"   alt="" /></a></td>
+	</tr>
+	</table>
+	</div>
+	<!--  end message-green -->
+    {/if}
 	<table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr valign="top">
 	<td>
 
-  {foreach from=$question_data item=row}
-            <!-- start id-form -->
-            <form action="?&sub=edit&question_id={$row['question_id']}" method="post" name="frmQuestion" id="frmQuestion">
-    		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
 
-            <tr>
-    			<th valign="top"></th>
-    			<td><font color="red">{if isset($message)}{$message}{/if}</font></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<th valign="top">Question: </th>
-    			<td><textarea name="question_name" maxlength="200"  rows="" cols="" class="form-textarea">{$row['question_name']}</textarea></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<th valign="top">Level:</th>
-    			<td>
-    				<select name="question_type_id" class="styledselect_form_1">
-                        {foreach from=$levels item=row_level}
-                            <option {if $row_level==$row['question_type_id']} selected="true" {/if} value="{$row_level}">{$row_level}</option>
-                        {/foreach}
-    				</select>
-    			</td>
-    			<td></td>
-    		</tr>
-
-    		<tr>
-    			<th valign="top">Answer A: </th>
-    			<td><textarea name="answer_a" maxlength="100" rows="" cols="" class="form-textarea">{$row['answer_a']}</textarea></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<th valign="top">Answer B: </th>
-    			<td><textarea name="answer_b" maxlength="100" rows="" cols="" class="form-textarea">{$row['answer_b']}</textarea></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<th valign="top">Answer C: </th>
-    			<td><textarea name="answer_c" maxlength="100" rows="" cols="" class="form-textarea">{$row['answer_c']}</textarea></td>
-    			<td></td>
-    		</tr>
-    		<tr>
-    			<th valign="top">Answer D: </th>
-    			<td><textarea name="answer_d" maxlength="100" rows="" cols="" class="form-textarea">{$row['answer_d']}</textarea></td>
-    			<td></td>
-    		</tr>
-
-    		<tr>
-    			<th valign="top">Answer:</th>
-    			<td>
-    				<select name="answer" class="styledselect_form_1">
-    					<option {if $row['answer']==1} selected="true"{/if} value="1">A</option>
-    					<option {if $row['answer']==2} selected="true"{/if} value="2">B</option>
-    					<option {if $row['answer']==3} selected="true"{/if} value="3">C</option>
-    					<option {if $row['answer']==4} selected="true"{/if} value="4">D</option>
-    				</select>
-    			</td>
-    			<td></td>
-    		</tr>
-        	<tr>
-        		<th valign="top">Description:</th>
-        		<td><textarea name="describle_answer" maxlength="200" rows="" cols="" class="form-textarea">{$row['describle_answer']}</textarea></td>
-        		<td></td>
-        	</tr>
-        	<tr>
-        		<th>&nbsp;</th>
-        		<td valign="top">
-        			<input type="submit" name="btnEdit" id="btnSubmit" value="Submit" class="form-submit" />
-        			<input type="submit" name="btnEditReset" id="btnReset" value="Reset" class="form-reset"  />
-        		</td>
-        		<td></td>
-        	</tr>
-        	</table>
-            </form>
-        	<!-- end id-form  -->
-         {/foreach}
+		<!-- start id-form -->
+        <form action="account.php" method="post" name="frmUser" id="frmUser">
+		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
+		<tr>
+			<th valign="top">Old password: </th>
+			<td><input type="text" name="old_password" class="inp-form"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th valign="top">Password: </th>
+			<td><input type="text" name="password" class="inp-form"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th valign="top">Retype password:</th>
+			<td><input type="text" name="re_password" class="inp-form"/></td>
+			<td></td>
+		</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td valign="top">
+			<input type="submit" name="btnSubmit" id="btnSubmit" value="Submit" class="form-submit" />
+			<input type="reset" name="btnEditReset" id="btnReset" value="Reset" class="form-reset"  />
+		</td>
+		<td></td>
+	</tr>
+	</table>
+	<!-- end id-form  -->
 	</td>
 	<td>
 

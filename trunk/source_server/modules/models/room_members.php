@@ -82,6 +82,14 @@
             return $result;
         }
 
+        public static function updateScoreHelpRealse($member_id){
+            $query = "  UPDATE  room_members
+                        SET     score = score*3/4'
+                        WHERE   room_member_id = '{$member_id}'";
+            $result = @mysql_query($query) or die('updateScore() ' . mysql_error());
+            return $result;
+        }
+
         // get question_id cua member
         public static function getQuestionIdOfMember($member_id)
         {

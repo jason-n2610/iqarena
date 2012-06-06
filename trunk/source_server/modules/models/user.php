@@ -15,8 +15,89 @@
                             power_user,
                             money
                         FROM
-                            users';
+                            users
+                        WHERE power_user = 0';
             $result = @mysql_query($query) or die('getAllUser(): ' . mysql_error());
+            return $result;
+        }
+
+        public static function getAllAdmin(){
+            $query = 'SELECT
+                            user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money
+                        FROM
+                            users
+                        WHERE power_user = 1';
+            $result = @mysql_query($query) or die('getAllAdmin(): ' . mysql_error());
+            return $result;
+        }
+
+        public static function changePassword($username, $password){
+            $query = "  UPDATE  users
+                        SET     password='{$password}'
+                        WHERE   username='{$username}'";
+            $result = @mysql_query($query) or die('changePassword(): ' . mysql_error());
+            return $result;
+        }
+
+        public static function insertUser($username, $password, $email, $power_user){
+            $query = "INSERT INTO users(username, password, email, registed_date, power_user, score_level, money)
+                        VALUES ('{$username}', '{$password}', '{$email}', NOW(), '{$power_user}', 8000, 0)";
+            $result = @mysql_query($query) or die('insertUser(): ' . mysql_error());
+            return $result;
+
+        }
+
+        public static function updateUser($user_id, $power_user, $score, $money){
+            $query = "UPDATE users
+                        SET power_user = '{$power_user}', score_level='{$score}', money='{$money}'
+                        WHERE user_id = '{$user_id}'";
+            $result = @mysql_query($query) or die('updateUser(): ' . mysql_error());
+            return $result;
+        }
+
+        public static function deleteUser($user_id){
+            $query = "  DELETE FROM users WHERE user_id = '{$user_id}'";
+            $result = mysql_query($query) or die('deleteUser() ' . mysql_error());;
+            return $result;
+        }
+
+        public static function getUsersByLimit($offset, $count){
+            $query = "SELECT
+                            user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money
+                        FROM
+                            users
+                        WHERE power_user = 0
+                        LIMIT {$offset}, {$count}";
+            $result = @mysql_query($query) or die('getUsersByLimit(): ' . mysql_error());
+            return $result;
+        }
+
+        public static function getAdminsByLimit($offset, $count){
+            $query = "SELECT
+                            user_id,
+                            username,
+                            email,
+                            score_level,
+                            registed_date,
+                            power_user,
+                            money
+                        FROM
+                            users
+                        WHERE power_user = 1
+                        LIMIT {$offset}, {$count}";
+            $result = @mysql_query($query) or die('getAdminsByLimit(): ' . mysql_error());
             return $result;
         }
 
@@ -28,7 +109,7 @@
                         FROM
                             users
                         WHERE
-                            user_id == '{$user_id}' ";
+                            user_id = '{$user_id}' ";
             $result = @mysql_query($query) or die('getUserById():' . mysql_error());
             return $result;
         }

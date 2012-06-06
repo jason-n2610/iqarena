@@ -348,6 +348,10 @@ public class AnalysisData {
 					mRankId = jObject.getInt("award_id");
 				}
 			}
+			else if (typeMessage.equals(Config.REQUEST_UPLOAD_QUESTION)){
+				value = jObject.getBoolean("value");
+				message = jObject.getString("message");
+			}
 
 			result = true;
 		} catch (JSONException e) {

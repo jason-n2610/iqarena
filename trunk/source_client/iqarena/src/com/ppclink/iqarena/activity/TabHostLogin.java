@@ -21,8 +21,8 @@ public class TabHostLogin extends TabActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.tab_host_menu);
 		LinearLayout main = (LinearLayout) findViewById(R.id.tab_host_ll_main);
 		main.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_app_fire));

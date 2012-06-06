@@ -36,6 +36,7 @@ import com.ppclink.iqarena.database.DatabaseHelper;
 import com.ppclink.iqarena.delegate.IRequestServer;
 import com.ppclink.iqarena.ultil.AnalysisData;
 import com.ppclink.iqarena.ultil.Config;
+import com.ppclink.iqarena.ultil.SessionStore;
 
 public class Main extends Activity implements OnClickListener, IRequestServer {
 
@@ -83,6 +84,18 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		vfLayoutMain.setOutAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.outgoing));
 
+		SessionStore.restoreSession(this);
+		if (SessionStore.getVolume()){
+			btnOption.setCompoundDrawablesWithIntrinsicBounds(null, 
+					getResources().getDrawable(R.drawable.sound_on), null, null);
+			isSoundOn = true;
+		}
+		else{
+			btnOption.setCompoundDrawablesWithIntrinsicBounds(null, 
+					getResources().getDrawable(R.drawable.sound_off), null, null);
+			isSoundOn = false;
+		}
+
 //		new CountDownTimer(3000, 1000) {
 //
 //			@Override
@@ -100,25 +113,31 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		player = MediaPlayer.create(this, R.raw.main_theme2);
-		player.setLooping(true);
-		try {
-			player.prepare();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		SessionStore.restoreSession(this);
+		if (SessionStore.getVolume()){
+			player = MediaPlayer.create(this, R.raw.main_theme2);
+			player.setLooping(true);
+			try {
+				player.prepare();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			player.start();
 		}
-		player.start();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if (player != null){
-			if (player.isPlaying()){
-				player.pause();
-				player.stop();
+		SessionStore.restoreSession(this);
+		if (SessionStore.getVolume()){
+			if (player != null){
+				if (player.isPlaying()){
+					player.pause();
+					player.stop();
+				}
 			}
 		}
 	}
@@ -133,9 +152,12 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		case R.id.main_ib_download_question:
 			break;
 		case R.id.main_ib_upload_question:
+			Intent iUpload = new Intent(this, UploadQuestion.class);
+			startActivity(iUpload);
 			break;
 		case R.id.main_btn_option:
 			if (isSoundOn){
+				SessionStore.controlVolume(this, false);
 				if (player != null){
 					if (player.isPlaying()){
 						player.pause();
@@ -145,7 +167,20 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 						getResources().getDrawable(R.drawable.sound_off), null, null);
 			}
 			else{
+				SessionStore.controlVolume(this, true);
 				if (player != null){
+					player.start();
+				}
+				else{
+					player = MediaPlayer.create(this, R.raw.main_theme2);
+					player.setLooping(true);
+					try {
+						player.prepare();
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					player.start();
 				}
 				btnOption.setCompoundDrawablesWithIntrinsicBounds(null, 
