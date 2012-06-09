@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_app_fire"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/rl_new_room"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_form1"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView4"
+            android:paddingLeft="10dp"
+            android:text="Category Name"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:layout_below="@+id/textView4"
+            android:text="Date Created"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:text="Describle"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+        
+        <View 
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/textView1"
+            android:id="@+id/horizal"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+
+        <ListView
+            android:id="@+id/category_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_new_room"
+            android:layout_below="@+id/horizal"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:listSelector="@drawable/grid_selector"
+            android:smoothScrollbar="true" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="fill_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_alignParentTop="true"
+            android:textColor="#ffffffff"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp"
+            android:text="DOWNLOAD QUESTION" />
+        
+    </RelativeLayout>
+</RelativeLayout>

@@ -18,6 +18,8 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +47,7 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 	ConnectionManager mRequestServer;
 	ProgressDialog mProgressDialog;
 	ViewFlipper vfLayoutMain;
-	PopupWindow mPopup;
+	PopupWindow mPopupAbout, mPopupHelp;
 	View mPopupView;
 	boolean isSoundOn = true;
 	Button btnOption;
@@ -96,18 +98,18 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 			isSoundOn = false;
 		}
 
-//		new CountDownTimer(3000, 1000) {
-//
-//			@Override
-//			public void onTick(long millisUntilFinished) {
-//
-//			}
-//
-//			@Override
-//			public void onFinish() {
-//				vfLayoutMain.showNext();
-//			}
-//		}.start();
+		new CountDownTimer(3000, 1000) {
+
+			@Override
+			public void onTick(long millisUntilFinished) {
+
+			}
+
+			@Override
+			public void onFinish() {
+				vfLayoutMain.showNext();
+			}
+		}.start();
 	}
 
 	@Override
@@ -140,6 +142,16 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 				}
 			}
 		}
+		if (mPopupHelp != null){
+			if (mPopupHelp.isShowing()){
+				mPopupHelp.dismiss();
+			}
+		}
+		if (mPopupAbout != null){
+			if (mPopupAbout.isShowing()){
+				mPopupAbout.dismiss();
+			}
+		}
 	}
 
 	@Override
@@ -147,13 +159,35 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 		switch (v.getId()) {
 		case R.id.main_btn_singler_player_off:
 			Intent i = new Intent(this, LocalMode.class);
+			if (isSoundOn){
+				i.putExtra("sound", true);
+			}
+			else{
+				i.putExtra("sound", false);
+			}
 			startActivity(i);
 			break;
 		case R.id.main_ib_download_question:
+			// kiem tra network
+			if (!checkNetworkConnection()) {
+				Toast.makeText(Main.this, "Please check network connection!",
+						1000).show();
+			} 
+			else{
+				Intent iDownload = new Intent(this, DownloadQuestion.class);
+				startActivity(iDownload);
+			}
 			break;
 		case R.id.main_ib_upload_question:
-			Intent iUpload = new Intent(this, UploadQuestion.class);
-			startActivity(iUpload);
+			// kiem tra network
+			if (!checkNetworkConnection()) {
+				Toast.makeText(Main.this, "Please check network connection!",
+						1000).show();
+			} 
+			else{
+				Intent iUpload = new Intent(this, UploadQuestion.class);
+				startActivity(iUpload);
+			}
 			break;
 		case R.id.main_btn_option:
 			if (isSoundOn){
@@ -189,27 +223,65 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 			isSoundOn = !isSoundOn;
 			break;
 		case R.id.main_btn_help:
-			break;
-		case R.id.main_btn_about:
-			if (mPopup == null){
+			if (mPopupHelp == null){
+				Display display = getWindowManager().getDefaultDisplay();
+				int screenWidth = display.getWidth();
 				LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-				View layout = inflater.inflate(R.layout.about, null);
-				mPopup = new PopupWindow(this);
-				mPopup.setWidth(320);
-				mPopup.setHeight(320);
-				mPopup.setOutsideTouchable(true);
-				mPopup.setFocusable(true);
-				mPopup.setBackgroundDrawable(new BitmapDrawable());
-				mPopup.setContentView(layout);
-				mPopup.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
+				View layout = inflater.inflate(R.layout.help, null);
+				mPopupHelp = new PopupWindow(this);
+				if (screenWidth == 1280 || screenWidth == 800) {					
+					mPopupHelp.setWidth(480);
+					mPopupHelp.setHeight(480);
+				}
+				else if (screenWidth == 240 || screenWidth == 320){					
+					mPopupHelp.setWidth(240);
+					mPopupHelp.setHeight(240);
+				}
+				mPopupHelp.setOutsideTouchable(true);
+				mPopupHelp.setFocusable(true);
+				mPopupHelp.setBackgroundDrawable(new BitmapDrawable());
+				mPopupHelp.setContentView(layout);
+				mPopupHelp.showAsDropDown(findViewById(R.id.main_btn_help), 0, 0);
 			}
 			else{
-				mPopup.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
+				mPopupHelp.showAsDropDown(findViewById(R.id.main_btn_help), 0, 0);
+			}
+			break;
+		case R.id.main_btn_about:
+			if (mPopupAbout == null){
+				LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.about, null);
+				mPopupAbout = new PopupWindow(this);
+				Display display = getWindowManager().getDefaultDisplay();
+				int screenWidth = display.getWidth();
+				if (screenWidth == 1280 || screenWidth == 800) {					
+					mPopupAbout.setWidth(320);
+					mPopupAbout.setHeight(320);
+				}
+				else if (screenWidth == 240 || screenWidth == 320){					
+					mPopupAbout.setWidth(240);
+					mPopupAbout.setHeight(240);
+				}
+				mPopupAbout.setOutsideTouchable(true);
+				mPopupAbout.setFocusable(true);
+				mPopupAbout.setBackgroundDrawable(new BitmapDrawable());
+				mPopupAbout.setContentView(layout);
+				mPopupAbout.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
+			}
+			else{
+				mPopupAbout.showAsDropDown(findViewById(R.id.main_btn_about), -120, 0);
 			}
 			break;
 		case R.id.main_btn_single_player_on:
-			Intent iSingle = new Intent(this, SinglePlayer.class);
-			startActivity(iSingle);
+			// kiem tra network
+			if (!checkNetworkConnection()) {
+				Toast.makeText(Main.this, "Please check network connection!",
+						1000).show();
+			} 
+			else{
+				Intent iSingle = new Intent(this, SinglePlayer.class);
+				startActivity(iSingle);
+			}
 			break;
 		case R.id.main_btn_multi_player:
 			// kiem tra network
@@ -232,6 +304,11 @@ public class Main extends Activity implements OnClickListener, IRequestServer {
 			}
 			break;
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
 	}
 
 	@Override

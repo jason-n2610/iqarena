@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.ppclink.iqarena.object.Category;
 import com.ppclink.iqarena.object.MemberScore;
 import com.ppclink.iqarena.object.Question;
 import com.ppclink.iqarena.object.QuestionLite;
@@ -30,6 +31,8 @@ public class AnalysisData {
 			new ArrayList<MemberScore>();
 	public static ArrayList<MemberScore> mListMembersScore = 
 			new ArrayList<MemberScore>();
+	public static ArrayList<QuestionLite> mListQuestionLite = 
+			new ArrayList<QuestionLite>();
 	public static ArrayList<Room> mListRoom = new ArrayList<Room>();
 	public static String mTrueAnswer = null;
 	public static Question question = null;
@@ -41,6 +44,7 @@ public class AnalysisData {
 	public static int help_5050_remove1=0, help_5050_remove2=0; 
 	public static ArrayList<Rank> mRanks = new ArrayList<Rank>();
 	public static int mRankId = 0;
+	public static ArrayList<Category> mListCategory = new ArrayList<Category>();
 
 	public static boolean value = false;
 
@@ -351,6 +355,68 @@ public class AnalysisData {
 			else if (typeMessage.equals(Config.REQUEST_UPLOAD_QUESTION)){
 				value = jObject.getBoolean("value");
 				message = jObject.getString("message");
+			}
+
+			// message 'get_category'
+			else if (typeMessage.equals(Config.REQUEST_GET_CATEGORY)) {
+				value = jObject.getBoolean("value");
+				// truong hop co room tra ve
+				if (value) {
+					String jInfo = jObject.getString("info");
+					JSONArray jArray = new JSONArray(jInfo);
+					int length = jArray.length();
+					mListCategory.clear();
+					for (int i = 0; i < length; i++) {
+						Category category;
+						JSONObject json_data = jArray.getJSONObject(i);
+						int category_id = json_data.getInt("category_id");
+						String category_name = json_data.getString("category_name");
+						String date_create = json_data.getString("date_create");
+						String describle = json_data.getString("describle_category");
+						
+						category = new Category(String.valueOf(category_id), 
+								category_name, date_create, describle);
+						mListCategory.add(category);
+					}
+				} else {
+					mListCategory.clear();
+					message = jObject.getString("message");
+				}
+			}
+			else if (typeMessage.equals(Config.REQUEST_DOWNLOAD_CATEGORY)){
+				value = jObject.getBoolean("value");
+				// truong hop co room tra ve
+				if (value) {
+					String jInfo = jObject.getString("questions");
+					JSONArray jArray = new JSONArray(jInfo);
+					int length = jArray.length();
+					mListQuestionLite.clear();
+					for (int i = 0; i < length; i++) {
+						QuestionLite question;
+						JSONObject json_data = jArray.getJSONObject(i);
+						int quesId, quesType, answer;
+						String questionName, answerA, answerB, answerC, answerD;
+						String descrbileAnswer;
+						
+						quesId= json_data.getInt("question_id");
+						questionName = json_data.getString("question_name");
+						quesType = json_data.getInt("question_type_id");
+						answerA = json_data.getString("answer_a");
+						answerB = json_data.getString("answer_b");
+						answerC = json_data.getString("answer_c");
+						answerD = json_data.getString("answer_d");
+						answer = json_data.getInt("answer");
+						descrbileAnswer = json_data.getString("describle_answer");
+						
+						question = new QuestionLite(quesId, questionName, 
+								quesType, answerA, answerB, answerC, 
+								answerD, answer, descrbileAnswer);
+						mListQuestionLite.add(question);
+					}
+				} else {
+					mListCategory.clear();
+					message = jObject.getString("message");
+				}
 			}
 
 			result = true;

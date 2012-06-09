@@ -21,6 +21,14 @@
             android:background="@drawable/bg_form1"
             android:orientation="vertical"
             android:padding="12dp" >
+            
+            <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="UPLOAD QUESTION"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_result"

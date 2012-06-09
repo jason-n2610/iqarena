@@ -91,7 +91,13 @@
         include ($path . '/modules/controls/submit_record.php');
     }
     else if ($_POST['message'] == "upload_question"){
-        include ($path.'/modules/controls/upload_question.php');;
+        include ($path.'/modules/controls/upload_question.php');
+    }
+    else if ($_POST['message'] == "get_category"){
+        include ($path.'/modules/controls/get_category.php');
+    }
+    else if ($_POST['message'] == "download_category"){
+        include ($path.'/modules/controls/download_category.php');
     }
     else{
         /* Redirect to a different page in the current directory that was requested */
