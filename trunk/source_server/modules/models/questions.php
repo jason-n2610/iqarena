@@ -8,7 +8,7 @@
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
                                 answer_b, answer_c, answer_d, answer,
-                                describle_answer, question_field_id
+                                describle_answer, category_id
                         FROM    questions
                         WHERE   status = 0";
             $result = @mysql_query($query) or die('getAllQuestions() ' .
@@ -19,7 +19,7 @@
         public static function getQuestionByLimit($offset, $count){
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
-                                answer_b, answer_c, answer_d, answer, question_field_id,
+                                answer_b, answer_c, answer_d, answer, category_id,
                                 describle_answer
                         FROM    questions
                         WHERE   status = 0
@@ -29,14 +29,25 @@
             return $result;
         }
 
+        public static function getQuestionByCategory($category_id){
+            mysql_query("set names utf8;");
+            $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
+                                answer_b, answer_c, answer_d, answer, describle_answer
+                        FROM    questions
+                        WHERE   status=0 && category_id='{$category_id}'";
+            $result = @mysql_query($query) or die('getQuestionByCategory() ' .
+                mysql_error());
+            return $result;
+        }
+
         // lay ra 1 question dua vao type va field
-        public static function getQuestionByTypeAndField($question_type_id, $question_field_id)
+        public static function getQuestionByTypeAndField($question_type_id, $category_id)
         {
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d, answer
                         FROM    questions
                         WHERE   question_type_id='{$question_type_id}'
-                                AND question_field_id='{$question_field_id}' AND status = 0
+                                AND category_id='{$category_id}' AND status = 0
                         ORDER   BY RAND()
                         LIMIT   1";
             $result = @mysql_query($query) or die('getQuestionByTypeAndField() ' .
@@ -45,13 +56,13 @@
         }
 
         // lay ra tat ca question dua vao type va field
-        public static function getQuestionsByTypeAndField($question_type_id, $question_field_id)
+        public static function getQuestionsByTypeAndField($question_type_id, $category_id)
         {
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_name, answer_a, answer_b, answer_c, answer_d
                         FROM    questions
                         WHERE   question_type_id='{$question_type_id}'
-                                AND question_field_id='{$question_field_id}' AND status = 0";
+                                AND category_id='{$category_id}' AND status = 0";
             $result = @mysql_query($query) or die('getQuestionByTypeAndField() ' .
                 mysql_error());
             return $result;
@@ -133,7 +144,7 @@
         public static function addQuestion($type_id, $field_id, $question, $a, $b, $c, $d, $answer, $des)
         {
             mysql_query("set names utf8;");
-            $query = "  INSERT INTO questions(question_type_id, question_field_id, question_name,
+            $query = "  INSERT INTO questions(question_type_id, category_id, question_name,
                                     answer_a, answer_b, answer_c, answer_d, answer, describle_answer
                         VALUES  ('{$type_id}', '{$field_id}', '{$question}', '{$a}', '{$b}', '{$c}',
                                     '{$d}', '{$answer}', '{$des}'";
@@ -191,7 +202,7 @@
         public static function getQuestionReviewByLimit($offset, $count){
             mysql_query("set names utf8;");
             $query = "  SELECT  question_id, question_type_id, question_name, answer_a,
-                                answer_b, answer_c, answer_d, answer, question_field_id,
+                                answer_b, answer_c, answer_d, answer, category_id,
                                 describle_answer
                         FROM    questions
                         WHERE   status = 1

@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +158,47 @@ public class RoomPlay extends Activity implements IRequestServer, ICheckServer,
 
 		mAdapterAnswer = new AnswerAdapter(this, mAlAnswer);
 		mLvResult.setAdapter(mAdapterAnswer);
+
+		// init UI
+		initUISuportMultiScreen();
 	}
+	private void initUISuportMultiScreen() {
+		Display display = getWindowManager().getDefaultDisplay();
+		int screenWidth = display.getWidth();
+		if (screenWidth == 1280 || screenWidth == 800) {
+			mTvQuestion.setTextSize(24);
+			mTvQuestionTimer.setTextSize(48);
+
+			mRbA.setHeight(56);
+			mRbA.setTextSize(20);
+			mRbB.setHeight(56);
+			mRbB.setTextSize(20);
+			mRbC.setHeight(56);
+			mRbC.setTextSize(20);
+			mRbD.setHeight(56);
+			mRbD.setTextSize(20);
+
+			mBtnHelp5050.setTextSize(20);
+			mBtnHelpRelease.setTextSize(20);
+			mBtnHelpX2.setTextSize(20);
+			mBtnSummit.setTextSize(20);
+			mBtnHelpChangeQuestion.setTextSize(20);
+			
+			mBtnHelp5050.getLayoutParams().width = 160;
+			mBtnHelpChangeQuestion.getLayoutParams().width = 160;
+			mBtnHelpRelease.getLayoutParams().width = 160;
+			mBtnHelpX2.getLayoutParams().width = 160;
+			
+			mBtnSummit.setWidth(160);
+
+			mBtnHelp5050.setHeight(60);
+			mBtnHelpRelease.setHeight(60);
+			mBtnHelpX2.setHeight(60);
+			mBtnSummit.setHeight(60);
+			mBtnHelpChangeQuestion.setHeight(60);
+		}
+	}
+
 
 	@Override
 	public void onBackPressed() {

@@ -55,7 +55,9 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 		REQUEST_GET_QUESTION_BY_TYPE,
 		REQUEST_GET_TOP_RECORD,
 		REQUEST_SUBMIT_RECORD,
-		REQUEST_UPLOAD_QUESTION
+		REQUEST_UPLOAD_QUESTION, 
+		REQUEST_GET_CATEGORY,
+		REQUEST_DOWNLOAD_CATEGORY
 	}
 
 	public ConnectionManager(IRequestServer delegate) {
@@ -255,6 +257,17 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 				nameValuePairs.add(new BasicNameValuePair("answer", params[6]));
 				nameValuePairs.add(new BasicNameValuePair("describle_answer", params[7]));
 				break;
+			case REQUEST_GET_CATEGORY:
+				nameValuePairs = new ArrayList<NameValuePair>(1);
+				nameValuePairs.add(new BasicNameValuePair("message", 
+						Config.REQUEST_GET_CATEGORY));
+				break;
+			case REQUEST_DOWNLOAD_CATEGORY:
+				nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("message", 
+						Config.REQUEST_DOWNLOAD_CATEGORY));
+				nameValuePairs.add(new BasicNameValuePair("category_id", params[0]));
+				break;
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
@@ -431,5 +444,14 @@ public class ConnectionManager extends AsyncTask<String, Integer, String> {
 		this.execute(question, level, a, b, c, d, answer, describle);
 	}
 	
+	public void getCategory(){
+		this.requestType = REQUEST_TYPE.REQUEST_GET_CATEGORY;
+		this.execute();
+	}
+	
+	public void downloadCategory(String category_id){
+		this.requestType = REQUEST_TYPE.REQUEST_DOWNLOAD_CATEGORY;
+		this.execute(category_id);
+	}
 	
 }

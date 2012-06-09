@@ -28,6 +28,9 @@
         <activity
             android:name=".activity.Main"
             android:label="@string/app_name"
+            android:allowTaskReparenting="true"
+            android:finishOnTaskLaunch="true"
+            android:clearTaskOnLaunch="true"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -160,6 +163,17 @@
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.upload_question" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.DownloadQuestion"
+            android:label="Download Question"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.download_question" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

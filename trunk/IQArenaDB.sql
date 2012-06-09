@@ -23,6 +23,16 @@ DROP TABLE IF EXISTS member_answers;
 DROP TABLE IF EXISTS structure_of_questions;
 DROP TABLE IF EXISTS question_reviews;
 DROP TABLE IF EXISTS awards;
+DROP TABLE IF EXISTS categories;
+
+CREATE TABLE categories(
+	category_id int unsigned not null auto_increment,
+	category_name nvarchar(100) not null,
+	number_of_questions int not null,
+	date_create datetime,
+	describle_category nvarchar(200),
+	PRIMARY KEY (category_id)
+);
 
 CREATE TABLE users (
     user_id int unsigned not null auto_increment,

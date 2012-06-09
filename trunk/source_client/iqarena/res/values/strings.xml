@@ -30,6 +30,10 @@
     
     <string name="upload_question_level">Choose a level</string>
     <string name="upload_question_answer">Choose a answer</string>
-    
+    <string name="help">\n- Hướng dẫn chơi: trong mỗi chế độ chơi, chương trình sẽ đưa ra câu hỏi trắc nghiệm với 4 phương án trả lời. Người chơi cần chọn phương án đúng. Chương trình có đưa ra trợ giúp hỗ trợ người chơi hoàn thành câu hỏi.
+\n- Chế độ Local Mode: các câu hỏi trong chương trình được lấy từ dữ liệu lưu trong máy người chơi
+\n- Chế độ Single Player: câu hỏi được lấy từ server của hệ thống, yêu cầu người chơi cần có kết nối internet
+\n- Chế độ Multi Player: người chơi sẽ tham gia thi đấu với người chơi khác trên mạng. Để chơi được chế độ này, người chơi cần đăng kí một tài khoản với chương trình. Sau đó, người chơi có thể tham gia một phòng chơi hoặc tự tạo lấy một phòng chơi cho mình. 
+Ready for game!</string>
 
 </resources>

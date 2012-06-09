@@ -75,6 +75,9 @@ public class LocalMode extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.local_mode);
+		Bundle extra = getIntent().getExtras();
+		boolean isSoundOn = extra.getBoolean("sound");
+		
 
 		mVfMain = (ViewFlipper) findViewById(R.id.local_mode_vf_main);
 		
@@ -203,26 +206,29 @@ public class LocalMode extends Activity implements OnClickListener {
 		// init UI
 		initUISuportMultiScreen();
 		
+		if (isSoundOn){
+			if (player == null){
+				player = MediaPlayer.create(this, R.raw.play_theme1);
+				player.setLooping(true);
+				try {
+					player.prepare();
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				player.start();
+			}
+			else{
+				player.start();
+			}
+		}
+		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (player == null){
-			player = MediaPlayer.create(this, R.raw.play_theme1);
-			player.setLooping(true);
-			try {
-				player.prepare();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			player.start();
-		}
-		else{
-			player.start();
-		}
 	}
 
 	@Override
